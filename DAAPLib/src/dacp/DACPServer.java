@@ -56,8 +56,11 @@ public class DACPServer {
 			}
 		}
 
-		System.out.println("creating dmcp service");
-
+		String hostname = InetAddress.getLocalHost().getHostName();
+		String hash = Integer.toHexString(hostname.hashCode()).substring(0, 13).toUpperCase();
+		
+		System.out.println("registering mDNS for " + hostname + " (" + hash + ")");
+		
 		Hashtable<String, String> records = new Hashtable<String, String>();
 
 		records.put("CtlN","Memphis Stereo");
@@ -66,12 +69,9 @@ public class DACPServer {
 		records.put("txtvers","1");
 		records.put("DvTy","iTunes");
 		records.put("DvSv","1905");
-		records.put("DbId","F35226B7C8EE14D3");
+		records.put("DbId", hash);
 
-		ServiceInfo dmcp = ServiceInfo.create("_touch-able._tcp.local.", "F35226B7C8EE14D1", 3689, 0, 0, records);
-
-		String hostname = InetAddress.getLocalHost().getHostName();
-		System.out.println("registering mDNS for " + hostname);
+		ServiceInfo dmcp = ServiceInfo.create("_touch-able._tcp.local.", hash, 3689, 0, 0, records);
 
 		InetAddress a = Inet4Address.getAllByName(hostname)[1];
 		InetAddress addr = Inet4Address.getByAddress(hostname, a.getAddress());
