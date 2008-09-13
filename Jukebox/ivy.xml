@@ -1,0 +1,7 @@
+<ivy-module version="1.0">
+  <info organisation="memphis" module="Jukebox"/>
+  <dependencies>
+    <dependency org="net.javazoom" name="jlayer" rev="1.0" />
+    <dependency org="junit" name="junit" rev="4.3.1" />
+  </dependencies>
+</ivy-module>

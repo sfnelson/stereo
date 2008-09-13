@@ -1,0 +1,8 @@
+<ivy-module version="1.0">
+	<info organisation="memphis" module="MemphisDJ"/>
+	<dependencies>
+		<dependency org="net.javazoom" name="jlayer" rev="1.0" />
+		<dependency org="junit" name="junit" rev="4.3.1" />
+		<dependency org="java_mp3" name="java_mp3" rev="0.3" />
+	</dependencies>
+</ivy-module>

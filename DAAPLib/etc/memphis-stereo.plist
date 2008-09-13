@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>clients</key>
+		<dict>
+			<key>com.apple.DAAP</key>
+			<dict>
+				<key>name</key>
+				<string>Memphis Stereo</string>
+				<key>pairingGuid</key>
+				<string>0x0000000000000000</string>
+				<key>serviceDomain</key>
+				<string>local.</string>
+				<key>serviceName</key>
+				<string>F35226B7C8EE14D1</string>
+				<key>serviceType</key>
+				<string>_touch-able._tcp.</string>
+				<key>txt</key>
+				<dict>
+					<key>CtlN</key>
+					<data>TWVtcGhpcyBTdGVyZW8=</data>
+					<key>DbId</key>
+					<data>RjM1MjI2QjdDOEVFMTREMw==</data>
+					<key>DvSv</key>
+					<data>MTkwNQ==</data>
+					<key>DvTy</key>
+					<data>aVR1bmVz</data>
+					<key>OSsi</key>
+					<data>MHgxRjY=</data>
+					<key>txtvers</key>
+					<data>MQ==</data>
+					<key>Ver</key>
+					<data>MTMxMDcy</data>
+				</dict>
+			</dict>
+		</dict>
+		<key>defaultsDict</key>
+		<dict>
+			<key>selectedIndex</key>
+			<integer>3</integer>
+		</dict>
+		<key>identifier</key>
+		<string>F35226B7C8EE14D1</string>
+		<key>name</key>
+		<string>Memphis Stereo</string>
+	</dict>
+</array>
+</plist>

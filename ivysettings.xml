@@ -1,0 +1,12 @@
+<ivysettings>
+  <settings defaultResolver="chain" />
+  <resolvers>
+    <chain name="chain">
+      <url name="sandpit">
+	<artifact pattern="http://sandpit.mcs.vuw.ac.nz/~vipul/ivy/[artifact]-[revision].[ext]" />
+      </url>
+      <ibiblio name="jlayer" root="http://ppnetmedia.com/repository/" m2compatible="true" />
+      <ibiblio name="ibiblio" m2compatible="true" />
+    </chain>
+  </resolvers>
+</ivysettings>

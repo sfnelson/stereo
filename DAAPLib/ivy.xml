@@ -1,0 +1,11 @@
+<ivy-module version="1.0">
+  <info organisation="memphis" module="DAAPLib"/>
+  <dependencies>
+    <dependency org="jparsec" name="jparsec" rev="2.0.1" />
+    <dependency org="commons-logging" name="commons-logging" rev="1.1.1" />
+    <dependency org="commons-httpclient" name="commons-httpclient" rev="3.1" />
+    <dependency org="net.javazoom" name="jlayer" rev="1.0" />
+    <dependency org="junit" name="junit" rev="4.3.1" />
+    <dependency org="jmdns" name="jmdns" rev="2.0" />
+  </dependencies>
+</ivy-module>
