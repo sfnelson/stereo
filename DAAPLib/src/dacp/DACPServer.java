@@ -56,14 +56,21 @@ public class DACPServer {
 			}
 		}
 
-		String hostname = InetAddress.getLocalHost().getHostName();
-		String hash = Integer.toHexString(hostname.hashCode()).substring(0, 13).toUpperCase();
+		String hostname = InetAddress.getLocalHost().getCanonicalHostName();
+		hostname = new Scanner(hostname).useDelimiter("[.]").next();
+		
+		InetAddress addr = Inet4Address.getAllByName("localhost")[1];
+		final JmDNS mdns = JmDNS.create(addr);
+		System.out.println("creating hook for " + addr.getHostAddress());
+		
+		String hash = Integer.toHexString(hostname.hashCode()).toUpperCase();
+		hash = (hash+hash).substring(0,13);
 		
 		System.out.println("registering mDNS for " + hostname + " (" + hash + ")");
 		
 		Hashtable<String, String> records = new Hashtable<String, String>();
 
-		records.put("CtlN","Memphis Stereo");
+		records.put("CtlN","Stereo on " + hostname);
 		records.put("OSsi","0x1F6");
 		records.put("Ver","131072");
 		records.put("txtvers","1");
@@ -73,10 +80,6 @@ public class DACPServer {
 
 		ServiceInfo dmcp = ServiceInfo.create("_touch-able._tcp.local.", hash, 3689, 0, 0, records);
 
-		InetAddress a = Inet4Address.getAllByName(hostname)[1];
-		InetAddress addr = Inet4Address.getByAddress(hostname, a.getAddress());
-		final JmDNS mdns = JmDNS.create(addr);
-		System.out.println("creating hook for " + addr.getHostAddress());
 		Runtime.getRuntime().addShutdownHook(new Thread("mDNS Shutdown Hook") {
 			public void run() {
 				System.out.println("removing services");
