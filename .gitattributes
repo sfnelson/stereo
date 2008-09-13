@@ -11,6 +11,7 @@ DAAPLib/.classpath -text
 DAAPLib/.project -text
 DAAPLib/build.xml -text
 DAAPLib/etc/memphis-stereo.plist -text
+DAAPLib/etc/str2bin.pl -text
 DAAPLib/ivy.xml -text
 DAAPLib/src/daap/DAAPClient.java -text
 DAAPLib/src/daap/DAAPConstants.java -text
