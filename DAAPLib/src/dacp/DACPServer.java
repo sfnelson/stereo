@@ -56,12 +56,8 @@ public class DACPServer {
 			}
 		}
 
-		String hostname = InetAddress.getLocalHost().getCanonicalHostName();
+		String hostname = InetAddress.getLocalHost().getHostName();
 		hostname = new Scanner(hostname).useDelimiter("[.]").next();
-		
-		InetAddress addr = Inet4Address.getAllByName("localhost")[1];
-		final JmDNS mdns = JmDNS.create(addr);
-		System.out.println("creating hook for " + addr.getHostAddress());
 		
 		String hash = Integer.toHexString(hostname.hashCode()).toUpperCase();
 		hash = (hash+hash).substring(0,13);
@@ -80,16 +76,11 @@ public class DACPServer {
 
 		ServiceInfo dmcp = ServiceInfo.create("_touch-able._tcp.local.", hash, 3689, 0, 0, records);
 
-		Runtime.getRuntime().addShutdownHook(new Thread("mDNS Shutdown Hook") {
-			public void run() {
-				System.out.println("removing services");
-				mdns.unregisterAllServices();
-				System.out.println("removed services");
-				mdns.close();
-				System.out.println("done");
-			}
-		});
-		mdns.registerService(dmcp);
+		for (InetAddress a: addresses) {
+			final JmDNS mdns = JmDNS.create(a);
+			System.out.println("binding on " + a);
+			mdns.registerService(dmcp);
+		}
 	}
 
 	private class ServerSocketThread extends Thread {
