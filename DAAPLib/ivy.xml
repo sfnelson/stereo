@@ -7,5 +7,6 @@
     <dependency org="net.javazoom" name="jlayer" rev="1.0" />
     <dependency org="junit" name="junit" rev="4.3.1" />
     <dependency org="jmdns" name="jmdns" rev="2.0" />
+    <dependency org="java_mp3" name="java_mp3" rev="0.3" />
   </dependencies>
 </ivy-module>
