@@ -116,4 +116,14 @@ MemphisDJ/test/music/DJTest.java -text
 MemphisDJ/test/music/PlaylistTest.java -text
 MemphisDJ/test/player/PlayerTest.java -text
 MemphisDJ/test/player/music.mp3 -text
+StereoPair/Classes/StereoPairAppDelegate.h -text
+StereoPair/Classes/StereoPairAppDelegate.m -text
+StereoPair/Classes/StereoPairViewController.h -text
+StereoPair/Classes/StereoPairViewController.m -text
+StereoPair/Info.plist -text
+StereoPair/MainWindow.xib -text
+StereoPair/StereoPair.xcodeproj/project.pbxproj -text
+StereoPair/StereoPairViewController.xib -text
+StereoPair/StereoPair_Prefix.pch -text
+StereoPair/main.m -text
 /ivysettings.xml -text
