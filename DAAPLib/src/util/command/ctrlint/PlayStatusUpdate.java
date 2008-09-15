@@ -41,13 +41,19 @@ public class PlayStatusUpdate implements Command, PlaylistStatusListener {
 			dj.removePlaybackStatusListener(this);
 		}
 		
+		System.out.println("play status update requested");
+		
 		Track current = dj.currentTrack();
 		byte state = dj.playbackStatus();
 		int revision = dj.playbackRevision();
 		int elapsed = dj.playbackElapsedTime();
 		
-		return DACPTreeBuilder.buildPlayStatusUpdate(revision, state,
+		Node n = DACPTreeBuilder.buildPlayStatusUpdate(revision, state,
 				(byte)0, (byte)0, current, elapsed);
+		
+		System.out.println("returning: " + n);
+		
+		return n;
 		
 	}
 

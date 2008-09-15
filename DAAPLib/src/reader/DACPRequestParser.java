@@ -50,8 +50,7 @@ public class DACPRequestParser {
 			final String URI = request.next();
 			final String protocol = request.next();
 
-			if (!URI.contains("playstatus") && !URI.contains("/update") && !URI.contains("dmcp.volume"))
-				System.out.println("Received request: " + URI + " (" + type + ", " + protocol + ")");
+			System.out.println("Received request: " + URI + " (" + type + ", " + protocol + ")");
 
 			Scanner req = new Scanner(URI);
 			req.useDelimiter("[?]");
@@ -62,14 +61,11 @@ public class DACPRequestParser {
 			Scanner args = new Scanner(req.hasNext()?req.next():"");
 			args.useDelimiter("[&]");
 			
-			Map<String, String> argsMap = null;
-			if (args.hasNext()) {
-				argsMap = new HashMap<String, String>();
-				while (args.hasNext()) {
-					Scanner param = new Scanner(args.next());
-					param.useDelimiter("[=]");
-					argsMap.put(param.next(), param.next());
-				}
+			Map<String, String> argsMap = new HashMap<String, String>();
+			while (args.hasNext()) {
+				Scanner param = new Scanner(args.next());
+				param.useDelimiter("[=]");
+				argsMap.put(param.next(), param.next());
 			}
 			
 			RequestNode node = base;

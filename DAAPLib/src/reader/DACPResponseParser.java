@@ -37,20 +37,29 @@ public class DACPResponseParser {
 
 	public Composite parse(InputStream stream) {
 		this.stream = stream;
+		
+		try {
+			if (stream.available() == 0) return null;
+		}
+		catch (IOException ex) {
+			return null;
+		}
 
 		int c = readInteger(stream);
 		int b = readInteger(stream);
+		
 		Node tree = this.reply.visit(c, b);
 
 		return (Composite) tree;
 	}
 
-	public void addStatusUpdate(Handler reply) {
+	private void addStatusUpdate(Handler reply) {
+		
 		reply.register(DACPConstants.mstt, new IntegerNodeHandler());
 		reply.register(DACPConstants.cmsr, new IntegerNodeHandler());
-		reply.register(DACPConstants.caps, new ShortNodeHandler());
-		reply.register(DACPConstants.cash, new BooleanNodeHandler());
-		reply.register(DACPConstants.carp, new BooleanNodeHandler());
+		reply.register(DACPConstants.caps, new ByteNodeHandler());
+		reply.register(DACPConstants.cash, new ByteNodeHandler());
+		reply.register(DACPConstants.carp, new ByteNodeHandler());
 		reply.register(DACPConstants.caas, new IntegerNodeHandler());
 		reply.register(DACPConstants.caar, new IntegerNodeHandler());
 		reply.register(DACPConstants.canp, new LongLongNodeHandler());
@@ -64,7 +73,7 @@ public class DACPResponseParser {
 		reply.register(DACPConstants.cast, new IntegerNodeHandler());
 	}
 
-	public void addPlaylistRequest(Handler reply) {
+	private void addPlaylistRequest(Handler reply) {
 		reply.register(DACPConstants.mstt, new IntegerNodeHandler());
 		reply.register(DACPConstants.muty, new IntegerNodeHandler());
 		reply.register(DACPConstants.mtco, new IntegerNodeHandler());
@@ -101,7 +110,7 @@ public class DACPResponseParser {
 			while (read < bytes) {
 				int c = readInteger(stream);
 				int b = readInteger(stream);
-
+				
 				if (handlers.get(c) == null) {
 					System.err.println("unexpected " + Node.intToCode(c) + " (" + c + ") in " + Node.intToCode(code) + " block");
 					read += 8 + b;
@@ -236,7 +245,7 @@ public class DACPResponseParser {
 
 		if (!protocol.equals("HTTP/1.1"))
 			throw new IOException("Unsupported Protocol: " + protocol);
-		if (status != 200 && code.equals("OK"))
+		if (status/100 != 2)
 			throw new IOException("Error connecting to server: " + status + " " + code);
 
 		if (!sc.nextLine().equals(""))
@@ -269,7 +278,7 @@ public class DACPResponseParser {
 				date = lineScanner.next();
 			}
 		}
-
+		
 		return in;
 	}
 

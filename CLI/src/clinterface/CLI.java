@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-import player.Controller;
+import dacp.DACPDJInterface;
 
 public class CLI {
 
@@ -72,8 +72,14 @@ public class CLI {
 		public void status(){
 			switch(controller.playbackStatus()) {
 			case 2: System.out.println("Stopped"); break;
-			case 3: System.out.println("Paused"); break;
-			case 4: System.out.println("Playing"); break;
+			case 3:
+				System.out.print(controller.currentTrack());
+				System.out.println(" (Paused)");
+				break;
+			case 4:
+				System.out.print(controller.currentTrack());
+				System.out.println(" (Playing)");
+				break;
 			default: System.out.println("Unknown status: " + controller.playbackStatus());
 			}
 		}
@@ -265,9 +271,9 @@ public class CLI {
 
 		if (location != null) {
 			if (combinedArgs != null) {
-				new CLI(new Controller(location, port), combinedArgs);
+				new CLI(new DACPDJInterface(location, port), combinedArgs);
 			} else {
-				new CLI(new Controller(location, port));
+				new CLI(new DACPDJInterface(location, port));
 			}
 		} else {
 			usage();

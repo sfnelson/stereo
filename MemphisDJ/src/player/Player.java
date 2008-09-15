@@ -108,7 +108,7 @@ public class Player implements music.Player {
 
 
 	private volatile TrackThread thread;
-	private volatile byte state;
+	private volatile byte state = STOPPED;
 	
 	public static final byte STOPPED = 2;
 	public static final byte PAUSED = 3;

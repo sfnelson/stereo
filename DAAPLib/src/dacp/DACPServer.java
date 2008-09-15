@@ -116,7 +116,7 @@ public class DACPServer {
 
 					try {
 						Command s = DACPRequestParser.parse(parseText);
-
+						
 						if (s != null) {
 							Node reply = s.run(dj);
 							printer.visit(reply, sock.getOutputStream());
@@ -130,10 +130,6 @@ public class DACPServer {
 
 						printer.error("501 Not Implemented", sock.getOutputStream());
 					}
-					catch (NullPointerException ex) {
-						printer.visit(null, sock.getOutputStream());
-					}
-
 
 				}
 			} catch (IOException e) {
