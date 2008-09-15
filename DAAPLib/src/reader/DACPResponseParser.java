@@ -142,18 +142,7 @@ public class DACPResponseParser {
 	private class StringNodeHandler extends Handler {
 		public Node visit(int code, int bytes) {
 
-			byte[] in = new byte[bytes];
-			try {
-				stream.read(in);
-			}
-			catch (IOException ex) {
-				System.err.println("Error reading DACPResponse");
-				ex.printStackTrace();
-			}
-			String value = "";
-			for (byte b: in) {
-				value += (char)b;
-			}
+			String value = readString(stream, bytes);
 			return new StringNode(code,value);
 		}
 	}
@@ -211,16 +200,15 @@ public class DACPResponseParser {
 	private class LongLongNodeHandler extends Handler {
 		public Node visit(int code, int bytes) {
 
-			long value = readLong(stream);
-			long value2 = readLong(stream);
-			Node node = new LongLongNode(code, value, value2);
+			int v0 = readInteger(stream);
+			int v1 = readInteger(stream);
+			int v2 = readInteger(stream);
+			int v3 = readInteger(stream);
+			Node node = new LongLongNode(code, v0, v1, v2, v3);
 
 			return node;
 		}
 	}
-
-
-
 
 	public static InputStream request(String host, int port, String request) throws IOException, UnknownHostException {
 
@@ -281,68 +269,40 @@ public class DACPResponseParser {
 		
 		return in;
 	}
-
-	private static int readInteger(InputStream stream) {
-		byte[] b = new byte[4];
+	
+	private static byte[] readBytes(InputStream stream, int num) {
+		byte[] b = new byte[num];
 		try {
-			stream.read(b);
+			for (int i = 0; i < num;) {
+				i += stream.read(b, i, num-i);
+			}
 		}
 		catch (IOException e) {
-			System.err.println("Error reading integer from DACPResponse");
+			System.err.println("Error reading bytes from DACPResponse");
 			e.printStackTrace();
 		}
-		return readInteger(b);
+		return b;
 	}
 
 	private static int readShort(InputStream stream) {
-		byte[] b = new byte[2];
-		try {
-			stream.read(b);
-		}
-		catch (IOException e) {
-			System.err.println("Error reading short from DACPResponse");
-			e.printStackTrace();
-		}
+		byte[] b = readBytes(stream, 2);
 		return ((b[0] & 255) << 8) + (b[1] & 255);
 	}
 
 	private static int readBoolean(InputStream stream) {
-		byte[] b = new byte[1];
-		try {
-			stream.read(b);
-		}
-		catch (IOException e) {
-			System.err.println("Error reading boolean from DACPResponse");
-			e.printStackTrace();
-		}
+		byte[] b = readBytes(stream, 1);
 		return ((b[0] & 255));
 	}
 
 	private static byte readByte(InputStream stream) {
-		byte[] b = new byte[1];
-		try {
-			stream.read(b);
-		}
-		catch (IOException e) {
-			System.err.println("Error reading byte from DACPResponse");
-			e.printStackTrace();
-		}
+		byte[] b = readBytes(stream, 1);
 		return b[0];
 	}
 
-	private static long readLong(InputStream stream) {
-		byte[] b = new byte[8];
-		try {
-			stream.read(b);
-		}
-		catch (IOException e) {
-			System.err.println("Error reading reading long from DACPResponse");
-			e.printStackTrace();
-		}
-		return readLong(b);
-	}
-
-	private static int readInteger(byte[] b) {
+	private static int readInteger(InputStream is) {
+		
+		byte[] b = readBytes(is, 4);
+		
 		int size = 0;
 		for (int i = 0; i < 4; i++) {
 			size <<= 8;
@@ -351,12 +311,22 @@ public class DACPResponseParser {
 		return size;
 	}
 
-	private static long readLong(byte[] b) {
-		long size = 0;
+	private static long readLong(InputStream stream) {
+		byte[] b = readBytes(stream, 8);
+		long value = 0;
 		for (int i = 0; i < 8; i++) {
-			size <<= 8;
-			size += b[i] & 255;
+			value <<= 8;
+			value += b[i] & 255;
 		}
-		return size;
+		return value;
+	}
+	
+	private static String readString(InputStream stream, int num) {
+		byte[] b = readBytes(stream, num);
+		String value = "";
+		for (int i = 0; i < num; i++) {
+			value += (char)b[i];
+		}
+		return value;
 	}
 }
