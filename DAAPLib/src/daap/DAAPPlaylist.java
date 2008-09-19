@@ -13,11 +13,11 @@ public class DAAPPlaylist extends AbstractList<DAAPTrack> implements Playlist<DA
 	private final String name;
 	private final int id;
 	private final long persistantId;
-	private final Playlist parent;
+	private final Playlist<? extends Track> parent;
 	
 	private Set<DAAPTrack> tracks = new HashSet<DAAPTrack>();
 	
-	public DAAPPlaylist(String name, int id, long persistantId, Playlist parent) {
+	public DAAPPlaylist(String name, int id, long persistantId, Playlist<? extends Track> parent) {
 		this.name = name;
 		this.id = id;
 		this.persistantId = persistantId;
@@ -32,8 +32,8 @@ public class DAAPPlaylist extends AbstractList<DAAPTrack> implements Playlist<DA
 		return name;
 	}
 
-	public Playlist<Track> parent() {
-		return parent;
+	public Playlist<? extends Track> parent() {
+		return this.parent;
 	}
 	
 	public boolean isRoot() {

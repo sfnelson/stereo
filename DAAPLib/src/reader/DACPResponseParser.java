@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-import daap.DAAPConstants;
-
 import util.DACPConstants;
 import util.node.BooleanNode;
 import util.node.ByteNode;
@@ -20,6 +18,7 @@ import util.node.LongLongNode;
 import util.node.LongNode;
 import util.node.Node;
 import util.node.StringNode;
+import daap.DAAPConstants;
 
 
 public class DACPResponseParser {
@@ -168,6 +167,7 @@ public class DACPResponseParser {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private class BooleanNodeHandler extends Handler {
 		public Node visit(int code, int bytes) {
 
