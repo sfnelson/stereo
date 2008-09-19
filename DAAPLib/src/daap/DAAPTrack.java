@@ -1,16 +1,19 @@
 package daap;
 
+import interfaces.Album;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import music.Constants;
+import util.DACPConstants;
 
 public class DAAPTrack implements interfaces.Track {
 	
 	private Map<Integer, Object> tags;
 	private DAAPClient publisher;
+	private Album album;
 	
 	public DAAPTrack(Map<Integer, Object> values, DAAPClient parent){
 		tags = new HashMap<Integer, Object>();
@@ -31,8 +34,8 @@ public class DAAPTrack implements interfaces.Track {
 		return tags.get(tagID);
 	}
 
-	public int getTrackId() {
-		return (Integer)tags.get(Constants.TRACK_ID);
+	public int getId() {
+		return (Integer)tags.get(DAAPConstants.TRACK_ID);
 	}
 	
 	public DAAPClient getParent(){
@@ -45,11 +48,21 @@ public class DAAPTrack implements interfaces.Track {
 	}
 	
 	public String toString(){
-		 return String.format("%s - %s - %s",getTag(Constants.NAME),getTag(Constants.ARTIST),getTag(Constants.ALBUM));
+		 //return String.format("%s - %s - %s",getTag(Constants.NAME),getTag(Constants.ARTIST),getTag(Constants.ALBUM));
+		 return String.format("%s",getTag(DAAPConstants.NAME));
 	}
 
 	public Map<Integer, Object> getAllTags() {
 		return tags;
+	}
+
+	public Album getAlbum() {
+		return album;
+	}
+
+	public void setAlbum(Album album) {
+		this.album = album;
+		this.tags.put(DACPConstants.asai, album.getTag(DACPConstants.asai));
 	}
 	
 }

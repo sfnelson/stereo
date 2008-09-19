@@ -1,9 +1,9 @@
 package util.queryparser;
 
-import interfaces.Track;
+import interfaces.Element;
 
 public interface Filter {
 
-	public boolean check(Track t);
+	public boolean check(Element e);
 	
 }

@@ -14,7 +14,11 @@ import org.apache.commons.logging.impl.SimpleLog;
 public class DAAPClient {
 
 	private String hostname;
+	
+	private String dbname;
 
+	private int id;
+	
 	private int dbid;
 
 	private int revisionNumber;
@@ -27,11 +31,12 @@ public class DAAPClient {
 
 	DAAPUtilities helper;
 
-	public DAAPClient(String hostname, int port) throws IOException {
+	public DAAPClient(String hostname, int port, int id) throws IOException {
 		//This method should login and get a session ID,
-		//the database ID (dbid) by updateing and currentVersion [of database]
+		//the database ID (dbid) by updating and currentVersion [of database]
 		this.hostname = hostname;
 		this.port = port;
+		this.id = id;
 
 		log = new SimpleLog("Log");
 
@@ -42,17 +47,34 @@ public class DAAPClient {
 			//e.printStackTrace();
 		}
 		//Get a session Id
+		getSessionDetails();
 		sessionID = getSessionID();
 		revisionNumber = getRevisionNumber();
 		dbid = getDatabaseId();
 
 	}
+	
+	/**
+	 * This should be the name of the library, but for now is the hostname
+	 * TODO: use the library name rather than the hostname
+	 * @return
+	 */
+	public String getName() {
+		return dbname;
+	}
+	
+	public int id() {
+		return id;
+	}
+	
+	public long getPersistantId() {
+		return (((long)hostname.hashCode())<<32)|((long)dbname.hashCode());
+	}
+	
 
-	public List<DAAPTrack> getTrackList() {	
-		if(dbid < 0) return null;
+	public void getTracks(DAAPPlaylist tracks) {	
+		if(dbid < 0) return;
 		
-		List<DAAPTrack> tracks = new ArrayList<DAAPTrack>();
-
 		String request = "databases/"
 			+ dbid
 			+ "/items?type=music&meta=dmap.itemkind,dmap.itemid,dmap.itemname,daap.songalbum,daap.songartist,daap.songgenre,daap.songcomposer,daap.songbitrate,daap.songsamplerate,daap.songstarttime,daap.songstoptime,daap.songtime&session-id="
@@ -66,7 +88,7 @@ public class DAAPClient {
 
 			if ((entry == null)
 					|| (entry.getName() != DAAPUtilities.stringToInt("adbs"))) {
-				return null;
+				return;
 			}
 
 			for (DAAPEntry e : entry) {
@@ -76,6 +98,8 @@ public class DAAPClient {
 				}
 			}
 
+			tracks.clear();
+			
 			for (DAAPEntry e : entry) {
 				if ((entry == null) || !entry.hasChildren()) {
 					continue;
@@ -84,17 +108,15 @@ public class DAAPClient {
 				tracks.add(new DAAPTrack(values, this));
 
 			}
-
-			return tracks;
 		} catch (IOException e) {
-			return null;
+			e.printStackTrace();
 		}finally{
 			//helper.release(in);
 		}
 	}
 
 	public InputStream getStream(DAAPTrack track) throws IOException {
-		int song = track.getTrackId();
+		int song = track.getId();
 		return helper.songRequest(hostname, port, "databases/" + dbid + "/items/" + song
 				+ ".mp3?session-id=" + sessionID, log);
 	}
@@ -110,6 +132,31 @@ public class DAAPClient {
 		}
 	}
 
+	private int getSessionDetails() {
+		String serverInfoRequest = "server-info";
+		InputStream in = null;
+
+		try {
+			in = helper.request(hostname, port, serverInfoRequest, log);
+			DAAPEntry entry = DAAPEntry.parseStream(in, helper.types);
+
+			for (DAAPEntry e : entry) {
+				switch(e.getName()) {
+				case DAAPConstants.minm:
+					dbname = (String) e.getValue();
+					break;
+				}
+			}
+
+			return -1;
+		} catch (IOException e) {
+			return -1;
+		}finally{
+			//helper.release(in);
+		}
+
+	}
+	
 	private int getSessionID() {
 		String loginRequest = "login";
 		InputStream in = null;

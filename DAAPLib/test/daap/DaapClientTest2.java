@@ -13,7 +13,7 @@ public class DaapClientTest2 {
 	@BeforeClass
 	public static void setup(){
 		try {
-			client = new DAAPClient("serranos.mcs.vuw.ac.nz", 3689);
+			client = new DAAPClient("serranos.mcs.vuw.ac.nz", 3689, 0);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

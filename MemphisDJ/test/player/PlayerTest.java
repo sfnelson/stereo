@@ -1,6 +1,13 @@
 package player;
 
+import interfaces.Album;
+import interfaces.Track;
+
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
+
+import music.Player;
 
 public class PlayerTest {
 
@@ -29,13 +36,13 @@ public class PlayerTest {
 
 	public static void testCompletePlay(InputStream stream) {
 		Player player = new Player();
-		player.setInputStream(stream);
+		player.setTrack(new FakeTrack(stream));
 	}
 	
 	
 	public static void testPlayer(InputStream stream) {
 		Player player = new Player();
-		player.setInputStream(stream);
+		player.setTrack(new FakeTrack(stream));
 
 		try {
 			Thread.sleep(3000);
@@ -58,14 +65,14 @@ public class PlayerTest {
 	
 	public static void testSkip(InputStream in1, InputStream in2){
 		Player player = new Player();
-		player.setInputStream(in1);
+		player.setTrack(new FakeTrack(in1));
 		try {
 			Thread.sleep(10000);
 		} catch (InterruptedException e) {
 	
 			e.printStackTrace();
 		}
-		player.setInputStream(in2);
+		player.setTrack(new FakeTrack(in2));
 		try {
 			Thread.sleep(10000);
 		} catch (InterruptedException e) {
@@ -73,6 +80,40 @@ public class PlayerTest {
 			e.printStackTrace();
 		}
 		player.stop();
+		
+	}
+	
+	private static class FakeTrack implements Track {
+
+		private InputStream stream;
+		
+		public FakeTrack(InputStream stream) {
+			this.stream = stream;
+		}
+		
+		public Album getAlbum() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public InputStream getStream() throws IOException {
+			return stream;
+		}
+
+		public void setAlbum(Album album) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public Map<Integer, Object> getAllTags() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public Object getTag(int tagID) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 		
 	}
 }

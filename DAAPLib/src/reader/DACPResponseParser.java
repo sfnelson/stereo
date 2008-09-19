@@ -98,6 +98,7 @@ public class DACPResponseParser {
 		trackHandler.register(DAAPConstants.STOP_TIME, new IntegerNodeHandler());
 
 		trackHandler.register(DACPConstants.assr, new IntegerNodeHandler());
+		trackHandler.register(DACPConstants.asai, new LongNodeHandler());
 
 	}
 

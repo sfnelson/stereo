@@ -31,8 +31,8 @@ public class DJTest {
 	@Test
 	public void testGetVolume() {
 
-		a.setVolume(20);
-		assertTrue(a.getVolume()==20);
+		a.volume().setVolume(20);
+		assertTrue(a.volume().getVolume()==20);
 	}
 
 	@Test

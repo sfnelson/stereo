@@ -70,22 +70,42 @@ public class DACPRequestParser {
 			
 			RequestNode node = base;
 			while (cmd.hasNext()) {
+				
+				int arg = -1;
+				if (cmd.hasNextInt()) {
+					arg = cmd.nextInt();
+					if (!cmd.hasNext()) {
+						throw new IllegalArgumentException("invalid command string: " + URI);
+					}
+				}
+				
 				if (node instanceof PathNode) {
+					
 					String name = cmd.next();
 					if (name.charAt(0) >= '0' && name.charAt(0) <= '9') {
-						name = "_" + name;
+						throw new IllegalArgumentException("invalid command string: " + URI);
 					}
 					while (name.indexOf('-') != -1) {
 						int i = name.indexOf('-');
 						name = name.substring(0, i) + name.substring(i+1,i+2).toUpperCase() + name.substring(i+2);
 					}
 					PathNode path = (PathNode)node;
-					Method m = path.methods().get(name);
-					if (m == null) {
-						throw new IllegalArgumentException("unexpected command '" + name + "' in request: " + URI);
+					Method method = null;
+					for (Method m: path.getClass().getMethods()) {
+						if (m.getName().equals(name)) {
+							method = m;
+						}
+					}
+					if (method == null) {
+						throw new IllegalArgumentException("unexpected command '" + name + "' for path " + node.getClass().getName() + ": " + URI);
 					}
 					try {
-						node = (RequestNode)m.invoke(path);
+						if (arg == -1) {
+							node = (RequestNode)method.invoke(path);
+						}
+						else {
+							node = (RequestNode)method.invoke(path, arg);
+						}
 					}
 					catch (IllegalAccessException e) {
 						e.printStackTrace();

@@ -8,6 +8,7 @@ import dacp.DACPTreeBuilder;
 
 import util.DACPConstants;
 import util.command.databases.Browse;
+import util.command.databases.Containers;
 import util.command.databases.Groups;
 import util.node.Node;
 
@@ -18,28 +19,33 @@ public class Databases extends PathNode implements Command {
 	}
 
 	public Node run(DJInterface dj) {
-		//TODO when multiple playlist support is added this will need to change
-		return DACPTreeBuilder.buildDatabaseResponse(dj.getLibrary().size(), 1); //no playlists so far
+		int items = dj.library().getLibrary().size();
+		int containers = dj.library().getPlaylists().size();
+		return DACPTreeBuilder.buildDatabaseResponse(items, containers);
 	}
 	
-	public PathNode _1() {
+	public Command browse(int db) {
 		return this;
 	}
 	
-	public Command browse() {
-		return this;
-	}
-	
-	public Command groups() {
+	public Command groups(int db) {
 		return new Groups();
 	}
 	
+	public Command containers(int db) {
+		return new Containers();
+	}
+	
 	public Command artists() {
-		return new Browse(DACPConstants.abar, DACPConstants.asar);
+		return new Browse(DACPConstants.abar, DACPConstants.ARTIST);
 	}
 	
 	public Command albums() {
-		return new Browse(DACPConstants.abal, DACPConstants.asal);
+		return new Browse(DACPConstants.abal, DACPConstants.ALBUM);
+	}
+	
+	public Command genres() {
+		return new Browse(DACPConstants.abgn, DACPConstants.GENRE);
 	}
 
 }

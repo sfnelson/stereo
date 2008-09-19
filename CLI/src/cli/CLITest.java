@@ -46,7 +46,7 @@ public class CLITest {
             //}
         }
         public void play(String dummy) {
-            controller.play();
+            controller.playbackControl().play();
         	status(null);
         }
 
@@ -70,7 +70,7 @@ public class CLITest {
         }
         
         public void library(String dummy){
-        	controller.getLibrary();
+        	controller.library().getLibrary();
         }
         
         public void filter(String param) {
@@ -100,11 +100,11 @@ public class CLITest {
         }
         
         public void pause(String dummy) { 
-            controller.pause();
+            controller.playbackControl().pause();
             status(null);
         }
         public void skip(String dummy) {
-            controller.next();
+            controller.playbackControl().next();
             status(null);
         }
         public void set(String command) {
@@ -116,7 +116,7 @@ public class CLITest {
         }
         public void stop(String dummy){
         	System.out.println("Stopped");
-        	controller.stop();
+        	controller.playbackControl().stop();
         }
     }
     
@@ -124,7 +124,7 @@ public class CLITest {
         public void volume(String volume) {
             try {
                 Integer value = Integer.parseInt(volume);
-                controller.setVolume(value);
+                controller.volume().setVolume(value);
             }
             catch (NumberFormatException ex) {
                 System.out.println("You were supposed to give me a volume dumbass!");

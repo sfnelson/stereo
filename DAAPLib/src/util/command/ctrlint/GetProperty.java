@@ -21,7 +21,7 @@ public class GetProperty implements Command {
 		if (args != null && args.containsKey("properties")) {
 			String property = args.get("properties");
 			if (property.equals("dmcp.volume")) {
-				return DACPTreeBuilder.buildGetVolume(dj.getVolume());
+				return DACPTreeBuilder.buildGetVolume(dj.volume().getVolume());
 			}
 			else {
 				throw new IllegalArgumentException("property not understood: "+property);

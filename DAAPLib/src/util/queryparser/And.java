@@ -1,13 +1,13 @@
 package util.queryparser;
 
-import interfaces.Track;
+import interfaces.Element;
 
 public class And extends BinOp {
 	public And(Filter a, Filter b) {
 		super(a, b);
 	}
 	
-	public boolean check(Track t) {
+	public boolean check(Element t) {
 		return a.check(t) && b.check(t);
 	}
 	

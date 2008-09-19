@@ -14,7 +14,7 @@ public class Pause implements Command {
 	}
 
 	public Node run(DJInterface dj) {
-		dj.pause();
+		dj.playbackControl().pause();
 		return null;
 	}
 

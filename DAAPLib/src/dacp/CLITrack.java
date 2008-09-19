@@ -7,6 +7,7 @@ import java.util.Map;
 
 import daap.DAAPConstants;
 
+import interfaces.Album;
 import interfaces.Track;
 
 public class CLITrack implements Track {
@@ -23,7 +24,7 @@ public class CLITrack implements Track {
 		return tags.get(tagID);
 	}
 
-	public int getTrackId() {
+	public int getId() {
 		return id;
 	}
 	
@@ -39,9 +40,18 @@ public class CLITrack implements Track {
 	
 	void setId(int id) {
 		this.id = id;
+		tags.put(DAAPConstants.miid, id);
 	}
 	
 	private Map<Integer, Object> tags = new HashMap<Integer, Object>();
 	private int id; //package visibility
+	public Album getAlbum() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
+	public void setAlbum(Album album) {
+		// TODO Auto-generated method stub
+		
+	}
 }

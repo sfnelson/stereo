@@ -2,6 +2,7 @@ package music;
 
 import static org.junit.Assert.*;
 
+import interfaces.Album;
 import interfaces.Track;
 
 import java.io.InputStream;
@@ -22,10 +23,12 @@ public class PlaylistTest {
 	public void setUp() throws Exception {
 		p = new ArrayList<Track>();
 		track = new Track() {
-			public int getTrackId() { return 1; }
+			public int getId() { return 1; }
 			public Object getTag(int i) { return "value"; }
 			public Map<Integer, Object> getAllTags() { return null; }
 			public InputStream getStream() { return null; }
+			public Album getAlbum() { return null; }
+			public void setAlbum(Album album) {}
 		};
 	}
 	

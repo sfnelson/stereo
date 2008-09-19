@@ -1,10 +1,13 @@
 package util.queryparser;
 
+import interfaces.Element;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Scanner;
 
 import daap.DAAPConstants;
-
-import interfaces.Track;
 
 public class Token implements Filter {
 	
@@ -19,7 +22,14 @@ public class Token implements Filter {
 		
 		String p = s.next();
 		if (s.hasNext()) {
-			value = s.next();
+			String val = s.next();
+			try {
+				val = new URI(val).getPath();
+			}
+			catch (URISyntaxException ex) {
+				ex.printStackTrace();
+			}
+			value = val;
 		}
 		else {
 			value = "";
@@ -35,7 +45,7 @@ public class Token implements Filter {
 		}
 	}
 	
-	public boolean check(Track t) {
+	public boolean check(Element t) {
 		
 		Integer code = DAAPConstants.shortCodes.get(property);
 		
@@ -53,6 +63,7 @@ public class Token implements Filter {
 			switch (DAAPConstants.types.get(code)) {
 			case 1: tval = Byte.parseByte(value); break;
 			case 5: tval = Integer.parseInt(value); break;
+			case 7: tval = Long.parseLong(value); break;
 			case 9: tval = value; break; //string
 			default:
 				throw new IllegalArgumentException("unknown or unimplemented type: "

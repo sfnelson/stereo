@@ -128,7 +128,7 @@ public class DACPServer {
 					catch (IllegalArgumentException ex) {
 						ex.printStackTrace();
 
-						printer.error("501 Not Implemented", sock.getOutputStream());
+						printer.error("204 No Content", sock.getOutputStream());
 					}
 
 				}

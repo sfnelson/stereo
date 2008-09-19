@@ -1,7 +1,8 @@
 package interfaces;
 
+
 public interface LackeyCreator {
 
-	public Lackey create(LackeyClient dj);
+	public Lackey create();
 	
 }

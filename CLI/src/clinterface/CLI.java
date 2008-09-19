@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
+import daap.DAAPConstants;
 import dacp.DACPDJInterface;
 
 public class CLI {
@@ -17,19 +18,19 @@ public class CLI {
 	private final static boolean DEBUG = false;
 
 	private Scanner    scan;
-	private DJInterface controller;
+	private DJInterface dj;
 
 
 	public CLI(DJInterface controller) {
 
 		scan = new Scanner(System.in);
-		this.controller = controller;
+		this.dj = controller;
 		run();
 	}
 
 	public CLI(DJInterface controller, String args) {
 		scan = new Scanner(System.in);
-		this.controller = controller;
+		this.dj = controller;
 		input(args);
 	}
 
@@ -48,16 +49,28 @@ public class CLI {
 
 	private class Top {
 		public void list() {
-			//List<Track> p = controller.getPlaylist();
-			//for(Track t:p){
-			//	System.out.println(t.toString());
-			//}
+			int id = 0;
+			Track current = dj.playbackStatus().currentTrack();
+			if (current != null) {
+				Integer idVal = (Integer)current.getTag(DAAPConstants.TRACK_ID);
+				if (idVal != null) id = idVal;
+			}
+			
+			List<? extends Track> p = dj.playbackStatus().getPlaylist();
+			if (p == null) return;
+			
+			for(Track t:p){
+				Integer oid = (Integer)t.getTag(DAAPConstants.TRACK_ID);
+				if (oid != null && oid == id) {
+					System.out.println("> " + t);
+				}
+				else {
+					System.out.println("  " + t);
+				}
+			}
 		}
 		public void play() {
-			controller.play();
-		}
-		public void recent() {
-			//controller.queryRecentlyPlayed();
+			dj.playbackControl().play();
 		}
 		public void query(String param) {
 			System.out.println(param);
@@ -70,22 +83,22 @@ public class CLI {
 		}
 
 		public void status(){
-			switch(controller.playbackStatus()) {
+			switch(dj.playbackStatus().state()) {
 			case 2: System.out.println("Stopped"); break;
 			case 3:
-				System.out.print(controller.currentTrack());
+				System.out.print(dj.playbackStatus().currentTrack());
 				System.out.println(" (Paused)");
 				break;
 			case 4:
-				System.out.print(controller.currentTrack());
+				System.out.print(dj.playbackStatus().currentTrack());
 				System.out.println(" (Playing)");
 				break;
-			default: System.out.println("Unknown status: " + controller.playbackStatus());
+			default: System.out.println("Unknown status: " + dj.playbackStatus());
 			}
 		}
 
 		public void library(){
-			printTracks(controller.getLibrary());
+			printTracks(dj.library().getLibrary());
 		}
 
 		public void filter(String param) {
@@ -105,20 +118,17 @@ public class CLI {
 			System.out.println("Appended with a new list with Type: "+type+" with the Criteria of:"+crit+"");
 			//controller.append(type, crit);
 		}
-
-		public void tracklist() {
-			//for(Track currentTrack: controller.getPlaylist()) {
-			//	System.out.print(currentTrack.toString());
-			//}
-		}
 		public void pause() { 
-			controller.pause();
+			dj.playbackControl().pause();
 		}
 		public void skip() {
 			next();
 		}
 		public void next() {
-			controller.next();
+			dj.playbackControl().next();
+		}
+		public void prev() {
+			dj.playbackControl().prev();
 		}
 		public void set(String command) {
 			command = command.toLowerCase().trim();
@@ -127,7 +137,7 @@ public class CLI {
 			}
 		}
 		public void stop(){
-			controller.stop();
+			dj.playbackControl().stop();
 		}
 	}
 
@@ -135,7 +145,7 @@ public class CLI {
 		public void volume(String volume) {
 			try {
 				Integer value = Integer.parseInt(volume);
-				controller.setVolume(value);
+				dj.volume().setVolume(value);
 			}
 			catch (NumberFormatException ex) {
 				System.out.println("You were supposed to give me a volume dumbass!");
@@ -286,7 +296,7 @@ public class CLI {
 		System.out.println("Usage: " + appName + " HOST (PORT | --) [COMMANDS]");
 	}
 	
-	private void printTracks(List<Track> tracks) {
+	private void printTracks(List<? extends Track> tracks) {
 		for (Track t: tracks) {
 			printTrack(t);
 		}

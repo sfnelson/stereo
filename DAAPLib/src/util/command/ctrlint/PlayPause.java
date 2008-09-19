@@ -15,7 +15,7 @@ public class PlayPause implements Command {
 
 	public Node run(DJInterface dj) {
 		
-		dj.play();
+		dj.playbackControl().play();
 		
 		return null;
 	}

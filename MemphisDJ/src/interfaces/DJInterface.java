@@ -1,8 +1,10 @@
 package interfaces;
 
-public interface DJInterface extends
-		PlaybackControlInterface,
-		PlaybackStatusInterface,
-		LibraryInterface {
+public interface DJInterface {
+	
+	public PlaybackControl playbackControl();
+	public PlaybackStatus playbackStatus();
+	public Lackey library();
+	public VolumeControl volume();
 
 }

@@ -16,7 +16,7 @@ public class NowPlayingArtwork implements Command {
 
 	public Node run(DJInterface dj) {
 		
-		byte[] image = dj.getAlbumArt();
+		byte[] image = dj.playbackStatus().getAlbumArt();
 		
 		if (image != null) {
 			return new ImageNode(image);

@@ -1,17 +1,18 @@
 package util.command.ctrlint;
 
 import interfaces.DJInterface;
-import interfaces.PlaybackStatusInterface;
-import interfaces.PlaylistStatusListener;
+import interfaces.PlaybackControl;
+import interfaces.PlaybackQueue;
 import interfaces.Track;
 
 import java.util.Map;
 
+import notification.PlaybackListener;
 import util.command.Command;
 import util.node.Node;
 import dacp.DACPTreeBuilder;
 
-public class PlayStatusUpdate implements Command, PlaylistStatusListener {
+public class PlayStatusUpdate implements Command, PlaybackListener {
 
 	private int revision;
 	
@@ -26,9 +27,11 @@ public class PlayStatusUpdate implements Command, PlaylistStatusListener {
 
 	public Node run(DJInterface dj) {
 		
-		if (this.revision >= dj.playbackRevision()) {
+		PlaybackControl control = dj.playbackControl();
+		
+		if (this.revision >= control.revision()) {
 			
-			dj.registerPlaybackStatusListener(this);
+			control.registerListener(this);
 
 			try {
 				synchronized (this) {
@@ -38,13 +41,13 @@ public class PlayStatusUpdate implements Command, PlaylistStatusListener {
 				e.printStackTrace();
 			}
 
-			dj.removePlaybackStatusListener(this);
+			control.removeListener(this);
 		}
 		
-		Track current = dj.currentTrack();
-		byte state = dj.playbackStatus();
-		int revision = dj.playbackRevision();
-		int elapsed = dj.playbackElapsedTime();
+		Track current = dj.playbackStatus().currentTrack();
+		byte state = dj.playbackStatus().state();
+		int revision = dj.playbackControl().revision();
+		int elapsed = dj.playbackStatus().elapsedTime();
 		
 		Node n = DACPTreeBuilder.buildPlayStatusUpdate(revision, state,
 				(byte)0, (byte)0, current, elapsed);
@@ -53,7 +56,19 @@ public class PlayStatusUpdate implements Command, PlaylistStatusListener {
 		
 	}
 
-	public void currentTrackChanged(PlaybackStatusInterface dj) {
+	public void trackChanged(Track t) {
+		synchronized (this) {
+			this.notify();
+		}
+	}
+
+	public void queueChanged(PlaybackQueue queue) {
+		synchronized (this) {
+			this.notify();
+		}
+	}
+
+	public void stateChanged(byte state) {
 		synchronized (this) {
 			this.notify();
 		}

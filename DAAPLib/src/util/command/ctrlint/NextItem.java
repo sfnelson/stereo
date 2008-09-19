@@ -15,7 +15,7 @@ public class NextItem implements Command {
 
 	public Node run(DJInterface dj) {
 		
-		dj.next();
+		dj.playbackControl().next();
 		
 		return null;
 	}

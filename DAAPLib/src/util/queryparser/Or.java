@@ -1,6 +1,6 @@
 package util.queryparser;
 
-import interfaces.Track;
+import interfaces.Element;
 
 public class Or extends BinOp {
 	
@@ -8,7 +8,7 @@ public class Or extends BinOp {
 		super(a, b);
 	}
 	
-	public boolean check(Track t) {
+	public boolean check(Element t) {
 		return a.check(t) || b.check(t);
 	}
 	

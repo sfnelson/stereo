@@ -1,5 +1,7 @@
 package dacp;
 
+import interfaces.Album;
+import interfaces.Playlist;
 import interfaces.Track;
 
 import java.util.ArrayList;
@@ -49,7 +51,7 @@ public class DACPTreeBuilder {
 
 	public static Composite buildCtrlIntNode() {
 
-		Composite response = createResponse(DACPConstants.apso);
+		Composite response = createResponse(DACPConstants.caci);
 		Composite list = createList(response, DACPConstants.mlcl, 0, 1);
 
 		Composite item = new Composite(DACPConstants.mlit);
@@ -155,8 +157,10 @@ public class DACPTreeBuilder {
 			if (genre==null) genre = "";
 			response.append(new StringNode(DACPConstants.cang, genre));
 			
+			long albumid = (Long)track.getAlbum().getTag(DACPConstants.asai);
+			
 			//TODO get the album id
-			response.append(new LongNode(DACPConstants.asai, 0x0)); //album id
+			response.append(new LongNode(DACPConstants.asai, albumid)); //album id
 			response.append(new IntegerNode(DACPConstants.cmmk, 1)); //media kind?
 			
 			Integer time = (Integer)track.getTag(DACPConstants.SONG_TIME);
@@ -168,7 +172,7 @@ public class DACPTreeBuilder {
 		return response;
 	}
 
-	public static Node buildPlaylistResponse(List<Track> playlist) {
+	public static Node buildPlaylistResponse(List<? extends Track> playlist) {
 
 		Composite response = createResponse(DACPConstants.apso);
 
@@ -176,6 +180,19 @@ public class DACPTreeBuilder {
 
 		for (Track t: playlist) {
 			list.append(buildTrackNode(t));
+		}
+
+		return response;
+	}
+	
+	public static Node buildPlaylistsResponse(List<? extends Playlist<? extends Track>> list2) {
+
+		Composite response = createResponse(DACPConstants.aply);
+
+		Composite list = createList(response, DACPConstants.mlcl, 0, list2.size());
+
+		for (Playlist<? extends Track> p: list2) {
+			list.append(buildPlaylistNode(p));
 		}
 
 		return response;
@@ -229,6 +246,19 @@ public class DACPTreeBuilder {
 
 		return response;
 	}
+	
+	public static Node buildAlbumResponse(int code, List<? extends Album> albums) {
+
+		Composite response = createResponse(code);
+
+		Composite list = createList(response, DACPConstants.mlcl, 0, albums.size());
+
+		for (Album a: albums) {
+			list.append(buildAlbumNode(a));
+		}
+
+		return response;
+	}
 
 	private static Composite createResponse(int code) {
 		Composite response = new Composite(code);
@@ -273,6 +303,39 @@ public class DACPTreeBuilder {
 		}
 
 		return trackNode;
+	}
+	
+	private static Composite buildAlbumNode(Album album) {
+
+		Composite albumNode = new Composite(DACPConstants.mlit);
+		
+		albumNode.append(new IntegerNode(DACPConstants.miid, (Integer)album.getTag(DACPConstants.miid)));
+		albumNode.append(new LongNode(DACPConstants.mper, (Long)album.getTag(DACPConstants.asai)));
+		albumNode.append(new StringNode(DACPConstants.minm, (String)album.getTag(DACPConstants.ALBUM)));
+		albumNode.append(new StringNode(DACPConstants.asaa, (String)album.getTag(DACPConstants.ARTIST)));
+			
+		return albumNode;
+	}
+	
+	private static Node buildPlaylistNode(Playlist<? extends Track> p) {
+
+		Composite playlistNode = new Composite(DACPConstants.mlit);
+
+		playlistNode.append(new IntegerNode(DACPConstants.miid, p.id()));
+		playlistNode.append(new LongNode(DACPConstants.mper, p.persistantId()));
+		playlistNode.append(new StringNode(DACPConstants.minm, p.name()));
+		
+		if (p.isRoot()) {
+			playlistNode.append(new BooleanNode(DACPConstants.abpl, true));
+		}
+		
+		Playlist<? extends Track> par = p.parent();
+		int pid = (par == null)?0:par.id();
+		playlistNode.append(new IntegerNode(DACPConstants.mpco, pid));
+		
+		playlistNode.append(new IntegerNode(DACPConstants.mimc, p.size()));
+
+		return playlistNode;
 	}
 
 	private static Composite createDictionaryNode() {

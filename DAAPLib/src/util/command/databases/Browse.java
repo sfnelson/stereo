@@ -10,13 +10,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import dacp.DACPTreeBuilder;
-
 import util.command.Command;
 import util.node.Node;
 import util.queryparser.Filter;
-import util.queryparser.FilterTracks;
+import util.queryparser.ApplyFilter;
 import util.queryparser.QueryParser;
+import dacp.DACPTreeBuilder;
 
 public class Browse implements Command {
 	
@@ -37,12 +36,14 @@ public class Browse implements Command {
 
 	public Node run(DJInterface dj) {
 		
-		List<Track> songs = dj.getLibrary();
+		List<? extends Track> songs = dj.library().getLibrary();
+		
+		System.out.println("library has " + songs.size() + " elements");
 		
 		if (args != null && args.containsKey("filter")) {
 			Filter f = QueryParser.parser.parse(args.get("filter"));
 			System.out.println(f);
-			songs = FilterTracks.filter(f, songs);
+			songs = ApplyFilter.filter(f, songs);
 		}
 		
 		Set<String> results = new HashSet<String>();
