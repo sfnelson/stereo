@@ -95,7 +95,7 @@
   <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
   <target name="CLI">
     <java classname="clinterface.CLI" failonerror="true" fork="yes">
-      <arg line="localhost 3689"/>
+      <arg line="${args}"/>
       <classpath refid="CLI.classpath"/>
     </java>
   </target>
