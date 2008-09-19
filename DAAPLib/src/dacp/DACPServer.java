@@ -4,12 +4,9 @@ import interfaces.ControlServerCreator;
 import interfaces.DJInterface;
 
 import java.io.IOException;
-import java.net.Inet4Address;
 import java.net.InetAddress;
-import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Scanner;
@@ -35,7 +32,7 @@ public class DACPServer {
 
 	private final DACPResponseGenerator printer = new DACPResponseGenerator();
 
-	public DACPServer(int port, DJInterface dj) throws IOException {
+	public DACPServer(String device, int port, DJInterface dj) throws IOException {
 		this.PORT = port;
 		this.dj = dj;
 		SERVER_SOCK = new ServerSocket(PORT);
@@ -44,6 +41,7 @@ public class DACPServer {
 
 		Set<InetAddress> addresses = new HashSet<InetAddress>();
 
+		/*
 		for (Enumeration<NetworkInterface> e = NetworkInterface.getNetworkInterfaces(); e.hasMoreElements();) {
 			NetworkInterface i = e.nextElement();
 			for (Enumeration<InetAddress> f = i.getInetAddresses(); f.hasMoreElements();) {
@@ -55,6 +53,8 @@ public class DACPServer {
 				if (a instanceof Inet4Address) addresses.add(a);
 			}
 		}
+		*/
+		addresses.add(InetAddress.getByName(device));
 
 		String hostname = InetAddress.getLocalHost().getHostName();
 		hostname = new Scanner(hostname).useDelimiter("[.]").next();
@@ -144,14 +144,18 @@ public class DACPServer {
 
 	}
 
-	public static void register() {
-		DJ.registerServerCreator(new DACPServerCreator());
+	public static void register(String device) {
+		DJ.registerServerCreator(new DACPServerCreator(device));
 	}
 
 	private static class DACPServerCreator implements ControlServerCreator {
+		private final String device;
+		public DACPServerCreator(String device) {
+			this.device = device;
+		}
 		public void create(DJInterface dj) {
 			try {
-				new DACPServer(3689, dj);
+				new DACPServer(device, 3689, dj);
 			}
 			catch (IOException ex) {
 				System.err.println("Unable to create DACP Server");

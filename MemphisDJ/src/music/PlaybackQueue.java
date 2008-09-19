@@ -147,9 +147,9 @@ class PlaybackQueue extends AbstractEventGenerator<QueueListener>
 		for (QueueListener l: super.listeners()) {
 			l.queueChanged();
 			
-			System.out.println(recent);
-			System.out.println(current);
-			System.out.println(queued);
+			//System.out.println(recent);
+			//System.out.println(current);
+			//System.out.println(queued);
 		}
 	}
 	

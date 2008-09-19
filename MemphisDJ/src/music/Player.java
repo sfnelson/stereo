@@ -41,13 +41,12 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 
 	@SuppressWarnings("deprecation")
 	public synchronized void setTrack(Track t) {
-		System.out.println("Setting input stream in player");
+		System.out.println("Setting the track on the player: " + t);
 		if (thread != null) {
 			thread.resume();
 			thread.close();
 			thread = null;
 		}
-		System.out.println("Making new thread");	
 		thread = new TrackThread(t);
 		start();
 	}
@@ -153,13 +152,12 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 			}
 			
 			try {
-				Thread.sleep(100); //TODO Bitstream is broken and doesn't read the whole tag
+				Thread.sleep(100); //TODO Tag reader doesn't block to read the whole tag 
 				Bitstream s = new Bitstream(in);
 				InputStream tags = s.getRawID3v2();
 				if (tags != null) {
 					try {
 						ID3v2 t = new ID3v2(tags);
-						if (t.hasTag()) System.out.println("We have an ID3v2 Tag");
 						
 						ID3v2Frame img = (ID3v2Frame)t.getFrame("APIC").firstElement();
 						byte[] bytes = img.getContent();
@@ -180,7 +178,7 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 							if (b == 0) break;
 							contentType += (char)b;
 						}
-						System.out.println(contentType);
+						System.out.println("Album art: " + contentType);
 						
 						ba.read(); //picture type;
 						read++;
@@ -191,9 +189,7 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 							read++;
 							
 							if (b == 0) break;
-							System.out.print((char)b);
 						}
-						System.out.println();
 						
 						image = new byte[bytes.length - read];
 						ba.read(image);
@@ -224,7 +220,7 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 			}
 			catch (JavaLayerException ex) {
 				System.err.println("Funky error with JavaLayer - could not create Player");
-				//ex.printStackTrace();
+				ex.printStackTrace();
 				player.close();
 				try {
 					in.close();
@@ -234,8 +230,7 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 				player = null;
 				
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 
 		}
@@ -257,7 +252,7 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 			}
 			catch (JavaLayerException ex) {
 				System.out.println("playback stopped with an exception");
-				//ex.printStackTrace();
+				ex.printStackTrace();
 			}
 			player.close();
 			try {
