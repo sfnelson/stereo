@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- WARNING: Eclipse auto-generated file.
-     Any modifications will be overwritten.
-     To include a user specific buildfile here, simply create one in the same
-     directory with the processing instruction <?eclipse.ant.import?>
-     as the first entry and export the buildfile again. -->
 <project basedir="." default="build" name="DAAPLib" xmlns:ivy="antlib:org.apache.ivy.ant">
   <property name="CLI.location" value="../CLI"/>
   <property name="Jukebox.location" value="../Jukebox"/>
@@ -62,7 +57,13 @@
   <target depends="clean" name="cleanall">
     <ant antfile="${MemphisDJ.location}/build.xml" inheritAll="false" target="clean"/>
   </target>
-  <target depends="build-subprojects,build-project" name="build"/>
+  <target depends="build-subprojects,build-project" name="build">
+    <echo file="run.sh" message="#!/bin/sh${line.separator}${line.separator}${java.home}/bin/java -cp ${toString:DAAPLib.classpath} dacp.Main${line.separator}" />
+    <exec executable="chmod">
+      <arg line="755 run.sh"/>
+    </exec>
+  </target>
+
   <target name="build-subprojects">
     <ant antfile="${MemphisDJ.location}/build.xml" inheritAll="false" target="build-project"/>
   </target>
