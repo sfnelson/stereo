@@ -42,7 +42,7 @@ public class DAAPClient {
 			helper = new DAAPUtilities(hostname, port, log);
 		} catch (IOException e) {
 			System.err.println("*Probably* an invalid host");
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 		//Get a session Id
 		getSessionDetails();

@@ -20,8 +20,8 @@ public class SetProperty implements Command {
 		
 		if (args != null && args.containsKey("dmcp.volume")) {
 			Scanner property = new Scanner(args.get("dmcp.volume"));
-			if (property.hasNextInt()) {
-				dj.volume().setVolume(property.nextInt());
+			if (property.hasNextDouble()) {
+				dj.volume().setVolume((int)Math.round(property.nextDouble()));
 			}
 			else {
 				throw new IllegalArgumentException("property not understood: "+args);
