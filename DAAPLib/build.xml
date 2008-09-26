@@ -58,7 +58,7 @@
     <ant antfile="${MemphisDJ.location}/build.xml" inheritAll="false" target="clean"/>
   </target>
   <target depends="build-subprojects,build-project" name="build">
-    <echo file="run.sh" message="#!/bin/sh${line.separator}${line.separator}${java.home}/bin/java -cp ${toString:DAAPLib.classpath} dacp.Main${line.separator}" />
+    <echo file="run.sh" message="#!/bin/sh${line.separator}${line.separator}${java.home}/bin/java -cp ${toString:DAAPLib.classpath} dacp.Main $* ${line.separator}" />
     <exec executable="chmod">
       <arg line="755 run.sh"/>
     </exec>
