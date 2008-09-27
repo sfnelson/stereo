@@ -7,7 +7,6 @@
 <project basedir="." default="build" name="CLI" xmlns:ivy="antlib:org.apache.ivy.ant">
   <property name="MemphisDJ.location" value="../MemphisDJ"/>
   <property name="DAAPLib.location" value="../DAAPLib"/>
-  <property name="Jukebox.location" value="../Jukebox"/>
 
   <property name="debuglevel" value="source,lines,vars"/>
 
@@ -15,37 +14,12 @@
   <property name="source" value="1.5"/>
 
   <property name="ivy.install.version" value="2.0.0-beta2"/>
-  
-  <target name="download-ivy" unless="skip.download">
-    <!-- download Ivy from web site so that it can be used even without any special installation -->  
-    <echo message="installing ivy..."/>
-    <mkdir dir="lib"/>
-    <get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"  
-	 dest="lib/ivy.jar" usetimestamp="true"/>
-  </target>  
-  
-  <target name="install-ivy" depends="download-ivy">
-    <path id="ivy.lib.path">
-      <fileset dir="lib" includes="*.jar"/>  
-    </path>
-    <taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/>  
-  </target>
-
-  <target name="resolve" depends="install-ivy">
-    <ivy:settings file="../ivysettings.xml" />
-    <ivy:retrieve />
-  </target>
-
+ 
   <path id="MemphisDJ.classpath">
     <pathelement location="${MemphisDJ.location}/bin"/>
   </path>
   <path id="DAAPLib.classpath">
     <pathelement location="${DAAPLib.location}/bin"/>
-    <path refid="MemphisDJ.classpath"/>
-  </path>
-  <path id="Jukebox.classpath">
-    <pathelement location="${Jukebox.location}/bin"/>
-    <path refid="DAAPLib.classpath"/>
     <path refid="MemphisDJ.classpath"/>
   </path>
   <path id="CLI.classpath">
@@ -55,10 +29,9 @@
     </fileset>
     <path refid="DAAPLib.classpath"/>
     <path refid="MemphisDJ.classpath"/>
-    <path refid="Jukebox.classpath"/>
   </path>
 
-  <target name="init" depends="resolve">
+  <target name="init">
     <mkdir dir="bin"/>
     <copy includeemptydirs="false" todir="bin">
       <fileset dir="src" excludes="**/*.launch, **/*.java"/>
@@ -73,13 +46,17 @@
   <target depends="clean" name="cleanall">
     <ant antfile="${MemphisDJ.location}/build.xml" inheritAll="false" target="clean"/>
     <ant antfile="${DAAPLib.location}/build.xml" inheritAll="false" target="clean"/>
-    <ant antfile="${Jukebox.location}/build.xml" inheritAll="false" target="clean"/>
   </target>
-  <target depends="build-subprojects,build-project" name="build"/>
+  <target depends="build-subprojects,build-project" name="build">
+    <echo file="run.sh" message="#!/bin/sh${line.separator}${line.separator}${java.home}/bin/java -cp ${toString:CLI.classpath} clinterface.CLI $* ${line.separator}" />
+    <exec executable="chmod">
+      <arg line="755 run.sh"/>
+    </exec>
+  </target>
+
   <target name="build-subprojects">
     <ant antfile="${MemphisDJ.location}/build.xml" inheritAll="false" target="build-project"/>
     <ant antfile="${DAAPLib.location}/build.xml" inheritAll="false" target="build-project"/>
-    <ant antfile="${Jukebox.location}/build.xml" inheritAll="false" target="build-project"/>
   </target>
   <target depends="init" name="build-project">
     <echo message="${ant.project.name}: ${ant.file}"/>
