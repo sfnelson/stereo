@@ -2,6 +2,7 @@ package util.queryparser;
 
 import interfaces.Element;
 
+import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Scanner;
@@ -62,7 +63,8 @@ public class Token implements Filter {
 			switch (DAAPConstants.types.get(code)) {
 			case 1: tval = Byte.parseByte(value); break;
 			case 5: tval = Integer.parseInt(value); break;
-			case 7: tval = Long.parseLong(value); break;
+			//using big integer ensures unsigned longs are parsed correctly
+			case 7: tval = new BigInteger(value).longValue(); break;
 			case 9: tval = value; break; //string
 			default:
 				throw new IllegalArgumentException("unknown or unimplemented type: "
