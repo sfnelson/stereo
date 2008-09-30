@@ -1,0 +1,395 @@
+<html>
+<head>
+<title>Stereo</title>
+<meta name="http-equiv" content="Content-type: text/html; charset=UTF-8" />
+<script type="text/javascript" charset="utf-8">
+	function getPlaybackStatusUpdate() {
+		var request = new XMLHttpRequest();
+		request.onreadystatechange = function() {
+			if (request.readyState == 4) {
+				parseUpdateResponse(request);
+			}
+		};
+		if (lastUpdate && lastUpdate.revision) {
+			request.open("GET", "/ctrl-int/1/playstatusupdate?revision-number="+lastUpdate.revision, true);
+		}
+		else {
+			request.open("GET", "/ctrl-int/1/playstatusupdate", true);
+		}
+		//XHR binary charset opt by Marcus Granado 2006 [http://mgran.blogspot.com] 
+		request.overrideMimeType('text/plain; charset=x-user-defined');
+		request.send(null);
+	}
+
+	function getPlaylistUpdate() {
+		var request = new XMLHttpRequest();
+		request.onreadystatechange = function() {
+			if (request.readyState == 4) {
+				parsePlaylistResponse(request);
+			}
+		};
+		request.open("GET", "/ctrl-int/1/playlist", true);
+		//XHR binary charset opt by Marcus Granado 2006 [http://mgran.blogspot.com] 
+		request.overrideMimeType('text/plain; charset=x-user-defined');
+		request.send(null);
+	}
+
+	function Node(name, length) {
+		this.name = name;
+		this.length = length;
+		this.value = "";
+		this.children = new Array();
+		this.print = function (indent) {
+			sysout(indent + this.name + ": " + this.value + " (" + this.length + ")");
+			for (var i = 0; i < this.children.length; i++) {
+				this.children[i].print(indent+"&nbsp;&nbsp;");
+			}
+		}
+	}
+	
+	function parseUpdateResponse(response) {
+		var text = response.responseText;
+
+		var name = text.substring(0, 4);
+		var length = parseInt(text, 4);
+		
+		var tree = new Node(name, length);
+		
+		for (var i = 8; i < text.length;) {
+			i += parseNode(tree, text, i);
+		}
+
+		var up = new PlayStatusUpdate(tree);
+
+		updateStatus(up);
+
+		if (up.revision != lastUpdate.revision) {
+			getPlaylistUpdate();
+		}
+
+		lastUpdate = up;
+		getPlaybackStatusUpdate();
+	}
+
+	function parsePlaylistResponse(response) {
+		var text = response.responseText;
+
+		var name = text.substring(0, 4);
+		var length = parseInt(text, 4);
+		
+		var tree = new Node(name, length);
+		
+		for (var i = 8; i < text.length;) {
+			i += parseNode(tree, text, i);
+		}
+
+		//tree.print("");
+
+		var playlist = new Playlist(tree);
+
+		updatePlaylist(playlist);
+	}
+
+
+	function parseNode(parent, text, index) {
+		var name = text.substring(index, index + 4);
+		var length = parseInt(text, index + 4);
+		var node = new Node(name, length);
+
+		switch (types[name]) {
+		case byteVal:
+			node.value = parseByte(text, index+8); break;
+		case shortVal:
+			node.value = parseShort(text, index+8); break;
+		case intVal:
+			node.value = parseInt(text, index+8); break;
+		case longVal:
+			node.value = parseLong(text, index+8); break;
+		case longlongVal:
+			node.value = parseLongLong(text, index+8); break;
+		case stringVal:
+			node.value = parseString(text, index+8, length); break;
+		case dateVal:
+			node.value = parseDate(text, index+8); break;
+		case version:
+			node.value = parseVersion(text, index+8); break;
+		case list:
+			for ( var i = 0; i < length;) {
+				i += parseNode(node, text, 8 + index + i);
+			}
+			break;
+		}
+
+		parent.children.push(node);
+		return 8 + length;
+	}
+
+	function parseByte(text, index) {
+		return text.charCodeAt(index);
+	}
+
+	function parseShort(text, index) {
+		var i = text.charCodeAt(index) & 255;
+		i <<= 8;
+		i += text.charCodeAt(index + 1) & 255;
+		return i;
+	}
+	
+	function parseInt(text, index) {
+		var i = text.charCodeAt(index) & 255;
+		i <<= 8;
+		i += text.charCodeAt(index + 1) & 255;
+		i <<= 8;
+		i += text.charCodeAt(index + 2) & 255;
+		i <<= 8;
+		i += text.charCodeAt(index + 3) & 255;
+		return i;
+	}
+
+	function parseLong(text, index) {
+		var i = text.charCodeAt(index) & 255;
+		i <<= 8;
+		i += text.charCodeAt(index + 1) & 255;
+		i <<= 8;
+		i += text.charCodeAt(index + 2) & 255;
+		i <<= 8;
+		i += text.charCodeAt(index + 3) & 255;
+		i <<= 8;
+		i += text.charCodeAt(index + 4) & 255;
+		i <<= 8;
+		i += text.charCodeAt(index + 5) & 255;
+		i <<= 8;
+		i += text.charCodeAt(index + 6) & 255;
+		i <<= 8;
+		i += text.charCodeAt(index + 7) & 255;
+		return i;
+	}
+
+	function parseLongLong(text, index) {
+		var i = new Array();
+		i.push(parseInt(text, index));
+		i.push(parseInt(text, index+4));
+		i.push(parseInt(text, index+8));
+		i.push(parseInt(text, index+12));
+		return i;
+	}
+
+	function parseString(text, index, length) {
+		//needs to decode utf-8. This is slow :-(
+
+		var string = "";
+
+		for (var i = 0; i < length;) {
+			var c = text.charCodeAt(index+i) & 255;
+			if (c < 128) {
+				string += String.fromCharCode(c) ;
+				i++;
+			}
+			else if (c > 191 && c < 224) {
+				var c2 = text.charCodeAt(index+i+1) & 255;
+				string += String.fromCharCode(((c & 31)) << 6 | (c2 & 63));
+				i+=2;
+			}
+			else {
+				var c2 = text.charCodeAt(index+i+1) & 255;
+				var c3 = text.charCodeAt(index+i+2) & 255;
+				string += String.fromCharCode(((c & 15)) << 12 | (c2 & 63) << 6 | (c3 & 63));
+				i+=3;
+			}
+		}
+
+		return string;
+	}
+
+	function parseDate(text, index) {
+		return parseInt(text, index);
+	}
+
+	function parseVersion(text, index) {
+		var i = text.charCodeAt(index) & 255;
+		i += ".";
+		i += text.charCodeAt(index + 1) & 255;
+		i += ".";
+		i += text.charCodeAt(index + 2) & 255;
+		i += ".";
+		i += text.charCodeAt(index + 3) & 255;
+		return i;
+	}
+
+	function sysout(text) {
+		var p = document.createElement("DIV");
+		p.innerHTML = text;
+		document.body.appendChild(p);
+	}
+
+	var byteVal = 1;
+	var shortVal = 3;
+	var intVal = 5;
+	var longVal = 7;
+	var longlongVal = 8;
+	var stringVal = 9;
+	var dateVal = 10; //4-byte int
+	var version = 11; //4 single bytes or two ints
+	var list = 12;
+	var composite = 13;
+	var types = new Array();
+	types["cmst"] = list;
+	types["mstt"] = intVal;
+	types["cmsr"] = intVal;
+	types["caps"] = byteVal;
+	types["cash"] = byteVal;
+	types["carp"] = byteVal;
+	types["caas"] = intVal;
+	types["caar"] = intVal;
+	types["canp"] = longlongVal;
+	types["cann"] = stringVal;
+	types["cana"] = stringVal;
+	types["canl"] = stringVal;
+	types["cang"] = stringVal;
+	types["asai"] = longVal;
+	types["cmmk"] = intVal;
+	types["cant"] = intVal;
+	types["cast"] = intVal;
+
+	types["muty"] = intVal;
+	types["mtco"] = intVal;
+	types["mrco"] = intVal;
+	types["mlcl"] = list;
+	types["mlit"] = list;
+	types["minm"] = stringVal;
+	types["asgn"] = stringVal;
+	types["asal"] = stringVal;
+	types["asar"] = stringVal;
+	types["mikd"] = byteVal;
+	types["assp"] = intVal;
+	types["assr"] = intVal;
+	types["asst"] = intVal;
+	types["astm"] = intVal;
+	types["asai"] = longVal;
+	types["miid"] = intVal;
+	
+	var lastUpdate = 0;
+
+	function PlayStatusUpdate(tree) {
+
+		for (child in tree.children) {
+			var node = tree.children[child];
+			switch (node.name) {
+			case "caps":
+				this.status = node.value;
+				break;
+			case "cmsr":
+				this.revision = node.value;
+				break;
+			case "cann": this.title = node.value; break;
+			case "cana": this.artist = node.value; break;
+			case "canl": this.album = node.value; break;
+			case "cang": this.genre = node.value; break;
+			case "miid": this.id = node.value; break;
+			}
+		}
+	}
+
+	function Playlist(tree) {
+
+		this.tracks = new Array();
+		
+		var list = 0;
+		
+		for (child in tree.children) {
+			var node = tree.children[child];
+			switch (node.name) {
+			case "mlcl":
+				list = node;
+				break;
+			}
+		}
+
+		if (!list) return;
+
+		for (child in list.children) {
+			var node = list.children[child];
+			switch (node.name) {
+			case "mlit":
+				this.tracks.push(new Track(node));
+				break;
+			}
+		}
+	}
+
+	function Track(tree) {
+
+		for (child in tree.children) {
+			var node = tree.children[child];
+			switch (node.name) {
+			case "asal": this.album = node.value; break;
+			case "minm": this.title = node.value; break;
+			case "asar": this.artist = node.value; break;
+			case "asag": this.genre = node.value; break;
+			}
+		}
+	}
+
+	function updateStatus(update) {
+
+		if (update.status == 2) {
+			document.getElementById("state").className = "stopped";
+		}
+		else if (update.status == 3) {
+			document.getElementById("state").className = "paused";
+			document.getElementById("title").innerHTML = update.title;
+			document.getElementById("artist").innerHTML = update.artist;
+			document.getElementById("album").innerHTML = update.album;
+			document.getElementById("genre").innerHTML = update.genre;
+		}
+		else if (update.status == 4) {
+			document.getElementById("state").className = "playing";
+			document.getElementById("title").innerHTML = update.title;
+			document.getElementById("artist").innerHTML = update.artist;
+			document.getElementById("album").innerHTML = update.album;
+			document.getElementById("genre").innerHTML = update.genre;
+		}
+	}
+
+	function updatePlaylist(playlist) {
+
+		var list = document.getElementById("playlist");
+		list.innerHTML="";
+		
+		for (i in playlist.tracks) {
+			var track = playlist.tracks[i];
+
+			var node = document.createElement("DIV");
+			node.className = "track";
+			
+			node.appendChild(createNode("title", track.title));
+			node.appendChild(createNode("album", track.album));
+			node.appendChild(createNode("artist", track.artist));
+			node.appendChild(createNode("genre", track.genre));
+			node.appendChild(createNode("id", track.id));
+
+			list.appendChild(node);
+		}
+	}
+
+	function createNode(type, value) {
+		var node = document.createElement("DIV");
+		node.className = type;
+		if (value) node.innerHTML = value;
+		return node;
+	}
+
+</script>
+
+</head>
+<body onload="getPlaybackStatusUpdate();">
+<div id="state">
+<div id="title" class="title"></div>
+<div id="artist" class="artist"></div>
+<div id="album" class="album"></div>
+<div id="genre" class="genre"></div>
+</div>
+<div id="playlist">
+</div>
+</body>
+</html>

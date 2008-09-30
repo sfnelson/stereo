@@ -244,6 +244,8 @@ public class DACPTreeBuilder {
 		for (String s: artists) {
 			list.append(new StringNode(DACPConstants.mlit, s));
 		}
+		
+		response.append(buildIndex(artists));
 
 		return response;
 	}
@@ -341,5 +343,44 @@ public class DACPTreeBuilder {
 
 	private static Composite createDictionaryNode() {
 		return new Composite(DACPConstants.mdcl);
+	}
+	
+	private static Node buildIndex(List<String> items) throws UnsupportedEncodingException {
+		
+		Composite index = new Composite(DACPConstants.mshl);
+		
+		char current = 0;
+		int count = 0;
+		int offset = 0;
+		
+		for (String s: items) {
+			
+			if (s.charAt(0) == current) {
+				count++;
+			}
+			else {
+				if (current != 0) {
+					Composite item = new Composite(DACPConstants.mlit);
+					item.append(new StringNode(DACPConstants.mshc, "\0"+current));
+					item.append(new IntegerNode(DACPConstants.mshi, offset));
+					item.append(new IntegerNode(DACPConstants.mshn, count));
+					index.append(item);
+				}
+				
+				current = s.charAt(0);
+				offset += count;
+				count = 0;
+			}
+		}
+		
+		if (current != 0) {
+			Composite item = new Composite(DACPConstants.mlit);
+			item.append(new StringNode(DACPConstants.mshc, "\0"+current));
+			item.append(new IntegerNode(DACPConstants.mshi, offset));
+			item.append(new IntegerNode(DACPConstants.mshn, count));
+			index.append(item);
+		}
+		
+		return index;
 	}
 }

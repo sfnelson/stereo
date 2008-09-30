@@ -12,6 +12,7 @@ import util.command.CtrlInt;
 import util.command.Databases;
 import util.command.Login;
 import util.command.Logout;
+import util.command.PageRequest;
 import util.command.PathNode;
 import util.command.RequestNode;
 import util.command.ServerInfo;
@@ -66,6 +67,12 @@ public class DACPRequestParser {
 				Scanner param = new Scanner(args.next());
 				param.useDelimiter("[=]");
 				argsMap.put(param.next(), param.next());
+			}
+			
+			if (!cmd.hasNext()) {
+				//a request for head: return html client page
+				
+				return new PageRequest();
 			}
 			
 			RequestNode node = base;

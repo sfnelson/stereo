@@ -40,6 +40,7 @@ DAAPLib/src/util/command/CtrlInt.java -text
 DAAPLib/src/util/command/Databases.java -text
 DAAPLib/src/util/command/Login.java -text
 DAAPLib/src/util/command/Logout.java -text
+DAAPLib/src/util/command/PageRequest.java -text
 DAAPLib/src/util/command/PathNode.java -text
 DAAPLib/src/util/command/RequestNode.java -text
 DAAPLib/src/util/command/ServerInfo.java -text
@@ -59,6 +60,7 @@ DAAPLib/src/util/command/databases/Browse.java -text
 DAAPLib/src/util/command/databases/Containers.java -text
 DAAPLib/src/util/command/databases/Groups.java -text
 DAAPLib/src/util/command/databases/Items.java -text
+DAAPLib/src/util/command/stereo.html -text
 DAAPLib/src/util/node/BooleanNode.java -text
 DAAPLib/src/util/node/ByteNode.java -text
 DAAPLib/src/util/node/Composite.java -text
@@ -68,6 +70,7 @@ DAAPLib/src/util/node/LengthVisitor.java -text
 DAAPLib/src/util/node/LongLongNode.java -text
 DAAPLib/src/util/node/LongNode.java -text
 DAAPLib/src/util/node/Node.java -text
+DAAPLib/src/util/node/PageNode.java -text
 DAAPLib/src/util/node/StringNode.java -text
 DAAPLib/src/util/node/VersionNode.java -text
 DAAPLib/src/util/node/Visitor.java -text

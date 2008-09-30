@@ -15,6 +15,7 @@ import util.node.LengthVisitor;
 import util.node.LongLongNode;
 import util.node.LongNode;
 import util.node.Node;
+import util.node.PageNode;
 import util.node.StringNode;
 import util.node.VersionNode;
 import util.node.Visitor;
@@ -34,6 +35,20 @@ public class DACPResponseGenerator {
 
 		if (tree == null) {
 			out.print("HTTP/1.1 204 OK\r\n\r\n");
+		}
+		else if (tree instanceof PageNode) {
+			PageNode page = (PageNode)tree;
+			
+			out.print("HTTP/1.1 200 OK\r\n");
+
+			int length = new LengthVisitor().visit(tree);
+			out.print("Content-Type: " + page.contentType() + "\r\n");
+			out.print("Content-Length: "+length+"\r\n");
+			out.print("Date: "+DateFormat.getDateInstance().format(new Date())+"\r\n");
+
+			out.print("\r\n");
+
+			new WriteVisitor(len, out).visit(tree);
 		}
 		else {
 			out.print("HTTP/1.1 200 OK\r\n");
@@ -210,6 +225,10 @@ public class DACPResponseGenerator {
 
 		public int visitImageNode(ImageNode node) {
 			return DACPResponseGenerator.writeBytes(node.image(), output);
+		}
+		
+		public int visitPageNode(PageNode node) {
+			return DACPResponseGenerator.writeBytes(node.text(), output);
 		}
 	}
 }

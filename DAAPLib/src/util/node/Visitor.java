@@ -12,4 +12,5 @@ public interface Visitor {
 	public int visitStringNode(StringNode node);
 	public int visitVersionNode(VersionNode node);
 	public int visitImageNode(ImageNode imageNode);
+	public int visitPageNode(PageNode padeNode);
 }

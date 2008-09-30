@@ -41,7 +41,7 @@ public class DAAPClient {
 		try {
 			helper = new DAAPUtilities(hostname, port, log);
 		} catch (IOException e) {
-			System.err.println("*Probably* an invalid host");
+			System.err.println("Unable to connect to " + hostname + " on " + port);
 			e.printStackTrace();
 		}
 		//Get a session Id

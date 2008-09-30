@@ -45,4 +45,8 @@ public class LengthVisitor implements Visitor {
 	public int visitImageNode(ImageNode node) {
 		return node.image().length;
 	}
+	
+	public int visitPageNode(PageNode node) {
+		return node.length();
+	}
 }

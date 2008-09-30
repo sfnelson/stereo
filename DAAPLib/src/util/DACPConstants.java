@@ -69,6 +69,12 @@ public class DACPConstants extends daap.DAAPConstants {
 	
 	public static final int cmcp = parseInt("cmcp"); //control prompt update response
 	
+	//these nodes are used for indexes
+	public static final int mshl = parseInt("mshl"); //list, composed of mlit nodes
+	public static final int mshc = parseInt("mshc"); //two bytes - range? second is ascii letter
+	public static final int mshi = parseInt("mshi"); //index
+	public static final int mshn = parseInt("mshn"); //number of items
+	
 	/*
 	public static final int cmst = parseInt("cmst");
 	public static final int mstt = parseInt("mstt");

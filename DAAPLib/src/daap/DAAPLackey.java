@@ -59,8 +59,8 @@ public class DAAPLackey extends AbstractEventGenerator<LibraryListener> implemen
 			hs = new Handshake(this);
 			hs.start();
 		} catch (IOException e) {
-			System.out.println("server socket failed to initialise");
-			//e.printStackTrace();
+			System.err.println("server socket failed to initialise");
+			e.printStackTrace();
 			System.exit(1);
 		}
 		
