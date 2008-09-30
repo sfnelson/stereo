@@ -36,7 +36,7 @@ public class DACPResponseParser {
 
 	public Composite parse(InputStream stream) {
 		this.stream = stream;
-		
+
 		try {
 			if (stream.available() == 0) return null;
 		}
@@ -46,14 +46,14 @@ public class DACPResponseParser {
 
 		int c = readInteger(stream);
 		int b = readInteger(stream);
-		
+
 		Node tree = this.reply.visit(c, b);
 
 		return (Composite) tree;
 	}
 
 	private void addStatusUpdate(Handler reply) {
-		
+
 		reply.register(DACPConstants.mstt, new IntegerNodeHandler());
 		reply.register(DACPConstants.cmsr, new IntegerNodeHandler());
 		reply.register(DACPConstants.caps, new ByteNodeHandler());
@@ -110,7 +110,7 @@ public class DACPResponseParser {
 			while (read < bytes) {
 				int c = readInteger(stream);
 				int b = readInteger(stream);
-				
+
 				if (handlers.get(c) == null) {
 					System.err.println("unexpected " + Node.intToCode(c) + " (" + c + ") in " + Node.intToCode(code) + " block");
 					read += 8 + b;
@@ -267,10 +267,10 @@ public class DACPResponseParser {
 				date = lineScanner.next();
 			}
 		}
-		
+
 		return in;
 	}
-	
+
 	private static byte[] readBytes(InputStream stream, int num) {
 		byte[] b = new byte[num];
 		try {
@@ -301,9 +301,9 @@ public class DACPResponseParser {
 	}
 
 	private static int readInteger(InputStream is) {
-		
+
 		byte[] b = readBytes(is, 4);
-		
+
 		int size = 0;
 		for (int i = 0; i < 4; i++) {
 			size <<= 8;
@@ -321,7 +321,7 @@ public class DACPResponseParser {
 		}
 		return value;
 	}
-	
+
 	private static String readString(InputStream stream, int num) {
 		byte[] b = readBytes(stream, num);
 		String value = "";

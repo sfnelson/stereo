@@ -85,10 +85,8 @@ public class DACPResponseGenerator {
 
 	public static void writeString(String code, OutputStream out) {
 		try {
-			char[] chars = code.toCharArray();
-			for (char c: chars) {
-				out.write((byte)c);
-			}
+
+			out.write(code.getBytes("UTF-8"));
 		}
 		catch (IOException ex) {
 			System.err.println("error writing to output stream");
@@ -111,16 +109,16 @@ public class DACPResponseGenerator {
 		writeCode(node.code, out);
 		writeInt(length-8, out);
 	}
-	
+
 	public static int writeBytes(byte[] b, OutputStream out){
-		
+
 		try {
 			out.write(b);
 		} catch (IOException e) {
 			System.err.println("error writing to output stream");
 			//e.printStackTrace();
 		}
-		
+
 		return b.length;
 	}
 
