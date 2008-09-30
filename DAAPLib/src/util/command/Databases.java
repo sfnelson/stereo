@@ -2,6 +2,7 @@ package util.command;
 
 import interfaces.DJInterface;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import dacp.DACPTreeBuilder;
@@ -21,7 +22,12 @@ public class Databases extends PathNode implements Command {
 	public Node run(DJInterface dj) {
 		int items = dj.library().getLibrary().size();
 		int containers = dj.library().getPlaylists().size();
-		return DACPTreeBuilder.buildDatabaseResponse(items, containers);
+		try {
+			return DACPTreeBuilder.buildDatabaseResponse(items, containers);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public Command browse(int db) {

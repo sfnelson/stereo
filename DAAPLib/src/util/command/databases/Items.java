@@ -4,6 +4,7 @@ import interfaces.DJInterface;
 import interfaces.Playlist;
 import interfaces.Track;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 
@@ -63,7 +64,12 @@ public class Items implements Command {
 		
 		System.out.println("returning " + playlist.size() + " elements");
 		
-		return DACPTreeBuilder.buildPlaylistResponse(playlist);
+		try {
+			return DACPTreeBuilder.buildPlaylistResponse(playlist);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 }

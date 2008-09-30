@@ -35,7 +35,7 @@ public class LengthVisitor implements Visitor {
 	}
 
 	public int visitStringNode(StringNode node) {
-		return 8+node.getValue().length();
+		return 8+node.getBytes().length;
 	}
 	
 	public int visitVersionNode(VersionNode node) {

@@ -2,6 +2,7 @@ package util.command;
 
 import interfaces.DJInterface;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import util.command.ctrlint.Cue;
@@ -89,7 +90,13 @@ class GetSpeakers implements Command {
 	}
 
 	public Node run(DJInterface dj) {
-		return DACPTreeBuilder.buildGetSpeakers();
+			
+		try {
+			return DACPTreeBuilder.buildGetSpeakers();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 }

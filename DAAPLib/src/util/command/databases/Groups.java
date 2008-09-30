@@ -3,6 +3,7 @@ package util.command.databases;
 import interfaces.Album;
 import interfaces.DJInterface;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -64,8 +65,12 @@ public class Groups implements Command {
 		
 		System.out.println("returning " + albums.size() + " elements");
 
-		return DACPTreeBuilder.buildAlbumResponse(DACPConstants.agal, albums);
-
+		try {
+			return DACPTreeBuilder.buildAlbumResponse(DACPConstants.agal, albums);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }

@@ -4,6 +4,7 @@ import interfaces.Album;
 import interfaces.Playlist;
 import interfaces.Track;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -78,7 +79,7 @@ public class DACPTreeBuilder {
 		return response;
 	}
 
-	public static Composite buildGetSpeakers() {
+	public static Composite buildGetSpeakers() throws UnsupportedEncodingException {
 
 		Composite response = createResponse(DACPConstants.casp);
 
@@ -107,7 +108,7 @@ public class DACPTreeBuilder {
 			byte shuffle,
 			byte repeat,
 			Track track,
-			int elapsed) {
+			int elapsed) throws UnsupportedEncodingException {
 
 		Composite response = createResponse(DACPConstants.cmst);
 
@@ -172,7 +173,7 @@ public class DACPTreeBuilder {
 		return response;
 	}
 
-	public static Node buildPlaylistResponse(List<? extends Track> playlist) {
+	public static Node buildPlaylistResponse(List<? extends Track> playlist) throws UnsupportedEncodingException {
 
 		Composite response = createResponse(DACPConstants.apso);
 
@@ -185,7 +186,7 @@ public class DACPTreeBuilder {
 		return response;
 	}
 
-	public static Node buildPlaylistsResponse(List<? extends Playlist<? extends Track>> list2) {
+	public static Node buildPlaylistsResponse(List<? extends Playlist<? extends Track>> list2) throws UnsupportedEncodingException {
 
 		Composite response = createResponse(DACPConstants.aply);
 
@@ -216,7 +217,7 @@ public class DACPTreeBuilder {
 		return response;
 	}
 
-	public static Node buildDatabaseResponse(int items, int containers) {
+	public static Node buildDatabaseResponse(int items, int containers) throws UnsupportedEncodingException {
 
 		Composite response = createResponse(DACPConstants.avdb);
 
@@ -234,7 +235,7 @@ public class DACPTreeBuilder {
 		return response;
 	}
 
-	public static Node buildBrowseResponse(int code, List<String> artists) {
+	public static Node buildBrowseResponse(int code, List<String> artists) throws UnsupportedEncodingException {
 
 		Composite response = createResponse(DACPConstants.abro);
 
@@ -247,7 +248,7 @@ public class DACPTreeBuilder {
 		return response;
 	}
 
-	public static Node buildAlbumResponse(int code, List<? extends Album> albums) {
+	public static Node buildAlbumResponse(int code, List<? extends Album> albums) throws UnsupportedEncodingException {
 
 		Composite response = createResponse(code);
 
@@ -278,7 +279,7 @@ public class DACPTreeBuilder {
 		return list;
 	}
 
-	private static Composite buildTrackNode(Track track) {
+	private static Composite buildTrackNode(Track track) throws UnsupportedEncodingException {
 
 		List<Node> tags = new ArrayList<Node>();
 		Map<Integer, Object> tagMap = track.getAllTags();
@@ -305,7 +306,7 @@ public class DACPTreeBuilder {
 		return trackNode;
 	}
 
-	private static Composite buildAlbumNode(Album album) {
+	private static Composite buildAlbumNode(Album album) throws UnsupportedEncodingException {
 
 		Composite albumNode = new Composite(DACPConstants.mlit);
 
@@ -317,7 +318,7 @@ public class DACPTreeBuilder {
 		return albumNode;
 	}
 
-	private static Node buildPlaylistNode(Playlist<? extends Track> p) {
+	private static Node buildPlaylistNode(Playlist<? extends Track> p) throws UnsupportedEncodingException {
 
 		Composite playlistNode = new Composite(DACPConstants.mlit);
 

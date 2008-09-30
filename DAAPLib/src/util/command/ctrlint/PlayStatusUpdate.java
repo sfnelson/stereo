@@ -5,6 +5,7 @@ import interfaces.PlaybackControl;
 import interfaces.PlaybackQueue;
 import interfaces.Track;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import notification.PlaybackListener;
@@ -49,10 +50,13 @@ public class PlayStatusUpdate implements Command, PlaybackListener {
 		int revision = dj.playbackControl().revision();
 		int elapsed = dj.playbackStatus().elapsedTime();
 		
-		Node n = DACPTreeBuilder.buildPlayStatusUpdate(revision, state,
+		try {
+			return DACPTreeBuilder.buildPlayStatusUpdate(revision, state,
 				(byte)0, (byte)0, current, elapsed);
-
-		return n;
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return null;
+		}
 		
 	}
 

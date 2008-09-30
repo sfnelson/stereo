@@ -3,6 +3,7 @@ package reader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.HashMap;
@@ -143,7 +144,12 @@ public class DACPResponseParser {
 		public Node visit(int code, int bytes) {
 
 			String value = readString(stream, bytes);
-			return new StringNode(code,value);
+			try {
+				return new StringNode(code,value);
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+				return null;
+			}
 		}
 	}
 
