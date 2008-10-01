@@ -285,7 +285,7 @@
 			case "cana": this.artist = node.value; break;
 			case "canl": this.album = node.value; break;
 			case "cang": this.genre = node.value; break;
-			case "miid": this.id = node.value; break;
+			case "canp": this.id = node.value[3]; break;
 			}
 		}
 	}
@@ -326,6 +326,7 @@
 			case "minm": this.title = node.value; break;
 			case "asar": this.artist = node.value; break;
 			case "asag": this.genre = node.value; break;
+			case "miid": this.id = node.value; break;
 			}
 		}
 	}
@@ -355,6 +356,8 @@
 
 		var list = document.getElementById("playlist");
 		list.innerHTML="";
+
+		var current = lastUpdate.id;
 		
 		for (i in playlist.tracks) {
 			var track = playlist.tracks[i];
@@ -362,11 +365,20 @@
 			var node = document.createElement("DIV");
 			node.className = "track";
 			
-			node.appendChild(createNode("title", track.title));
 			node.appendChild(createNode("album", track.album));
+			node.appendChild(createNode("title", track.title));
 			node.appendChild(createNode("artist", track.artist));
 			node.appendChild(createNode("genre", track.genre));
 			node.appendChild(createNode("id", track.id));
+
+			if (current && track.id == current) {
+				node.className += " current";
+				current = 0;
+
+				while (list.childNodes.length > 2) {
+					list.removeChild(list.childNodes[0]);
+				}
+			}
 
 			list.appendChild(node);
 		}
@@ -380,6 +392,38 @@
 	}
 
 </script>
+
+<style type="text/css">
+html, body {
+	margin: 0;
+}
+body {
+	font-family: "Chicago", "Geneva", sans-serif;
+}
+.track {
+	border-bottom: solid 1px #ccc;
+	padding: 1ex 1em;
+}
+.album, .artist {
+	color: #888;
+	font-size: 0.7em;
+}
+.title {
+	font-weight: bold;
+}
+.id {
+	display: none;
+}
+.current {
+	background-color: #eee;
+}
+#state {
+	font-size: 120%;
+	padding: 2ex 1em;
+	padding-bottom: 2ex;
+	border-bottom: solid 2px #ccc;
+}
+</style>
 
 </head>
 <body onload="getPlaybackStatusUpdate();">
