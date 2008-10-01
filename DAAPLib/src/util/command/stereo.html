@@ -67,6 +67,12 @@
 		request.send(null);
 	}
 
+	function jump(index) {
+		var request = new XMLHttpRequest();
+		request.open("GET", "/ctrl-int/1/cue?command=play&index="+index);
+		request.send(null);
+	}
+
 	function Node(name, length) {
 		this.name = name;
 		this.length = length;
@@ -461,6 +467,29 @@
 		document.getElementById("pause").onclick = function () { pause(); }
 		document.getElementById("next").onclick = function () { next(); }
 
+		document.getElementById("playlist").onclick = function (e) {
+			var node = e.target;
+			while (!node.className.match("track")) {
+				node = node.parentNode;
+				if (node == document.body) return;
+			}
+			var playlist = document.getElementById("playlist");
+			var offset = -1;
+			for (child in playlist.childNodes) {
+				if (playlist.childNodes[child].className
+						&& playlist.childNodes[child].className.match("current")) {
+					offset = child;
+				}
+			}
+			if (offset == -1) return;
+			for (child in playlist.childNodes) {
+				if (playlist.childNodes[child] == node) {
+					jump(child-offset);
+					break;
+				}
+			}
+		}
+		
 		replacePrev();
 		replacePause();
 		replacePlay();
