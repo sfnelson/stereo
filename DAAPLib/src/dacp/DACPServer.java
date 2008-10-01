@@ -74,7 +74,7 @@ public class DACPServer {
 		records.put("DvSv","1905");
 		records.put("DbId", hash);
 
-		ServiceInfo dmcp = ServiceInfo.create("_touch-able._tcp.local.", hash, 3689, 0, 0, records);
+		ServiceInfo dmcp = ServiceInfo.create("_touch-able._tcp.local.", hash, PORT, 0, 0, records);
 
 		for (InetAddress a: addresses) {
 			final JmDNS mdns = JmDNS.create(a);
