@@ -44,20 +44,8 @@ public class Cue implements Command {
 		
 		if (args.containsKey("index")) {
 			
-			int index = Integer.parseInt(args.get("index"));
+			dj.playbackControl().jump(Integer.parseInt(args.get("index")));
 			
-			if (index >= 0) {
-				while (index > 1) {
-					dj.playbackControl().next();
-					index--;
-				}
-			}
-			else {
-				while (index <= 1) {
-					dj.playbackControl().prev();
-					index++;
-				}
-			}
 		}
 		
 		if (args.containsKey("command")) {
