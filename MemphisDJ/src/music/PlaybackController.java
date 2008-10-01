@@ -68,6 +68,22 @@ public class PlaybackController implements PlaybackControl, PlayerListener, Queu
 		
 		notifier.notifyStateChanged(player.status());
 	}
+	
+	public void jump(int index) {
+		
+		if (index >= 0) {
+			while (index > 1) {
+				queue.next();
+				index--;
+			}
+		}
+		else {
+			while (index <= 1) {
+				queue.prev();
+				index++;
+			}
+		}
+	}
 
 	public void stop() {
 		player.stop();

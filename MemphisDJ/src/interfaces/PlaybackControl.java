@@ -12,6 +12,7 @@ public interface PlaybackControl extends EventGenerator<PlaybackListener> {
 	public void next();
 	public void prev();
 	public void stop();
+	public void jump(int pos);
 
 	public void clear();
 	public void enqueue(List<? extends Track> tracks);
