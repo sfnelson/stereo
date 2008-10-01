@@ -344,6 +344,10 @@ public class DACPDJInterface implements DJInterface {
 		public void prev() {
 			request("/ctrl-int/1/previtem");
 		}
+		
+		public void jump(int index) {
+			request("/ctrl-int/1/cue?command=play&index="+index);
+		}
 
 		public int revision() {
 			Composite c = request("/ctrl-int/1/playstatusupdate");
