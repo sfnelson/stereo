@@ -1,8 +1,13 @@
-<html>
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:svg="http://www.w3.org/2000/svg">
 <head>
 <title>Stereo</title>
-<meta name="http-equiv" content="Content-type: text/html; charset=UTF-8" />
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <script type="text/javascript" charset="utf-8">
+//<![CDATA[
 	function getPlaybackStatusUpdate() {
 		var request = new XMLHttpRequest();
 		request.onreadystatechange = function() {
@@ -31,6 +36,34 @@
 		request.open("GET", "/ctrl-int/1/playlist", true);
 		//XHR binary charset opt by Marcus Granado 2006 [http://mgran.blogspot.com] 
 		request.overrideMimeType('text/plain; charset=x-user-defined');
+		request.send(null);
+	}
+
+	function getAlbumArt() {
+		document.getElementById("albumart").src = "/ctrl-int/1/nowplayingartwork";
+	}
+
+	function next() {
+		var request = new XMLHttpRequest();
+		request.open("GET", "/ctrl-int/1/nextitem", true);
+		request.send(null);
+	}
+
+	function prev() {
+		var request = new XMLHttpRequest();
+		request.open("GET", "/ctrl-int/1/previtem", true);
+		request.send(null);
+	}
+
+	function play() {
+		var request = new XMLHttpRequest();
+		request.open("GET", "/ctrl-int/1/playpause", true);
+		request.send(null);
+	}
+
+	function pause() {
+		var request = new XMLHttpRequest();
+		request.open("GET", "/ctrl-int/1/pause", true);
 		request.send(null);
 	}
 
@@ -65,6 +98,7 @@
 
 		if (up.revision != lastUpdate.revision) {
 			getPlaylistUpdate();
+			getAlbumArt();
 		}
 
 		lastUpdate = up;
@@ -272,6 +306,14 @@
 
 	function PlayStatusUpdate(tree) {
 
+		this.album = "";
+		this.title = "";
+		this.artist = "";
+		this.genre = "";
+		this.id = 0;
+		this.status = 0;
+		this.revision = 0;
+		
 		for (child in tree.children) {
 			var node = tree.children[child];
 			switch (node.name) {
@@ -319,6 +361,12 @@
 
 	function Track(tree) {
 
+		this.album = "";
+		this.title = "";
+		this.artist = "";
+		this.genre = "";
+		this.id = 0;
+	
 		for (child in tree.children) {
 			var node = tree.children[child];
 			switch (node.name) {
@@ -335,21 +383,37 @@
 
 		if (update.status == 2) {
 			document.getElementById("state").className = "stopped";
+
+			document.getElementById("play").className = "";
+			document.getElementById("pause").className = "hidden";
 		}
 		else if (update.status == 3) {
 			document.getElementById("state").className = "paused";
-			document.getElementById("title").innerHTML = update.title;
-			document.getElementById("artist").innerHTML = update.artist;
-			document.getElementById("album").innerHTML = update.album;
-			document.getElementById("genre").innerHTML = update.genre;
+			setText(document.getElementById("title"), update.title);
+			setText(document.getElementById("artist"), update.artist);
+			setText(document.getElementById("album"), update.album);
+			setText(document.getElementById("genre"), update.genre);
+			
+			document.getElementById("play").className = "";
+			document.getElementById("pause").className = "hidden";
 		}
 		else if (update.status == 4) {
 			document.getElementById("state").className = "playing";
-			document.getElementById("title").innerHTML = update.title;
-			document.getElementById("artist").innerHTML = update.artist;
-			document.getElementById("album").innerHTML = update.album;
-			document.getElementById("genre").innerHTML = update.genre;
+			setText(document.getElementById("title"), update.title);
+			setText(document.getElementById("artist"), update.artist);
+			setText(document.getElementById("album"), update.album);
+			setText(document.getElementById("genre"), update.genre);
+
+			document.getElementById("play").className = "hidden";
+			document.getElementById("pause").className = "";
 		}
+	}
+
+	function setText(node, text) {
+		while (node.childNodes.length > 0) {
+			node.removeChild(node.firstChild);
+		}
+		node.appendChild(document.createTextNode(text));
 	}
 
 	function updatePlaylist(playlist) {
@@ -387,10 +451,119 @@
 	function createNode(type, value) {
 		var node = document.createElement("DIV");
 		node.className = type;
-		if (value) node.innerHTML = value;
+		node.appendChild(document.createTextNode(value));
 		return node;
 	}
+	
+	function registerControls() {
+		document.getElementById("previous").onclick = function () { prev(); }
+		document.getElementById("play").onclick = function () { play(); }
+		document.getElementById("pause").onclick = function () { pause(); }
+		document.getElementById("next").onclick = function () { next(); }
 
+		replacePrev();
+		replacePause();
+		replacePlay();
+		replaceNext();
+	}
+
+	function replacePrev() {
+		var prev = document.getElementById("previous");
+		prev.removeChild(prev.firstChild);
+		
+		var ns = 'http://www.w3.org/2000/svg';
+		var svg = document.createElementNS(ns, 'svg');
+		svg.setAttribute('viewPort', '0, 0, 33, 30');
+		svg.setAttribute('width', '33');
+		svg.setAttribute('height', '30');
+		
+		var bar = document.createElementNS(ns,'path');
+		bar.setAttribute('d','m 0,3 4,0 0,24 -4,0 z');
+		bar.setAttribute('style','fill: #222;');
+		svg.appendChild(bar);
+
+		var la = document.createElementNS(ns,'path');
+		la.setAttribute('d','m 7,15 10,11 0,-22 z');
+		la.setAttribute('style','fill: #222;stroke: #222; stroke-width:0.2em;stroke-linejoin:round;');
+		svg.appendChild(la);
+
+		var ra = document.createElementNS(ns,'path');
+		ra.setAttribute('d','m 20,15 10,11 0,-22 z');
+		ra.setAttribute('style','fill: #222;stroke: #222; stroke-width:0.2em;stroke-linejoin:round;');
+		svg.appendChild(ra);
+		
+		prev.appendChild(svg);
+	}
+
+	function replacePlay() {
+		var play = document.getElementById("play");
+		play.removeChild(play.firstChild);
+		
+		var ns = 'http://www.w3.org/2000/svg';
+		var svg = document.createElementNS(ns, 'svg');
+		svg.setAttribute('viewPort', '0, 0, 30, 30');
+		svg.setAttribute('width', '30');
+		svg.setAttribute('height', '30');
+		
+		var p = document.createElementNS(ns,'path');
+		p.setAttribute('d','m 5,3 22,12 -22,12 z');
+		p.setAttribute('style','fill: #222;stroke: #222; stroke-width:0.2em;stroke-linejoin:round;');
+		svg.appendChild(p);
+		
+		play.appendChild(svg);
+	}
+
+	function replacePause() {
+		var pause = document.getElementById("pause");
+		pause.removeChild(pause.firstChild);
+		
+		var ns = 'http://www.w3.org/2000/svg';
+		var svg = document.createElementNS(ns, 'svg');
+		svg.setAttribute('viewPort', '0, 0, 17, 30');
+		svg.setAttribute('width', '30');
+		svg.setAttribute('height', '30');
+		
+		var l = document.createElementNS(ns,'path');
+		l.setAttribute('d','m 0,2 6,0 0,26 -6,0 z');
+		l.setAttribute('style','fill: #222;');
+		svg.appendChild(l);
+
+		var r = document.createElementNS(ns,'path');
+		r.setAttribute('d','m 11,2 6,0 0,26 -6,0 z');
+		r.setAttribute('style','fill: #222;');
+		svg.appendChild(r);
+		
+		pause.appendChild(svg);
+	}
+
+	function replaceNext() {
+		var next = document.getElementById("next");
+		next.removeChild(next.firstChild);
+		
+		var ns = 'http://www.w3.org/2000/svg';
+		var svg = document.createElementNS(ns, 'svg');
+		svg.setAttribute('viewPort', '0, 0, 33, 30');
+		svg.setAttribute('width', '33');
+		svg.setAttribute('height', '30');
+
+		var la = document.createElementNS(ns,'path');
+		la.setAttribute('d','m 1,4 10,11 -10,11 z');
+		la.setAttribute('style','fill: #222;stroke: #222; stroke-width:0.2em;stroke-linejoin:round;');
+		svg.appendChild(la);
+
+		var ra = document.createElementNS(ns,'path');
+		ra.setAttribute('d','m 15,4 10,11 -10,11 z');
+		ra.setAttribute('style','fill: #222;stroke: #222; stroke-width:0.2em;stroke-linejoin:round;');
+		svg.appendChild(ra);
+
+		var bar = document.createElementNS(ns,'path');
+		bar.setAttribute('d','m 27,3 4,0 0,24 -4,0 z');
+		bar.setAttribute('style','fill: #222;');
+		svg.appendChild(bar);
+		
+		next.appendChild(svg);
+	}
+//]]>
 </script>
 
 <style type="text/css">
@@ -422,16 +595,56 @@ body {
 	padding: 2ex 1em;
 	padding-bottom: 2ex;
 	border-bottom: solid 2px #ccc;
+	overflow: auto;
 }
+#albumart {
+	height: 10ex;
+	float: left;
+	margin-right: 1em;
+}
+#playlist {
+	margin-bottom: 8ex;
+}
+#control {
+	position: fixed;
+	bottom: 0;
+	height: 4ex;
+	padding: 2ex 0;
+	width: 100%;
+	text-align: center;
+	opacity: 0.8;
+	background-color: #ccc;
+}
+#control div {
+	display: inline;
+}
+#control .hidden {
+	display: none;
+}
+#control #volume {
+	display: none;
+}
+#play,#pause {
+	padding: 2ex 3em;
+}
+
 </style>
 
 </head>
-<body onload="getPlaybackStatusUpdate();">
+<body onload="registerControls(); getPlaybackStatusUpdate();">
 <div id="state">
+<img id="albumart" src="" alt="" />
 <div id="title" class="title"></div>
 <div id="artist" class="artist"></div>
 <div id="album" class="album"></div>
 <div id="genre" class="genre"></div>
+</div>
+<div id="control">
+<div id="previous">previous</div>
+<div id="play">play</div>
+<div id="pause">pause</div>
+<div id="next">next</div>
+<div id="volume">volume</div>
 </div>
 <div id="playlist">
 </div>

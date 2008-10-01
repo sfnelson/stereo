@@ -27,7 +27,7 @@ public class PageRequest implements Command {
 			while (sc.hasNextLine()) {
 				body += sc.nextLine() + "\r\n";
 			}
-			return new PageNode("text/html", body);
+			return new PageNode("application/xhtml+xml", body);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
