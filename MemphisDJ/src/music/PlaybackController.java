@@ -72,7 +72,7 @@ public class PlaybackController implements PlaybackControl, PlayerListener, Queu
 	public void jump(int index) {
 		
 		if (index >= 0) {
-			while (index > 1) {
+			while (index > 0) {
 				queue.next();
 				index--;
 			}
