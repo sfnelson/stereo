@@ -39,8 +39,8 @@
 		request.send(null);
 	}
 
-	function getAlbumArt() {
-		document.getElementById("albumart").src = "/ctrl-int/1/nowplayingartwork";
+	function getAlbumArt(revision) {
+		document.getElementById("albumart").src = "/ctrl-int/1/nowplayingartwork?revision="+revision;
 	}
 
 	function getPlaylists() {
@@ -187,9 +187,13 @@
 
 		updateStatus(up);
 
-		if (up.revision != lastUpdate.revision) {
+		if (!lastUpdate || up.revision != lastUpdate.revision) {
 			getPlaylistUpdate();
-			getAlbumArt();
+			getAlbumArt(up.revision);
+			if ((!lastUpdate && up.status == 4)
+				|| (lastUpdate.status == 2 && up.status == 4)) {
+					document.body.className = "playing";
+			}
 		}
 
 		lastUpdate = up;
