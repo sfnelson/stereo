@@ -1,7 +1,9 @@
 package reader;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -48,12 +50,12 @@ public class DACPRequestParser {
 			final Scanner request = new Scanner(p);
 
 			final String type = request.next();
-			final String URI = request.next();
+			final String uri = request.next();
 			final String protocol = request.next();
 
-			System.out.println("Received request: " + URI + " (" + type + ", " + protocol + ")");
+			System.out.println("Received request: " + uri + " (" + type + ", " + protocol + ")");
 
-			Scanner req = new Scanner(URI);
+			Scanner req = new Scanner(uri);
 			req.useDelimiter("[?]");
 			
 			Scanner cmd = new Scanner(req.next());
@@ -82,7 +84,7 @@ public class DACPRequestParser {
 				if (cmd.hasNextInt()) {
 					arg = cmd.nextInt();
 					if (!cmd.hasNext()) {
-						throw new IllegalArgumentException("invalid command string: " + URI);
+						throw new IllegalArgumentException("invalid command string: " + uri);
 					}
 				}
 				
@@ -90,7 +92,7 @@ public class DACPRequestParser {
 					
 					String name = cmd.next();
 					if (name.charAt(0) >= '0' && name.charAt(0) <= '9') {
-						throw new IllegalArgumentException("invalid command string: " + URI);
+						throw new IllegalArgumentException("invalid command string: " + uri);
 					}
 					while (name.indexOf('-') != -1) {
 						int i = name.indexOf('-');
@@ -104,7 +106,7 @@ public class DACPRequestParser {
 						}
 					}
 					if (method == null) {
-						throw new IllegalArgumentException("unexpected command '" + name + "' for path " + node.getClass().getName() + ": " + URI);
+						throw new IllegalArgumentException("unexpected command '" + name + "' for path " + node.getClass().getName() + ": " + uri);
 					}
 					try {
 						if (arg == -1) {
@@ -133,7 +135,7 @@ public class DACPRequestParser {
 				return c;
 			}
 
-			throw new IllegalArgumentException("invalid command string: " + URI);
+			throw new IllegalArgumentException("invalid command string: " + uri);
 		}	
 		catch (NoSuchElementException e) {
 			throw new IllegalArgumentException("invalid command string");

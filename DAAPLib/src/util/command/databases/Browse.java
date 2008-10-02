@@ -42,7 +42,7 @@ public class Browse implements Command {
 		System.out.println("library has " + songs.size() + " elements");
 
 		if (args != null && args.containsKey("filter")) {
-			Filter f = QueryParser.parser.parse(args.get("filter"));
+			Filter f = QueryParser.parse(args.get("filter"));
 			System.out.println(f);
 			songs = ApplyFilter.filter(f, songs);
 		}

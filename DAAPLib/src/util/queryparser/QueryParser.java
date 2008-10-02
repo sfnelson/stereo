@@ -1,5 +1,8 @@
 package util.queryparser;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 import org.codehaus.jparsec.OperatorTable;
 import org.codehaus.jparsec.Parser;
 import org.codehaus.jparsec.Parsers;
@@ -54,9 +57,20 @@ public class QueryParser {
 	
 	private static Parser<Void> nodelim = Parsers.always();
 	
-	public static final Parser<Filter> parser = query(TOKEN).from(TOKENIZER, nodelim);
+	private static final Parser<Filter> parser = query(TOKEN).from(TOKENIZER, nodelim);
+	
+	public static Filter parse(String source) {
+		source = source.replace('+', '_');
+		try {
+			source = URLDecoder.decode(source, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		source = source.replace('_', '+').replace(' ', '_');
+		return parser.parse(source);
+	}
 	
 	public static void main(String args[]) {
-		System.out.println(QueryParser.parser.parse("'hi:bye'+'ho!:bo'"));
+		System.out.println(QueryParser.parse("'hi:bye'+'ho!:bo on'"));
 	}
 }

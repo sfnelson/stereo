@@ -37,7 +37,8 @@ public class Groups implements Command {
 		//don't query, as albums store name as minm not asal
 		
 		if (args.containsKey("query")) {
-			Filter q = QueryParser.parser.parse(args.get("query"));
+			String query = args.get("query").replace(' ', '_');
+			Filter q = QueryParser.parse(query);
 			System.out.println(q);
 			albums = ApplyFilter.filter(q, albums);
 		}

@@ -47,7 +47,7 @@ public class Items implements Command {
 		System.out.println("playlist has " + playlist.size() + " elements");
 		
 		if (args != null && args.containsKey("query")) {
-			Filter f = QueryParser.parser.parse(args.get("query"));
+			Filter f = QueryParser.parse(args.get("query"));
 			System.out.println(f);
 			playlist = ApplyFilter.filter(f, playlist);
 		}

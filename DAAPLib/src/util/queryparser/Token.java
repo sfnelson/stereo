@@ -29,6 +29,7 @@ public class Token implements Filter {
 			catch (URISyntaxException ex) {
 				ex.printStackTrace();
 			}
+			val = val.replace('_',' ');
 			value = val;
 		}
 		else {

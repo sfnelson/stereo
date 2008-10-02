@@ -64,7 +64,7 @@
 					} 
 				}
 
-				var parent = document.getElementById("browse-playlists");
+				var parent = document.getElementById("browse-playlists-container");
 				while (parent.childNodes.length > 0) {
 					parent.removeChild(parent.firstChild);
 				}
@@ -107,7 +107,8 @@
 					} 
 				}
 
-				var parent = document.getElementById("browse-artists");
+				var parent = document.getElementById("browse-artists-container");
+				
 				while (parent.childNodes.length > 0) {
 					parent.removeChild(parent.firstChild);
 				}
@@ -115,6 +116,7 @@
 				for (a in artists) {
 					var item = document.createElement("DIV");
 					item.className="item";
+					item.query="'daap.songartist:"+artists[a]+"'";
 					
 					item.appendChild(createNode("title", artists[a]));
 					
@@ -123,6 +125,68 @@
 			}
 		};
 		request.open("GET", "/databases/1/browse/artists", true);
+		//XHR binary charset opt by Marcus Granado 2006 [http://mgran.blogspot.com] 
+		request.overrideMimeType('text/plain; charset=x-user-defined');
+		request.send(null);
+	}
+
+	function getAlbums(query, callback) {
+		var request = new XMLHttpRequest();
+		request.onreadystatechange = function() {
+			if (request.readyState == 4) {
+				var text = request.responseText;
+
+				var tree = new Node();
+				parseNode(tree, text, 0);
+				tree = tree.children[0];
+
+				var albums = new Array();
+				
+				for (node in tree.children) {
+					if (tree.children[node].name = "mlcl") {
+						var list = tree.children[node];
+						for (item in list.children) {
+							albums.push(new Album(list.children[item]));
+						}
+					} 
+				}
+
+				callback(albums);
+			}
+		};
+
+		request.open("GET", "/databases/1/groups?group-type=albums&sort=albums&query="+query, true);
+		//XHR binary charset opt by Marcus Granado 2006 [http://mgran.blogspot.com] 
+		request.overrideMimeType('text/plain; charset=x-user-defined');
+		request.send(null);
+	}
+
+	function getTracks(query, callback) {
+		var request = new XMLHttpRequest();
+		request.onreadystatechange = function() {
+			if (request.readyState == 4) {
+				var text = request.responseText;
+
+				var tree = new Node();
+				parseNode(tree, text, 0);
+				tree = tree.children[0];
+				
+				var tracks = new Array();
+				
+				for (node in tree.children) {
+					if (tree.children[node].name = "mlcl") {
+						var list = tree.children[node];
+						for (item in list.children) {
+							tracks.push(new Track(list.children[item]));
+						}
+					} 
+				}
+
+				callback(tracks);
+			}
+		};
+
+		request.open("GET", "/databases/1/containers/1/items?query="+query, true);
 		//XHR binary charset opt by Marcus Granado 2006 [http://mgran.blogspot.com] 
 		request.overrideMimeType('text/plain; charset=x-user-defined');
 		request.send(null);
@@ -367,6 +431,7 @@
 	}
 
 	var lastUpdate = 0;
+	var previousPane = new Array();
 
 	function PlayStatusUpdate(tree) {
 
@@ -462,6 +527,32 @@
 			switch (node.name) {
 			case "mlit":
 				this.tracks.push(new Track(node));
+				break;
+			}
+		}
+	}
+
+	function Album(tree) {
+
+		this.id = 0;
+		this.name = "";
+		this.artist = 0;
+		this.persistantId = 0;
+
+		for (child in tree.children) {
+			var node = tree.children[child];
+			switch (node.name) {
+			case "miid":
+				this.id = node.value;
+				break;
+			case "minm":
+				this.name = node.value;
+				break;
+			case "asaa":
+				this.artist = node.value;
+				break;
+			case "mper":
+				this.persistantId = node.value;
 				break;
 			}
 		}
@@ -574,13 +665,19 @@
 	function registerControls() {
 
 		document.getElementById("back").onclick = function() {
-			document.body.className = "main";
+			if (previousPane.length == 0) {
+				previousPane.push("playlists");
+			}
+			document.body.className = previousPane.pop();
 		}
 		document.getElementById("playing").onclick = function() {
+			if (document.body.className) {
+				previousPane.push(document.body.className);
+			}
 			document.body.className = "playing";
 		}
 
-		document.body.className = "main";
+		document.body.className = "playlists";
 
 		document.getElementById("previous").onclick = function() {
 			prev();
@@ -621,6 +718,89 @@
 			}
 		}
 
+		document.getElementById("browse-artists-container").onclick = function(e) {
+			var node = e.target;
+			while (!node.className.match("item")) {
+				node = node.parentNode;
+				if (node == document.body)
+					return;
+			}
+			
+			var query = node.query;
+			
+			getAlbums(query, function (albums) {
+				var parent = document.getElementById("browse-artists-albums");
+				while (parent.childNodes.length > 0) {
+					parent.removeChild(parent.firstChild);
+				}
+				for (a in albums) {
+					var item = document.createElement("DIV");
+					item.className="item";
+					item.query="'daap.songalbum="+albums[a].name+"'";
+				
+					item.appendChild(createNode("title", albums[a].name));
+				
+					parent.appendChild(item);
+				}
+				previousPane.push("artists");
+				document.body.className = "artist-albums";
+			});
+		}
+
+		document.getElementById("browse-artists-albums").onclick = function(e) {
+			var node = e.target;
+			while (!node.className.match("item")) {
+				node = node.parentNode;
+				if (node == document.body)
+					return;
+			}
+			var query = "'daap.songalbum:"+node.textContent+"'";
+			getTracks(query, function (tracks) {
+				var parent = document.getElementById("browse-artists-tracks");
+				while (parent.childNodes.length > 0) {
+					parent.removeChild(parent.firstChild);
+				}
+				for (t in tracks) {
+					var item = document.createElement("DIV");
+					item.className="item";
+				
+					item.appendChild(createNode("title", tracks[t].title));
+				
+					parent.appendChild(item);
+				}
+				previousPane.push("artist-albums");
+				document.body.className = "artist-tracks";
+			});
+		}
+
+		document.getElementById("browse-albums-container").onclick = function(e) {
+			var node = e.target;
+			while (!node.className.match("item")) {
+				node = node.parentNode;
+				if (node == document.body)
+					return;
+			}
+			
+			var query = node.query;
+			
+			getTracks(query, function (tracks) {
+				var parent = document.getElementById("browse-albums-tracks");
+				while (parent.childNodes.length > 0) {
+					parent.removeChild(parent.firstChild);
+				}
+				for (t in tracks) {
+					var item = document.createElement("DIV");
+					item.className="item";
+				
+					item.appendChild(createNode("title", tracks[t].title));
+				
+					parent.appendChild(item);
+				}
+				previousPane.push("albums");
+				document.body.className = "album-tracks";
+			});
+		}
+
 		replacePrev();
 		replacePause();
 		replacePlay();
@@ -628,22 +808,36 @@
 
 		document.getElementById("browse-menu-playlists").onclick = function() {
 			getPlaylists();
-			document.getElementById("browse").className = "playlists";
+			document.body.className = "playlists";
 		}
 		document.getElementById("browse-menu-artists").onclick = function() {
 			getArtists();
-			document.getElementById("browse").className = "artists";
+			document.body.className = "artists";
 		}
 		document.getElementById("browse-menu-albums").onclick = function() {
-			getAlbums();
-			document.getElementById("browse").className = "albums";
+			getAlbums("'daap.songalbum!:'", function (albums) {
+					var parent = document.getElementById("browse-albums-container");
+					while (parent.childNodes.length > 0) {
+						parent.removeChild(parent.firstChild);
+					}
+					for (a in albums) {
+						var item = document.createElement("DIV");
+						item.className="item";
+						item.query="'daap.songalbum:"+albums[a].name+"'";
+					
+						item.appendChild(createNode("title", albums[a].name));
+					
+						parent.appendChild(item);
+					}
+					document.body.className = "albums";
+			});
 		}
 		document.getElementById("browse-menu-search").onclick = function() {
 			getSearch();
-			document.getElementById("browse").className = "search";
+			document.body.className = "search";
 		}
 		getPlaylists();
-		document.getElementById("browse").className = "playlists";
+		document.body.className = "playlists";
 	}
 
 	function replacePrev() {
@@ -811,6 +1005,10 @@
 
 	types["abro"] = list;
 	types["abar"] = list;
+
+	types["agal"] = list;
+	types["apso"] = list;
+	
 	//]]>
 </script>
 
@@ -827,8 +1025,8 @@ body {
 	height: 4ex;
 	left: 0;
 	right: 0;
-	background-color: #222;
-	color: white;
+	background-color: #ccc;
+	color: black;
 }
 #navigation div {
 	font-size: 80%;
@@ -838,14 +1036,10 @@ body {
 	background-color: #222;
 	color: white;
 }
-.main #navigation {
-	background-color: #ccc;
-	color: black;
-}
 .playing #playing {
 	display: none;
 }
-.main #back {
+.playlists #back, .albums #back, .artists #back, .search #back {
 	display: none;
 }
 #back {
@@ -859,12 +1053,12 @@ body {
 	margin-bottom: 8ex;
 }
 #playlist {
-	margin-top: 20ex;
+	margin-top: 18ex;
 }
 #state {
 	position: fixed;
 	top: 4ex;
-	height: 12ex;
+	height: 10ex;
 	left: 0;
 	right: 0;
 	padding: 2ex 1em;
@@ -930,8 +1124,11 @@ body {
 #play,#pause {
 	padding: 2ex 3em;
 }
-.main #current {
+#current {
 	display: none;
+}
+.playing #current {
+	display: block;
 }
 .playing #browse {
 	display: none;
@@ -956,13 +1153,42 @@ body {
 #browse .content {
 	display: none;
 }
+#browse .content .container {
+	display: none;
+}
 .playlists #browse-playlists {
 	display: block;
 }
-.artists #browse-artists {
+.playlists .content #browse-playlists-container {
 	display: block;
 }
-	
+.artists #browse-artists,
+.artist-albums #browse-artists,
+.artist-tracks #browse-artists {
+	display: block;
+}
+.artists .content #browse-artists-container {
+	display: block;
+}
+.artist-albums .content #browse-artists-albums {
+	display: block;
+}
+.artist-tracks .content #browse-artists-tracks {
+	display: block;
+}
+.albums #browse-albums,
+.album-tracks #browse-albums {
+	display: block;
+}
+.albums .content #browse-albums-container {
+	display: block;
+}
+.album-tracks .content #browse-albums-tracks {
+	display: block;
+}
+.search #browse-search {
+	display: block;
+}
 </style>
 
 </head>
@@ -996,9 +1222,18 @@ body {
 		<div id="browse-menu-albums">Albums</div>
 		<div id="browse-menu-search">Search</div>
 	</div>
-	<div id="browse-playlists" class="content"></div>
-	<div id="browse-artists" class="content"></div>
-	<div id="browse-albums" class="content"></div>
+	<div id="browse-playlists" class="content">
+		<div id="browse-playlists-container" class="container"></div>
+	</div>
+	<div id="browse-artists" class="content">
+		<div id="browse-artists-container" class="container"></div>
+		<div id="browse-artists-albums" class="container"></div>
+		<div id="browse-artists-tracks" class="container"></div>
+	</div>
+	<div id="browse-albums" class="content">
+		<div id="browse-albums-container" class="container"></div>
+		<div id="browse-albums-tracks" class="container"></div>
+	</div>
 	<div id="browse-search" class="content"></div>
 </div>
 </body>
