@@ -597,7 +597,7 @@
 
 		document.getElementById("playlist").onclick = function(e) {
 			var node = e.target;
-			while (!node.className.match("track")) {
+			while (!node.className.match("item")) {
 				node = node.parentNode;
 				if (node == document.body)
 					return;
