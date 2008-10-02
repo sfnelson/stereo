@@ -3,9 +3,6 @@ package util.queryparser;
 import interfaces.Element;
 
 import java.math.BigInteger;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Scanner;
 
 import daap.DAAPConstants;
 
@@ -16,23 +13,16 @@ public class Token implements Filter {
 	public final String value;
 	
 	public Token(String t) {
-	
-		Scanner s = new Scanner(t);
-		s.useDelimiter("[:]");
+		System.out.println("token: " + t);
+		String p;
 		
-		String p = s.next();
-		if (s.hasNext()) {
-			String val = s.next();
-			try {
-				val = new URI(val).getPath();
-			}
-			catch (URISyntaxException ex) {
-				ex.printStackTrace();
-			}
-			val = val.replace('_',' ');
-			value = val;
+		int i = t.indexOf(':');
+		if (i > 0) {
+			p = t.substring(0,i);
+			value = t.substring(i+1);
 		}
 		else {
+			p = t;
 			value = "";
 		}
 		
