@@ -1,9 +1,7 @@
 package reader;
 
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -14,7 +12,7 @@ import util.command.CtrlInt;
 import util.command.Databases;
 import util.command.Login;
 import util.command.Logout;
-import util.command.PageRequest;
+import util.command.HTMLClient;
 import util.command.PathNode;
 import util.command.RequestNode;
 import util.command.ServerInfo;
@@ -42,6 +40,9 @@ public class DACPRequestParser {
 		public RequestNode update() {
 			return new Update();
 		}
+		public RequestNode client() {
+			return new HTMLClient();
+		}
 	};
 	
 	public static Command parse(String p) {
@@ -55,13 +56,26 @@ public class DACPRequestParser {
 
 			System.out.println("Received request: " + uri + " (" + type + ", " + protocol + ")");
 
-			Scanner req = new Scanner(uri);
+			final Scanner req = new Scanner(uri);
 			req.useDelimiter("[?]");
 			
-			Scanner cmd = new Scanner(req.next());
+			String pathString = req.next();
+			String argsString = req.hasNext()?req.next():"";
+			
+			if ((pathString.equals("/") || pathString.equals("")) && argsString.equals("")) {
+				pathString = "/client";
+				System.out.println("rewriting as " + pathString);
+			}
+			else if (uri.contains(".") && argsString.equals("")) {
+				pathString = "/client";
+				argsString = "request=" + ((uri.charAt(0)=='/')?uri.substring(1):uri);
+				System.out.println("rewriting as " + pathString + "?" + argsString);
+			}
+			
+			Scanner cmd = new Scanner(pathString);
 			cmd.useDelimiter("[/]");
 			
-			Scanner args = new Scanner(req.hasNext()?req.next():"");
+			Scanner args = new Scanner(argsString);
 			args.useDelimiter("[&]");
 			
 			Map<String, String> argsMap = new HashMap<String, String>();
@@ -69,12 +83,6 @@ public class DACPRequestParser {
 				Scanner param = new Scanner(args.next());
 				param.useDelimiter("[=]");
 				argsMap.put(param.next(), param.next());
-			}
-			
-			if (!cmd.hasNext()) {
-				//a request for head: return html client page
-				
-				return new PageRequest();
 			}
 			
 			RequestNode node = base;

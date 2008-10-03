@@ -1,0 +1,218 @@
+html,body {
+	margin: 0;
+}
+
+body {
+	font-family: "Geneva", sans-serif;
+}
+
+#navigation {
+	position: fixed;
+	top: 0;
+	height: 4ex;
+	left: 0;
+	right: 0;
+	background-color: #ccc;
+	color: black;
+}
+
+#navigation div {
+	font-size: 80%;
+	padding: 1ex 1em;
+}
+
+.playing #navigation {
+	background-color: #222;
+	color: white;
+}
+
+.playing #playing {
+	display: none;
+}
+
+.playlists #back,.albums #back,.artists #back,.search #back {
+	display: none;
+}
+
+#back {
+	float: left;
+}
+
+#playing {
+	float: right;
+}
+
+.content {
+	margin-top: 4ex;
+	margin-bottom: 8ex;
+}
+
+#playlist {
+	margin-top: 18ex;
+}
+
+#state {
+	position: fixed;
+	top: 4ex;
+	height: 10ex;
+	left: 0;
+	right: 0;
+	padding: 2ex 1em;
+	padding-bottom: 2ex;
+	border-bottom: solid 2px #ccc;
+	background: white;
+	overflow: auto;
+}
+
+#state div {
+	font-size: 120%;
+}
+
+#state .artist {
+	color: black;
+}
+
+#state .album,#state .genre {
+	font-size: 80%;
+}
+
+.item {
+	border-bottom: solid 1px #ccc;
+	padding: 1ex 1em;
+	display: block;
+}
+
+.album,.artist,.title {
+	display: block;
+}
+
+.album,.artist,.genre {
+	color: #888;
+	font-size: 0.7em;
+}
+
+.title {
+	font-weight: bold;
+}
+
+.id {
+	display: none;
+}
+
+.current {
+	background-color: #eee;
+}
+
+#albumart {
+	height: 10ex;
+	float: left;
+	margin-right: 1em;
+}
+
+#control {
+	position: fixed;
+	bottom: 0;
+	height: 4ex;
+	padding: 2ex 0;
+	width: 100%;
+	text-align: center;
+	opacity: 0.8;
+	background-color: #ccc;
+}
+
+#control div {
+	display: inline;
+}
+
+#control .hidden {
+	display: none;
+}
+
+#control #volume {
+	display: none;
+}
+
+#play,#pause {
+	padding: 2ex 3em;
+}
+
+#current {
+	display: none;
+}
+
+.playing #current {
+	display: block;
+}
+
+.playing #browse {
+	display: none;
+}
+
+#browse-menu {
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 4ex;
+	padding: 2ex 0;
+	background-color: #222;
+	color: white;
+	text-align: center;
+}
+
+#browse-menu div {
+	display: inline;
+}
+
+.debug {
+	display: block;
+}
+
+#browse .content {
+	display: none;
+}
+
+#browse .content .container {
+	display: none;
+}
+
+.playlists #browse-playlists {
+	display: block;
+}
+
+.playlists .content #browse-playlists-container {
+	display: block;
+}
+
+.artists #browse-artists,.artist-albums #browse-artists,.artist-tracks #browse-artists
+	{
+	display: block;
+}
+
+.artists .content #browse-artists-container {
+	display: block;
+}
+
+.artist-albums .content #browse-artists-albums {
+	display: block;
+}
+
+.artist-tracks .content #browse-artists-tracks {
+	display: block;
+}
+
+.albums #browse-albums,.album-tracks #browse-albums {
+	display: block;
+}
+
+.albums .content #browse-albums-container {
+	display: block;
+}
+
+.album-tracks .content #browse-albums-tracks {
+	display: block;
+}
+
+.search #browse-search {
+	display: block;
+}

@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:svg="http://www.w3.org/2000/svg">
+<head>
+<title>Stereo</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<script type="text/javascript" charset="utf-8">
+//<![CDATA[
+	function getPlaybackStatusUpdate() {
+		var request = "/ctrl-int/1/playstatusupdate";
+		
+		if (lastUpdate && lastUpdate.revision) {
+			request += "?revision-number="+lastUpdate.revision;
+		}
+
+		ajax.request(request, function (response) {
+			var tree = new Node(response);
+
+			var up = new PlayStatusUpdate(tree, 0);
+
+			updateStatus(up);
+
+			if (!lastUpdate || up.revision != lastUpdate.revision) {
+				getPlaylistUpdate();
+				getAlbumArt(up.revision);
+				if ((!lastUpdate && up.status == 4)
+					|| (lastUpdate.status == 2 && up.status == 4)) {
+						document.body.className = "playing";
+				}
+			}
+
+			lastUpdate = up;
+			if (up.status) getPlaybackStatusUpdate();
+		});
+	}
+
+	function getPlaylistUpdate() {
+		var request = "/ctrl-int/1/playlist";
+		ajax.request(request, function (text) {
+			var tree = new Node(text);
+			var playlist = new Playlist(tree, 0);
+			updatePlaylist(playlist);
+		});
+	}
+
+	function getAlbumArt(revision) {
+		document.getElementById("albumart").src = "/ctrl-int/1/nowplayingartwork?revision="+revision;
+	}
+
+	function getPlaylists() {
+		var request = "/databases/1/containers";
+		var callback = function (text) {
+
+				var tree = new Node(text);
+
+				var list = findNode(tree, 0, "mlcl");
+				
+				var playlists = getItems(tree, list, function (t, i) {
+					return new Container(t, i);
+				});
+
+				var parent = document.getElementById("browse-playlists-container");
+				while (parent.childNodes.length > 0) {
+					parent.removeChild(parent.firstChild);
+				}
+				
+				for (p in playlists) {
+					var item = document.createElement("DIV");
+					item.className="item";
+					
+					item.appendChild(createNode("title", playlists[p].name));
+					item.appendChild(createNode("count", playlists[p].items));
+					
+					parent.appendChild(item);
+				}
+		}
+		ajax.request(request, callback);
+	}
+
+	function getArtists() {
+		var request = "/databases/1/browse/artists";
+		var callback = function (text) {
+			
+			var tree = new Node(text);
+
+			var list = findNode(tree, 0, "abar");
+			
+			var artists = getItems(tree, list, function (t, i) {
+				return t.stringVal(i);
+			});
+
+			var parent = document.getElementById("browse-artists-container");
+			while (parent.childNodes.length > 0) {
+				parent.removeChild(parent.firstChild);
+			}
+
+			for (a in artists) {
+				var item = document.createElement("DIV");
+				item.className="item";
+				item.query="'daap.songartist:"+artists[a]+"'";
+				
+				item.appendChild(createNode("title", artists[a]));
+				
+				parent.appendChild(item);
+			}
+		}
+		ajax.request(request, callback);
+	}
+
+	function getAlbums(query, callback) {
+		var request = "/databases/1/groups?group-type=albums&sort=albums&query="+query;
+		var fn = function (text) {
+			
+			var tree = new Node(text);
+
+			var list = findNode(tree, 0, "mlcl");
+			
+			var albums = getItems(tree, list, function (t, i) {
+				return new Album(t, i);
+			});
+
+			callback(albums);
+		}
+		ajax.request(request, fn);
+	
+	}
+
+	function getTracks(query, callback) {
+
+		var request = "/databases/1/containers/1/items?query="+query;
+		var fn = function (text) {
+			
+			var tree = new Node(text);
+
+			var list = findNode(tree, 0, "mlcl");
+			
+			var tracks = getItems(tree, list, function (t, i) {
+				return new Track(t, i);
+			});
+
+			callback(tracks);
+		}
+		ajax.request(request, fn);
+	}
+
+	function next() {
+		var request = new XMLHttpRequest();
+		request.open("GET", "/ctrl-int/1/nextitem", true);
+		request.send(null);
+	}
+
+	function prev() {
+		var request = new XMLHttpRequest();
+		request.open("GET", "/ctrl-int/1/previtem", true);
+		request.send(null);
+	}
+
+	function play() {
+		var request = new XMLHttpRequest();
+		request.open("GET", "/ctrl-int/1/playpause", true);
+		request.send(null);
+	}
+
+	function pause() {
+		var request = new XMLHttpRequest();
+		request.open("GET", "/ctrl-int/1/pause", true);
+		request.send(null);
+	}
+
+	function jump(index) {
+		var request = new XMLHttpRequest();
+		request.open("GET", "/ctrl-int/1/cue?command=play&index="+index);
+		request.send(null);
+	}
+
+	var lastUpdate = 0;
+	var previousPane = new Array();
+
+	function updateStatus(update) {
+
+		if (update.status == 2) {
+			document.getElementById("state").className = "stopped";
+
+			document.getElementById("play").className = "";
+			document.getElementById("pause").className = "hidden";
+		} else if (update.status == 3) {
+			document.getElementById("state").className = "paused";
+			setText(document.getElementById("title"), update.title);
+			setText(document.getElementById("artist"), update.artist);
+			setText(document.getElementById("album"), update.album);
+			setText(document.getElementById("genre"), update.genre);
+
+			document.getElementById("play").className = "";
+			document.getElementById("pause").className = "hidden";
+		} else if (update.status == 4) {
+			document.getElementById("state").className = "playing";
+			setText(document.getElementById("title"), update.title);
+			setText(document.getElementById("artist"), update.artist);
+			setText(document.getElementById("album"), update.album);
+			setText(document.getElementById("genre"), update.genre);
+
+			document.getElementById("play").className = "hidden";
+			document.getElementById("pause").className = "";
+		}
+	}
+
+	function setText(node, text) {
+		while (node.childNodes.length > 0) {
+			node.removeChild(node.firstChild);
+		}
+		node.appendChild(document.createTextNode(text));
+	}
+
+	function updatePlaylist(playlist) {
+
+		var list = document.getElementById("playlist");
+		list.innerHTML = "";
+
+		var current = lastUpdate.id;
+
+		for (i in playlist.tracks) {
+			var track = playlist.tracks[i];
+
+			var node = document.createElement("DIV");
+			node.className = "item";
+
+			node.appendChild(createNode("album", track.album));
+			node.appendChild(createNode("title", track.title));
+			node.appendChild(createNode("artist", track.artist));
+			node.appendChild(createNode("genre", track.genre));
+			node.appendChild(createNode("id", track.id));
+
+			if (current && track.id == current) {
+				node.className += " current";
+				current = 0;
+
+				while (list.childNodes.length > 2) {
+					list.removeChild(list.childNodes[0]);
+				}
+			}
+
+			list.appendChild(node);
+		}
+	}
+
+	function createNode(type, value) {
+		var node = document.createElement("DIV");
+		node.className = type;
+		node.appendChild(document.createTextNode(value));
+		return node;
+	}
+
+	function registerControls() {
+
+		document.getElementById("back").onclick = function() {
+			if (previousPane.length == 0) {
+				previousPane.push("playlists");
+			}
+			document.body.className = previousPane.pop();
+		}
+		document.getElementById("playing").onclick = function() {
+			if (document.body.className) {
+				previousPane.push(document.body.className);
+			}
+			document.body.className = "playing";
+		}
+
+		document.body.className = "playlists";
+
+		document.getElementById("previous").onclick = function() {
+			prev();
+		}
+		document.getElementById("play").onclick = function() {
+			play();
+		}
+		document.getElementById("pause").onclick = function() {
+			pause();
+		}
+		document.getElementById("next").onclick = function() {
+			next();
+		}
+
+		document.getElementById("playlist").onclick = function(e) {
+			var node = e.target;
+			while (!node.className.match("item")) {
+				node = node.parentNode;
+				if (node == document.body)
+					return;
+			}
+			var playlist = document.getElementById("playlist");
+			var offset = -1;
+			for (child in playlist.childNodes) {
+				if (playlist.childNodes[child].className
+						&& playlist.childNodes[child].className
+								.match("current")) {
+					offset = child;
+				}
+			}
+			if (offset == -1)
+				return;
+			for (child in playlist.childNodes) {
+				if (playlist.childNodes[child] == node) {
+					jump(child - offset);
+					break;
+				}
+			}
+		}
+
+		document.getElementById("browse-artists-container").onclick = function(e) {
+			var node = e.target;
+			while (!node.className.match("item")) {
+				node = node.parentNode;
+				if (node == document.body)
+					return;
+			}
+			
+			var query = node.query;
+			
+			getAlbums(query, function (albums) {
+				var parent = document.getElementById("browse-artists-albums");
+				while (parent.childNodes.length > 0) {
+					parent.removeChild(parent.firstChild);
+				}
+				for (a in albums) {
+					var item = document.createElement("DIV");
+					item.className="item";
+					item.query="'daap.songalbum="+albums[a].name+"'";
+				
+					item.appendChild(createNode("title", albums[a].name));
+				
+					parent.appendChild(item);
+				}
+				previousPane.push("artists");
+				document.body.className = "artist-albums";
+			});
+		}
+
+		document.getElementById("browse-artists-albums").onclick = function(e) {
+			var node = e.target;
+			while (!node.className.match("item")) {
+				node = node.parentNode;
+				if (node == document.body)
+					return;
+			}
+			var query = "'daap.songalbum:"+node.textContent+"'";
+			getTracks(query, function (tracks) {
+				var parent = document.getElementById("browse-artists-tracks");
+				while (parent.childNodes.length > 0) {
+					parent.removeChild(parent.firstChild);
+				}
+				for (t in tracks) {
+					var item = document.createElement("DIV");
+					item.className="item";
+				
+					item.appendChild(createNode("title", tracks[t].title));
+				
+					parent.appendChild(item);
+				}
+				previousPane.push("artist-albums");
+				document.body.className = "artist-tracks";
+			});
+		}
+
+		document.getElementById("browse-albums-container").onclick = function(e) {
+			var node = e.target;
+			while (!node.className.match("item")) {
+				node = node.parentNode;
+				if (node == document.body)
+					return;
+			}
+			
+			var query = node.query;
+			
+			getTracks(query, function (tracks) {
+				var parent = document.getElementById("browse-albums-tracks");
+				while (parent.childNodes.length > 0) {
+					parent.removeChild(parent.firstChild);
+				}
+				for (t in tracks) {
+					var item = document.createElement("DIV");
+					item.className="item";
+				
+					item.appendChild(createNode("title", tracks[t].title));
+				
+					parent.appendChild(item);
+				}
+				previousPane.push("albums");
+				document.body.className = "album-tracks";
+			});
+		}
+
+		document.getElementById("browse-menu-playlists").onclick = function() {
+			getPlaylists();
+			document.body.className = "playlists";
+		}
+		document.getElementById("browse-menu-artists").onclick = function() {
+			getArtists();
+			document.body.className = "artists";
+		}
+		document.getElementById("browse-menu-albums").onclick = function() {
+			getAlbums("'daap.songalbum!:'", function (albums) {
+					var parent = document.getElementById("browse-albums-container");
+					while (parent.childNodes.length > 0) {
+						parent.removeChild(parent.firstChild);
+					}
+					for (a in albums) {
+						var item = document.createElement("DIV");
+						item.className="item";
+						item.query="'daap.songalbum:"+albums[a].name+"'";
+					
+						item.appendChild(createNode("title", albums[a].name));
+					
+						parent.appendChild(item);
+					}
+					document.body.className = "albums";
+			});
+		}
+		document.getElementById("browse-menu-search").onclick = function() {
+			getSearch();
+			document.body.className = "search";
+		}
+		getPlaylists();
+		document.body.className = "playlists";
+	}
+	//]]>
+</script>
+
+<link rel="stylesheet" type="text/css" href="style.css" />
+
+</head>
+<body onload="registerControls(); getPlaybackStatusUpdate();">
+<div id="navigation">
+<div id="back">Back</div>
+<div id="playing">Now Playing</div>
+</div>
+<div id="current">
+<div id="state"><img id="albumart" src="" alt="" />
+<div id="title" class="title"></div>
+<div id="album" class="album"></div>
+<div id="artist" class="artist"></div>
+<div id="genre" class="genre"></div>
+</div>
+<div id="control">
+<div id="previous">previous</div>
+<div id="play">play</div>
+<div id="pause">pause</div>
+<div id="next">next</div>
+<div id="volume">volume</div>
+</div>
+<div id="playlist" class="content"></div>
+</div>
+<div id="browse">
+<div id="browse-menu">
+<div id="browse-menu-playlists">Playlists</div>
+<div id="browse-menu-artists">Artists</div>
+<div id="browse-menu-albums">Albums</div>
+<div id="browse-menu-search">Search</div>
+</div>
+<div id="browse-playlists" class="content">
+<div id="browse-playlists-container" class="container"></div>
+</div>
+<div id="browse-artists" class="content">
+<div id="browse-artists-container" class="container"></div>
+<div id="browse-artists-albums" class="container"></div>
+<div id="browse-artists-tracks" class="container"></div>
+</div>
+<div id="browse-albums" class="content">
+<div id="browse-albums-container" class="container"></div>
+<div id="browse-albums-tracks" class="container"></div>
+</div>
+<div id="browse-search" class="content"></div>
+</div>
+
+<script type="text/javascript" src="svgloader.js"></script>
+<script type="text/javascript" src="ajax.js"></script>
+<script type="text/javascript" src="dacp.js"></script>
+<script type="text/javascript">
+	createSVGcontrols();
+</script>
+</body>
+</html>

@@ -1,4 +1,16 @@
 * text=auto !eol
+Asunder/.classpath -text
+Asunder/.project -text
+Asunder/.settings/.jsdtscope -text
+Asunder/.settings/org.eclipse.wst.jsdt.ui.superType.container -text
+Asunder/.settings/org.eclipse.wst.jsdt.ui.superType.name -text
+Asunder/webserver/FileLoader.java -text
+Asunder/webserver/ajax.js -text
+Asunder/webserver/dacp.js -text
+Asunder/webserver/favicon.ico -text
+Asunder/webserver/index.xhtml -text
+Asunder/webserver/style.css -text
+Asunder/webserver/svgloader.js -text
 CLI/.classpath -text
 CLI/.project -text
 CLI/build.xml -text
@@ -38,9 +50,9 @@ DAAPLib/src/util/command/Command.java -text
 DAAPLib/src/util/command/ControlPromptUpdate.java -text
 DAAPLib/src/util/command/CtrlInt.java -text
 DAAPLib/src/util/command/Databases.java -text
+DAAPLib/src/util/command/HTMLClient.java -text
 DAAPLib/src/util/command/Login.java -text
 DAAPLib/src/util/command/Logout.java -text
-DAAPLib/src/util/command/PageRequest.java -text
 DAAPLib/src/util/command/PathNode.java -text
 DAAPLib/src/util/command/RequestNode.java -text
 DAAPLib/src/util/command/ServerInfo.java -text
@@ -60,7 +72,6 @@ DAAPLib/src/util/command/databases/Browse.java -text
 DAAPLib/src/util/command/databases/Containers.java -text
 DAAPLib/src/util/command/databases/Groups.java -text
 DAAPLib/src/util/command/databases/Items.java -text
-DAAPLib/src/util/command/stereo.html -text
 DAAPLib/src/util/node/BooleanNode.java -text
 DAAPLib/src/util/node/ByteNode.java -text
 DAAPLib/src/util/node/Composite.java -text
