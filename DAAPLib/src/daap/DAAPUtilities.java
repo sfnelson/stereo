@@ -27,7 +27,7 @@ public class DAAPUtilities {
 		this.names = new HashMap<Integer,String>();
 		this.types = new HashMap<Integer,Short>();
 		
-		this.requests = new HashMap<InputStream, HttpMethod>();
+		//this.requests = new HashMap<InputStream, HttpMethod>();
 		
 		DAAPUtilities.initContentCodes(this.names, this.types);
 		
@@ -56,7 +56,7 @@ public class DAAPUtilities {
 	        // Read the response body.
 	        responseBody = method.getResponseBodyAsStream();
 
-	        this.requests.put(responseBody, method);
+	        //this.requests.put(responseBody, method);
 	        
 	        return responseBody;
 
@@ -75,7 +75,7 @@ public class DAAPUtilities {
 	protected InputStream songRequest(String hostname, int port, String request) throws IOException {
 		return request(clientSong, hostname, port, request);
 	}
-	
+	/*
 	protected void release(InputStream request) {
 		if ((request != null) && (this.requests.get(request) != null)) {
 			try {
@@ -86,7 +86,7 @@ public class DAAPUtilities {
 			this.requests.get(request).releaseConnection();
 			this.requests.remove(request);
 		}
-	}
+	}*/
 	
 	private void retrieveContentCodes(final String hostname, int port) throws IOException {
 		
@@ -116,13 +116,13 @@ public class DAAPUtilities {
 			}
 		}
 
-		this.release(response);
+		//this.release(response);
 	}
 	
 	protected Map<Integer, String> names;
 	protected Map<Integer, Short> types;
 	
-	private Map<InputStream, HttpMethod> requests;
+	//private Map<InputStream, HttpMethod> requests;
 	
 	private static void initContentCodes(Map<Integer, String> names, Map<Integer, Short> types) {
 		names.put(stringToInt("mdcl"), "dmap.dictionary");
