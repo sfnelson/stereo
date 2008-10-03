@@ -7,7 +7,7 @@
 <project basedir="." default="build" name="MemphisDJ" xmlns:ivy="antlib:org.apache.ivy.ant">
   <property name="CLI.location" value="../CLI"/>
   <property name="DAAPLib.location" value="../DAAPLib"/>
-  <property name="Jukebox.location" value="../Jukebox"/>
+  <property name="Asunder.location" value="../Asunder"/>
 
   <property name="debuglevel" value="source,lines,vars"/>
 
@@ -18,23 +18,23 @@
 
   <!--
       <path id="JUnit 4.libraryclasspath">
-        <pathelement location="${ECLIPSE_HOME}/plugins/org.junit4_4.3.1/junit.jar"/>
+	<pathelement location="${ECLIPSE_HOME}/plugins/org.junit4_4.3.1/junit.jar"/>
       </path>
       -->
 
-  <target name="download-ivy" unless="skip.download">  
-    <!-- download Ivy from web site so that it can be used even without any special installation -->  
+  <target name="download-ivy" unless="skip.download">
+    <!-- download Ivy from web site so that it can be used even without any special installation -->
     <echo message="installing ivy..."/>
     <mkdir dir="lib"/>
-    <get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"  
+    <get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"
 	 dest="lib/ivy.jar" usetimestamp="true"/>
-  </target>  
+  </target>
 
   <target name="install-ivy" depends="download-ivy">
-    <path id="ivy.lib.path">  
-      <fileset dir="lib" includes="*.jar"/>  
+    <path id="ivy.lib.path">
+      <fileset dir="lib" includes="*.jar"/>
     </path>
-    <taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/>  
+    <taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/>
   </target>
 
   <target name="resolve" depends="install-ivy">
@@ -86,8 +86,8 @@
     <ant antfile="${CLI.location}/build.xml" inheritAll="false" target="build"/>
     <ant antfile="${DAAPLib.location}/build.xml" inheritAll="false" target="clean"/>
     <ant antfile="${DAAPLib.location}/build.xml" inheritAll="false" target="build"/>
-    <ant antfile="${Jukebox.location}/build.xml" inheritAll="false" target="clean"/>
-    <ant antfile="${Jukebox.location}/build.xml" inheritAll="false" target="build"/>
+    <ant antfile="${Asunder.location}/build.xml" inheritAll="false" target="clean"/>
+    <ant antfile="${Asunder.location}/build.xml" inheritAll="false" target="build"/>
   </target>
 
   <target name="DJ">

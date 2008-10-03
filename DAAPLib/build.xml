@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="build" name="DAAPLib" xmlns:ivy="antlib:org.apache.ivy.ant">
   <property name="CLI.location" value="../CLI"/>
-  <property name="Jukebox.location" value="../Jukebox"/>
+  <property name="Asunder.location" value="../Asunder"/>
   <property name="MemphisDJ.location" value="../MemphisDJ"/>
 
   <property name="debuglevel" value="source,lines,vars"/>
@@ -13,18 +13,18 @@
   <property name="ivy.install.version" value="2.0.0-beta2"/>
 
   <target name="download-ivy" unless="skip.download">
-    <!-- download Ivy from web site so that it can be used even without any special installation -->  
+    <!-- download Ivy from web site so that it can be used even without any special installation -->
     <echo message="installing ivy..."/>
     <mkdir dir="lib"/>
-    <get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"  
+    <get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"
 	 dest="lib/ivy.jar" usetimestamp="true"/>
-  </target>  
+  </target>
 
   <target name="install-ivy" depends="download-ivy">
-    <path id="ivy.lib.path">  
-      <fileset dir="lib" includes="*.jar"/>  
+    <path id="ivy.lib.path">
+      <fileset dir="lib" includes="*.jar"/>
     </path>
-    <taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/>  
+    <taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/>
   </target>
 
   <target name="resolve" depends="install-ivy">
@@ -35,12 +35,16 @@
   <path id="MemphisDJ.classpath">
     <pathelement location="${MemphisDJ.location}/bin"/>
   </path>
+  <path id="Asunder.classpath">
+    <pathelement location="${Asunder.location}"/>
+  </path>
   <path id="DAAPLib.classpath">
     <pathelement location="bin"/>
     <fileset dir="lib">
       <include name="**/*.jar"/>
     </fileset>
     <path refid="MemphisDJ.classpath"/>
+    <path refid="Asunder.classpath"/>
   </path>
   <target name="init" depends="resolve">
     <mkdir dir="bin"/>
@@ -81,8 +85,8 @@
   <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects">
     <ant antfile="${CLI.location}/build.xml" inheritAll="false" target="clean"/>
     <ant antfile="${CLI.location}/build.xml" inheritAll="false" target="build"/>
-    <ant antfile="${Jukebox.location}/build.xml" inheritAll="false" target="clean"/>
-    <ant antfile="${Jukebox.location}/build.xml" inheritAll="false" target="build"/>
+    <ant antfile="${Asunder.location}/build.xml" inheritAll="false" target="clean"/>
+    <ant antfile="${Asunder.location}/build.xml" inheritAll="false" target="build"/>
   </target>
   <target name="DAAPConstants">
     <java classname="daap.DAAPConstants" failonerror="true" fork="yes">
