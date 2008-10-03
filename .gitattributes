@@ -90,13 +90,6 @@ DAAPLib/test/daap/TrackTest.java -text
 DAAPLib/test/music/LackeyTest.java -text
 DAAPLib/test/server/ServerParserTest.java -text
 DAAPLib/test/util/serializer/WriteVisitorTest.java -text
-Jukebox/.classpath -text
-Jukebox/.project -text
-Jukebox/build.xml -text
-Jukebox/ivy.xml -text
-Jukebox/src/player/Controller.java -text
-Jukebox/src/player/DACPHeckler.java -text
-Jukebox/test/controller/ControllerTest.java -text
 MemphisDJ/.classpath -text
 MemphisDJ/.project -text
 MemphisDJ/Sample/sample/CompositeEntry.java -text
