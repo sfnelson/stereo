@@ -4,30 +4,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.impl.SimpleLog;
-
-
-
 public class DAAPClient {
 
 	private String hostname;
-	
 	private String dbname;
-
 	private int id;
-	
 	private int dbid;
-
 	private int revisionNumber;
-
-	private Log log;
-
 	private int sessionID;
-
 	private int port;
-
-	DAAPUtilities helper;
+	private DAAPUtilities helper;
 
 	public DAAPClient(String hostname, int port, int id) throws IOException {
 		//This method should login and get a session ID,
@@ -36,10 +22,8 @@ public class DAAPClient {
 		this.port = port;
 		this.id = id;
 
-		log = new SimpleLog("Log");
-
 		try {
-			helper = new DAAPUtilities(hostname, port, log);
+			helper = new DAAPUtilities(hostname, port);
 		} catch (IOException e) {
 			System.err.println("Unable to connect to " + hostname + " on " + port);
 			e.printStackTrace();
@@ -81,7 +65,7 @@ public class DAAPClient {
 		InputStream in = null;
 		
 		try {
-			in = helper.request(hostname, port, request, log);
+			in = helper.request(hostname, port, request);
 			DAAPEntry entry = DAAPEntry.parseStream(in, helper.types);
 
 			if ((entry == null)
@@ -116,7 +100,7 @@ public class DAAPClient {
 	public InputStream getStream(DAAPTrack track) throws IOException {
 		int song = track.getId();
 		return helper.songRequest(hostname, port, "databases/" + dbid + "/items/" + song
-				+ ".mp3?session-id=" + sessionID, log);
+				+ ".mp3?session-id=" + sessionID);
 	}
 
 	public boolean isUpdated() throws ClientExpiredException{
@@ -135,7 +119,7 @@ public class DAAPClient {
 		InputStream in = null;
 
 		try {
-			in = helper.request(hostname, port, serverInfoRequest, log);
+			in = helper.request(hostname, port, serverInfoRequest);
 			DAAPEntry entry = DAAPEntry.parseStream(in, helper.types);
 
 			for (DAAPEntry e : entry) {
@@ -160,7 +144,7 @@ public class DAAPClient {
 		InputStream in = null;
 
 		try {
-			in = helper.request(hostname, port, loginRequest, log);
+			in = helper.request(hostname, port, loginRequest);
 			DAAPEntry entry = DAAPEntry.parseStream(in, helper.types);
 
 			for (DAAPEntry e : entry) {
@@ -186,7 +170,7 @@ public class DAAPClient {
 		String request = "update?session-id=" + sessionID;
 
 		try {
-			in = helper.request(hostname, port, request, log);
+			in = helper.request(hostname, port, request);
 			DAAPEntry entry = DAAPEntry.parseStream(in, helper.types);
 
 			for (DAAPEntry e : entry) {
@@ -213,7 +197,7 @@ public class DAAPClient {
 
 
 		try {
-			in = helper.request(hostname, port, request, log);
+			in = helper.request(hostname, port, request);
 			DAAPEntry entry = DAAPEntry.parseStream(in, helper.types);
 
 			for (DAAPEntry e : entry) {

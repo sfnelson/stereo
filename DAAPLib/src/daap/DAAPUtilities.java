@@ -13,14 +13,13 @@ import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
-import org.apache.commons.logging.Log;
 
 public class DAAPUtilities {
 
 	private HttpClient  client;	
 	private HttpClient  clientSong;	
 	
-	protected DAAPUtilities(final String hostname, final int port, final Log log) throws IOException {
+	protected DAAPUtilities(final String hostname, final int port) throws IOException {
 		
 		client = new HttpClient();
 		clientSong = new HttpClient();
@@ -32,13 +31,11 @@ public class DAAPUtilities {
 		
 		DAAPUtilities.initContentCodes(this.names, this.types);
 		
-		this.retrieveContentCodes(hostname, port, log);
+		this.retrieveContentCodes(hostname, port);
 	}
 	
-	private  InputStream request(HttpClient client, String hostname, int port, String request, Log log) throws IOException {
+	private  InputStream request(HttpClient client, String hostname, int port, String request) throws IOException {
 		String requestURI = "http://" + hostname + ":" + port + "/" + request;
-		log.debug("daap client: requestURI = " + requestURI);
-		
 		
 		HttpMethod method = new GetMethod(requestURI);
 		
@@ -53,7 +50,7 @@ public class DAAPUtilities {
 	        int statusCode = client.executeMethod(method);
 
 	        if (statusCode/100 != HttpStatus.SC_OK/100) {
-	          log.error("Method failed: " + method.getStatusLine());
+	          System.err.println("Method failed: " + method.getStatusLine());
 	        }
 
 	        // Read the response body.
@@ -71,12 +68,12 @@ public class DAAPUtilities {
 	    return null;
 	}
 	
-	protected InputStream request(String hostname, int port, String request, Log log) throws IOException {
-		return request(client, hostname, port, request, log);
+	protected InputStream request(String hostname, int port, String request) throws IOException {
+		return request(client, hostname, port, request);
 	}
 	
-	protected InputStream songRequest(String hostname, int port, String request, Log log) throws IOException {
-		return request(clientSong, hostname, port, request, log);
+	protected InputStream songRequest(String hostname, int port, String request) throws IOException {
+		return request(clientSong, hostname, port, request);
 	}
 	
 	protected void release(InputStream request) {
@@ -91,9 +88,9 @@ public class DAAPUtilities {
 		}
 	}
 	
-	private void retrieveContentCodes(final String hostname, int port, final Log log) throws IOException {
+	private void retrieveContentCodes(final String hostname, int port) throws IOException {
 		
-		InputStream response = this.request(hostname, port, "content-codes", log);
+		InputStream response = this.request(hostname, port, "content-codes");
 		
 		if (response == null) {
 			throw new NullPointerException();
