@@ -175,6 +175,18 @@
 		request.send(null);
 	}
 
+	function clear() {
+		var request = new XMLHttpRequest();
+		request.open("GET", "/ctrl-int/1/cue?command=clear");
+		request.send(null);
+	}
+
+	function enqueue(query) {
+		var request = new XMLHttpRequest();
+		request.open("GET", "/ctrl-int/1/cue?command=play&query="+query);
+		request.send(null);
+	}
+
 	var lastUpdate = 0;
 	var previousPane = new Array();
 
@@ -350,10 +362,17 @@
 				while (parent.childNodes.length > 0) {
 					parent.removeChild(parent.firstChild);
 				}
-				for (t in tracks) {
-					var item = document.createElement("DIV");
-					item.className="item";
 				
+				var item = document.createElement("DIV");
+				item.className="item";
+				item.query = query;
+				item.appendChild(createNode("title", "All Songs"));
+				parent.appendChild(item);
+				
+				for (t in tracks) {
+					item = document.createElement("DIV");
+					item.className="item";
+					item.query = query+"+'dmap.itemname:"+tracks[t].title+"'";
 					item.appendChild(createNode("title", tracks[t].title));
 				
 					parent.appendChild(item);
@@ -361,6 +380,23 @@
 				previousPane.push("artist-albums");
 				document.body.className = "artist-tracks";
 			});
+		}
+
+		document.getElementById("browse-artists-tracks").onclick = function (e) {
+			var node = e.target;
+			while (!node.className.match("item")) {
+				node = node.parentNode;
+				if (node == document.body)
+					return;
+			}
+			
+			var query = node.query;
+
+			clear();
+			enqueue(query);
+
+			previousPane.push("artist-tracks");
+			document.body.className = "playing";
 		}
 
 		document.getElementById("browse-albums-container").onclick = function(e) {
@@ -378,17 +414,42 @@
 				while (parent.childNodes.length > 0) {
 					parent.removeChild(parent.firstChild);
 				}
+				
+				var item = document.createElement("DIV");
+				item.className="item";
+				item.query = query;
+				item.appendChild(createNode("title", "All Songs"));
+				parent.appendChild(item);
+
 				for (t in tracks) {
-					var item = document.createElement("DIV");
+					item = document.createElement("DIV");
 					item.className="item";
-				
+					item.query = query+"+'dmap.itemname:"+tracks[t].title+"'";
 					item.appendChild(createNode("title", tracks[t].title));
-				
+					item.appendChild(createNode("artist", tracks[t].artist));
 					parent.appendChild(item);
 				}
+				
 				previousPane.push("albums");
 				document.body.className = "album-tracks";
 			});
+		}
+
+		document.getElementById("browse-albums-tracks").onclick = function (e) {
+			var node = e.target;
+			while (!node.className.match("item")) {
+				node = node.parentNode;
+				if (node == document.body)
+					return;
+			}
+			
+			var query = node.query;
+
+			clear();
+			enqueue(query);
+
+			previousPane.push("album-tracks");
+			document.body.className = "playing";
 		}
 
 		document.getElementById("browse-menu-playlists").onclick = function() {
@@ -452,25 +513,32 @@
 <div id="playlist" class="content"></div>
 </div>
 <div id="browse">
-<div id="browse-menu">
-<div id="browse-menu-playlists">Playlists</div>
-<div id="browse-menu-artists">Artists</div>
-<div id="browse-menu-albums">Albums</div>
-<div id="browse-menu-search">Search</div>
-</div>
-<div id="browse-playlists" class="content">
-<div id="browse-playlists-container" class="container"></div>
-</div>
-<div id="browse-artists" class="content">
-<div id="browse-artists-container" class="container"></div>
-<div id="browse-artists-albums" class="container"></div>
-<div id="browse-artists-tracks" class="container"></div>
-</div>
-<div id="browse-albums" class="content">
-<div id="browse-albums-container" class="container"></div>
-<div id="browse-albums-tracks" class="container"></div>
-</div>
-<div id="browse-search" class="content"></div>
+	<div id="browse-menu">
+		<div id="browse-menu-playlists">Playlists</div>
+		<div id="browse-menu-artists">Artists</div>
+		<div id="browse-menu-albums">Albums</div>
+		<div id="browse-menu-search">Search</div>
+	</div>
+	<div id="browse-playlists" class="content">
+		<div id="browse-playlists-container" class="container"></div>
+		<div id="browse-playlists-tracks" class="container"></div>
+	</div>
+	<div id="browse-artists" class="content">
+		<div id="browse-artists-container" class="container"></div>
+		<div id="browse-artists-albums" class="container"></div>
+		<div id="browse-artists-tracks" class="container"></div>
+	</div>
+	<div id="browse-albums" class="content">
+		<div id="browse-albums-container" class="container"></div>
+		<div id="browse-albums-tracks" class="container"></div>
+	</div>
+	<div id="browse-search" class="content">
+		<div id="browse-search-interface">
+			<input type="text" name="songs" id="browse-search-input" />
+			<button type="submit" />
+		</div>
+		<div id="browse-search-container" class="container"></div>
+	</div>
 </div>
 
 <script type="text/javascript" src="svgloader.js"></script>
