@@ -35,10 +35,6 @@ DAAPLib/src/daap/DAAPLackey.java -text
 DAAPLib/src/daap/DAAPTrack.java -text
 DAAPLib/src/daap/DAAPUtilities.java -text
 DAAPLib/src/daap/content-codes.txt -text
-DAAPLib/src/dacp/CLIAlbum.java -text
-DAAPLib/src/dacp/CLIPlaylist.java -text
-DAAPLib/src/dacp/CLITrack.java -text
-DAAPLib/src/dacp/DACPDJInterface.java -text
 DAAPLib/src/dacp/DACPServer.java -text
 DAAPLib/src/dacp/DACPTreeBuilder.java -text
 DAAPLib/src/dacp/Main.java -text
