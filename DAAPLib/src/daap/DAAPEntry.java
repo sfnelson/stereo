@@ -53,7 +53,7 @@ public class DAAPEntry {
 			throw new IOException("parser: unknown entry '" + DAAPConstants.codeToString(code) + " " + code + "' (" + length + ")");
 		}
 
-		switch (type) {
+		switch (type.shortValue()) {
 		case LONG:
 			this.value = readLong(bytes, pos);
 			break;
