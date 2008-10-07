@@ -94,9 +94,6 @@ DAAPLib/src/writer/DACPRequestGenerator.java -text
 DAAPLib/src/writer/DACPResponseGenerator.java -text
 DAAPLib/test/client/ClientBroadcasterTest.java -text
 DAAPLib/test/client/ClientParserTest.java -text
-DAAPLib/test/daap/DaapClientTest2.java -text
-DAAPLib/test/daap/TrackTest.java -text
-DAAPLib/test/music/LackeyTest.java -text
 DAAPLib/test/server/ServerParserTest.java -text
 DAAPLib/test/util/serializer/WriteVisitorTest.java -text
 MemphisDJ/.classpath -text
