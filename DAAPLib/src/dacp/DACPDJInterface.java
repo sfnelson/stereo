@@ -2,13 +2,12 @@ package dacp;
 
 import interfaces.Album;
 import interfaces.DJInterface;
-import interfaces.Lackey;
+import interfaces.Library;
 import interfaces.PlaybackControl;
 import interfaces.PlaybackStatus;
-import interfaces.Playlist;
-import interfaces.Track;
-import interfaces.TrackSource;
 import interfaces.VolumeControl;
+import interfaces.collection.Collection;
+import interfaces.collection.Source;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import music.Track;
 import notification.LibraryListener;
 import notification.PlaybackListener;
 import reader.DACPResponseParser;
@@ -58,48 +58,72 @@ public class DACPDJInterface implements DJInterface {
 	}
 	
 	private CLITrack parseStatusTrack(Composite c) {
-		CLITrack t = new CLITrack();
+		
+		int id = 0;
+		long persistent = 0;
+		
 		for (Node n : c.nodes) {
 			switch (n.code) {
 			case DACPConstants.canp:
 				LongLongNode lln = (LongLongNode)n;
-				t.setId((int)lln.getValue2()); //drops top types - last int field is id
-				break;
-			case DACPConstants.cann:
-				t.putTag(DACPConstants.NAME, ((StringNode)n).getValue());
-				break;
-			case DACPConstants.cana:
-				t.putTag(DACPConstants.ARTIST, ((StringNode)n).getValue());
-				break;
-			case DACPConstants.canl:
-				t.putTag(DACPConstants.ALBUM, ((StringNode)n).getValue());
-				break;
-			case DACPConstants.cang:
-				t.putTag(DACPConstants.GENRE, ((StringNode)n).getValue());
+				id = (int)lln.getValues()[3]; //drops top types - last int field is id
 				break;
 			}
 		}
+		
+		CLITrack t = new CLITrack(id, persistent);
+		
+		for (Node n : c.nodes) {
+			switch (n.code) {
+			case DACPConstants.cann:
+				t.put(DACPConstants.NAME, ((StringNode)n).getValue());
+				break;
+			case DACPConstants.cana:
+				t.put(DACPConstants.ARTIST, ((StringNode)n).getValue());
+				break;
+			case DACPConstants.canl:
+				t.put(DACPConstants.ALBUM, ((StringNode)n).getValue());
+				break;
+			case DACPConstants.cang:
+				t.put(DACPConstants.GENRE, ((StringNode)n).getValue());
+				break;
+			}
+		}
+		
 		return t;
 	}
 	
 	private CLITrack parsePlaylistTrack(Composite c) {
-		CLITrack t = new CLITrack();
+		
+		int id = 0;
+		long persistent = 0;
+		
 		for (Node n : c.nodes) {
 			switch (n.code) {
 			case DAAPConstants.miid:
-				t.setId(((IntegerNode)n).getValue());
+				id = (int)(((IntegerNode)n).getValue());
 				break;
+			case DAAPConstants.mper:
+				persistent = (long)(((LongNode)n).getValue());
+				break;
+			}
+		}
+		
+		CLITrack t = new CLITrack(id, persistent);
+		
+		for (Node n : c.nodes) {
+			switch (n.code) {
 			case DAAPConstants.NAME:
-				t.putTag(DACPConstants.NAME, ((StringNode)n).getValue());
+				t.put(DACPConstants.NAME, ((StringNode)n).getValue());
 				break;
 			case DAAPConstants.ARTIST:
-				t.putTag(DACPConstants.ARTIST, ((StringNode)n).getValue());
+				t.put(DACPConstants.ARTIST, ((StringNode)n).getValue());
 				break;
 			case DAAPConstants.ALBUM:
-				t.putTag(DACPConstants.ALBUM, ((StringNode)n).getValue());
+				t.put(DACPConstants.ALBUM, ((StringNode)n).getValue());
 				break;
 			case DAAPConstants.GENRE:
-				t.putTag(DACPConstants.GENRE, ((StringNode)n).getValue());
+				t.put(DACPConstants.GENRE, ((StringNode)n).getValue());
 				break;
 			}
 		}
@@ -107,7 +131,7 @@ public class DACPDJInterface implements DJInterface {
 	}
 	
 	private CLIPlaylist parsePlaylist(Composite c) {
-		CLIPlaylist pl = new CLIPlaylist();
+		CLIPlaylist pl = new CLIPlaylist(0, 0, "current");
 		for (Node n : c.nodes) {
 			if (n.code == DACPConstants.mlcl) {
 				Composite list = (Composite)n;
@@ -133,15 +157,26 @@ public class DACPDJInterface implements DJInterface {
 	}
 	
 	private CLIPlaylist parsePlaylistDetails(Composite c) {
-		CLIPlaylist pl = new CLIPlaylist();
+		
+		int id = 0;
+		long persistent = 0;
+		String name = null;
+		
 		for (Node n : c.nodes) {
 			switch (n.code) {
-			case DAAPConstants.miid: pl.setId(((IntegerNode)n).getValue()); break;
-			case DAAPConstants.mper: pl.setPersistantId(((LongNode)n).getValue()); break;
-			case DAAPConstants.minm: pl.setName(((StringNode)n).getValue()); break;
+			case DAAPConstants.miid: id = ((IntegerNode)n).getValue(); break;
+			case DAAPConstants.mper: persistent = ((LongNode)n).getValue(); break;
+			case DAAPConstants.minm: name = ((StringNode)n).getValue(); break;
+			}
+		}
+		
+		CLIPlaylist pl = new CLIPlaylist(id, persistent, name);
+		
+		for (Node n : c.nodes) {
+			switch (n.code) {
 			case DAAPConstants.abpl: pl.setRoot(((BooleanNode)n).getValue()); break;
-			case DAAPConstants.mpco: pl.setParentId(((IntegerNode)n).getValue()); break;
-			case DAAPConstants.mimc: pl.setSpecifiedSize(((IntegerNode)n).getValue()); break;
+			case DAAPConstants.mpco: pl.setParent(((IntegerNode)n).getValue()); break;
+			case DAAPConstants.mimc: pl.specifySize(((IntegerNode)n).getValue()); break;
 			}
 		}
 		return pl;
@@ -173,7 +208,7 @@ public class DACPDJInterface implements DJInterface {
 		return al;
 	}
 	
-	public Lackey library() {
+	public Library<CLITrack> library() {
 		return this.library;
 	}
 
@@ -189,8 +224,133 @@ public class DACPDJInterface implements DJInterface {
 		return this.status;
 	}
 	
-	private Lackey library = new Lackey() {
+	private Library<CLITrack> library = new Library<CLITrack>() {
 
+		public boolean addCollection(Collection<? extends Track> collection) {
+			throw new RuntimeException("should not be called on cli");
+		}
+
+		public boolean addSource(Source<? extends Track> source) {
+			throw new RuntimeException("should not be called on cli");
+		}
+
+		public Iterable<? extends Album> albums() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public Iterable<Collection<? extends Track>> collections() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public int numAlbums() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		public int numCollections() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		public void registerLibraryListener(LibraryListener listener) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public boolean removeCollection(Collection<? extends Track> collection) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		public void removeLibraryListener(LibraryListener listener) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public boolean removeSource(Source<? extends Track> source) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		public int version() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		public boolean isRoot() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		public String name() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public Collection<CLITrack> parent() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public int size() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		public Object get(int tagID) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public Iterable<Integer> getAllTags() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public int id() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		public long persistentId() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		public boolean hasNext() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		public CLITrack next() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public Iterable<? extends Track> tracks() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public void registerListener(
+				interfaces.collection.Source.Listener listener) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public void removeListener(
+				interfaces.collection.Source.Listener listener) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public Iterator<CLITrack> iterator() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		/*
 		public List<? extends Album> getAlbums() {
 			Composite c = request("/databases/1/browse/artists?filter=('daap.songartist!:')");
 
@@ -199,7 +359,7 @@ public class DACPDJInterface implements DJInterface {
 			return parseAlbums(c);
 		}
 
-		public List<? extends Track> getLibrary() {			
+		public CLIPlaylist getLibrary() {			
 			Composite c = request("/databases/1/containers/1/items");
 
 			if (c == null) return null;
@@ -207,15 +367,13 @@ public class DACPDJInterface implements DJInterface {
 			return parsePlaylist(c);
 		}
 
-		public List<? extends Playlist<? extends Track>> getPlaylists() {
+		public List<? extends Collection<? extends Track>> getPlaylists() {
 			Composite c = request("/databases/1/containers");
 
 			if (c == null) return null;
 			
 			return parsePlaylists(c);
 		}
-
-		public TrackSource trackSource() { return null; }
 
 		public int version() {
 			Composite c = request("/update");
@@ -233,12 +391,12 @@ public class DACPDJInterface implements DJInterface {
 
 		public void registerListener(LibraryListener listener) {}
 		public void removeListener(LibraryListener listener) {}
-		
+		*/
 	};
 	
 	private PlaybackStatus status = new PlaybackStatus() {
 
-		public Track currentTrack() {
+		public Track current() {
 			Composite c = request("/ctrl-int/1/playstatusupdate");
 
 			if (c == null) return null;
@@ -267,7 +425,7 @@ public class DACPDJInterface implements DJInterface {
 			return null;
 		}
 
-		public Playlist<? extends Track> getPlaylist() {
+		public Collection<? extends Track> playlist() {
 			Composite c = request("/ctrl-int/1/playlist");
 
 			if (c == null) return null;
@@ -283,6 +441,20 @@ public class DACPDJInterface implements DJInterface {
 			for (Node n : c.nodes) {
 				if (n.code == DACPConstants.caps) {
 					return ((ByteNode)n).getValue();
+				}
+			}
+			
+			return -1;
+		}
+
+		public int position() {
+			Composite c = request("/ctrl-int/1/playstatusupdate");
+
+			if (c == null) return -1;
+			
+			for (Node n : c.nodes) {
+				if (n.code == DACPConstants.canp) {
+					return ((LongLongNode)n).getValues()[2];
 				}
 			}
 			
@@ -322,7 +494,7 @@ public class DACPDJInterface implements DJInterface {
 		public void enqueue(List<? extends Track> tracks) {
 			String query = "/ctrl-int/1/cue?command=play&query=(";
 			for (Iterator<? extends Track> it = tracks.iterator(); it.hasNext();) {
-				query += "'daap.itemid:"+it.next().getTag(DAAPConstants.TRACK_ID)+"'";
+				query += "'daap.itemid:"+it.next().get(DAAPConstants.TRACK_ID)+"'";
 				if (it.hasNext()) query += ',';
 			}
 			query += ")";
@@ -370,6 +542,10 @@ public class DACPDJInterface implements DJInterface {
 
 		public void registerListener(PlaybackListener listener) {}
 		public void removeListener(PlaybackListener listener) {}
+
+		public void setCollection(Collection<? extends Track> collection) {
+			request("/ctrl-int/1/playspec?playlist-spec='dmap.persistentid:"+collection.persistantId()+"'");
+		}
 		
 	};
 }

@@ -3,11 +3,11 @@ package util.command.ctrlint;
 import interfaces.DJInterface;
 import interfaces.PlaybackControl;
 import interfaces.PlaybackQueue;
-import interfaces.Track;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
+import music.Track;
 import notification.PlaybackListener;
 import util.command.Command;
 import util.node.Node;
@@ -45,14 +45,16 @@ public class PlayStatusUpdate implements Command, PlaybackListener {
 			control.removeListener(this);
 		}
 		
-		Track current = dj.playbackStatus().currentTrack();
+		Track current = dj.playbackStatus().current();
+		interfaces.collection.Collection<? extends Track> playlist = dj.playbackStatus().playlist(); 
+		int position = dj.playbackStatus().position();
 		byte state = dj.playbackStatus().state();
 		int revision = dj.playbackControl().revision();
 		int elapsed = dj.playbackStatus().elapsedTime();
 		
 		try {
 			return DACPTreeBuilder.buildPlayStatusUpdate(revision, state,
-				(byte)0, (byte)0, current, elapsed);
+				(byte)0, (byte)0, current, playlist.id(), position, elapsed);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			return null;

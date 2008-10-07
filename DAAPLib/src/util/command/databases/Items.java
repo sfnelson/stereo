@@ -1,13 +1,14 @@
 package util.command.databases;
 
 import interfaces.DJInterface;
-import interfaces.Playlist;
-import interfaces.Track;
+import interfaces.collection.Collection;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import music.Track;
 import util.command.Command;
 import util.node.Node;
 import util.queryparser.ApplyFilter;
@@ -30,9 +31,9 @@ public class Items implements Command {
 
 	public Node run(DJInterface dj) {
 
-		List<? extends Track> playlist = null;
+		Collection<? extends Track> playlist = null;
 		
-		for (Playlist<? extends Track> p: dj.library().getPlaylists()) {
+		for (Collection<? extends Track> p: dj.library().collections()) {
 			if (p.id() == container) {
 				playlist = p;
 				break;
@@ -46,10 +47,19 @@ public class Items implements Command {
 		
 		System.out.println("playlist has " + playlist.size() + " elements");
 		
+		List<? extends Track> pl;
+		
 		if (args != null && args.containsKey("query")) {
 			Filter f = QueryParser.parse(args.get("query"));
 			System.out.println(f);
-			playlist = ApplyFilter.filter(f, playlist);
+			pl = ApplyFilter.filter(f, playlist);
+		}
+		else {
+			List<Track> l = new ArrayList<Track>();
+			for (Track t: playlist) {
+				l.add(t);
+			}
+			pl = l;
 		}
 		
 		/*Collections.sort(playlist, new Comparator<Track>() {
@@ -65,7 +75,7 @@ public class Items implements Command {
 		System.out.println("returning " + playlist.size() + " elements");
 		
 		try {
-			return DACPTreeBuilder.buildPlaylistResponse(playlist);
+			return DACPTreeBuilder.buildPlaylistResponse(pl);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			return null;

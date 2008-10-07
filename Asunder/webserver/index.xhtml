@@ -65,13 +65,19 @@
 				while (parent.childNodes.length > 0) {
 					parent.removeChild(parent.firstChild);
 				}
-				
+
 				for (p in playlists) {
 					var item = document.createElement("DIV");
 					item.className="item";
 					
 					item.appendChild(createNode("title", playlists[p].name));
 					item.appendChild(createNode("count", playlists[p].items));
+					item.collection = playlists[p].id;
+					item.persistent = playlists[p].persistent;
+					
+					if (playlists[p].id == lastUpdate.container) {
+						item.className += " current";
+					}
 					
 					parent.appendChild(item);
 				}
@@ -145,6 +151,24 @@
 		ajax.request(request, fn);
 	}
 
+	function getCollectionTracks(collection, callback) {
+
+		var request = "/databases/1/containers/" + collection + "/items";
+		var fn = function (text) {
+			
+			var tree = new Node(text);
+
+			var list = findNode(tree, 0, "mlcl");
+			
+			var tracks = getItems(tree, list, function (t, i) {
+				return new Track(t, i);
+			});
+
+			callback(tracks);
+		}
+		ajax.request(request, fn);
+	}
+
 	function next() {
 		var request = new XMLHttpRequest();
 		request.open("GET", "/ctrl-int/1/nextitem", true);
@@ -184,6 +208,12 @@
 	function enqueue(query) {
 		var request = new XMLHttpRequest();
 		request.open("GET", "/ctrl-int/1/cue?command=play&query="+query);
+		request.send(null);
+	}
+
+	function setCollection(persistent) {
+		var request = new XMLHttpRequest();
+		request.open("GET", "/ctrl-int/1/playspec?playlist-spec="+persistent);
 		request.send(null);
 	}
 
@@ -320,6 +350,69 @@
 			}
 		}
 
+		document.getElementById("browse-playlists-container").onclick = function(e) {
+			var node = e.target;
+			while (!node.className.match("item")) {
+				node = node.parentNode;
+				if (node == document.body)
+					return;
+			}
+			
+			var collection = node.collection;
+			var persistent = node.persistent;
+			
+			getCollectionTracks(collection, function (tracks) {
+				var parent = document.getElementById("browse-playlists-tracks");
+				while (parent.childNodes.length > 0) {
+					parent.removeChild(parent.firstChild);
+				}
+
+				var shuffle = document.createElement("DIV");
+				shuffle.className="item";
+				shuffle.persistent=persistent;
+				shuffle.query="";
+				shuffle.appendChild(createNode("title", "Shuffle"));
+				shuffle.appendChild(createNode("artist", ""));
+				parent.appendChild(shuffle);
+				
+				for (t in tracks) {
+					var item = document.createElement("DIV");
+					item.className="item";
+					item.persistent=persistent;
+					item.query="'dmap.persistentid:"+tracks[t].persistent+"'";
+				
+					item.appendChild(createNode("title", tracks[t].title));
+					item.appendChild(createNode("artist", tracks[t].artist));
+				
+					parent.appendChild(item);
+				}
+				previousPane.push("playlists");
+				document.body.className = "playlist-tracks";
+			});
+		}
+
+		document.getElementById("browse-playlists-tracks").onclick = function(e) {
+			var node = e.target;
+			while (!node.className.match("item")) {
+				node = node.parentNode;
+				if (node == document.body)
+					return;
+			}
+			
+			var query = node.query;
+			var persistent = node.persistent;
+
+			setCollection(persistent);
+
+			if (query != "") {
+				clear();
+				enqueue(query);
+			}
+
+			previousPane.push("playlist-tracks");
+			document.body.className = "playing";
+		}
+		
 		document.getElementById("browse-artists-container").onclick = function(e) {
 			var node = e.target;
 			while (!node.className.match("item")) {
@@ -544,6 +637,7 @@
 <script type="text/javascript" src="svgloader.js"></script>
 <script type="text/javascript" src="ajax.js"></script>
 <script type="text/javascript" src="dacp.js"></script>
+<script type="text/javascript" src="bignum.js"></script>
 <script type="text/javascript">
 	createSVGcontrols();
 </script>

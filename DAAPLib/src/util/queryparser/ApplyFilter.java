@@ -1,24 +1,20 @@
 package util.queryparser;
 
-import interfaces.Element;
+import interfaces.HasMetadata;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 
 public class ApplyFilter {
 
-	public static <E extends Element> List<E> filter(Filter filter, List<E> items) {
+	public static <E extends HasMetadata> List<E> filter(Filter filter, Iterable<E> items) {
 		
 		List<E> es = new ArrayList<E>();
-		es.addAll(items);
 		
-		for (Iterator<E> it = es.iterator(); it.hasNext();) {
-			E e = it.next();
-			
-			if (!filter.check(e)) {
-				it.remove();
+		for (E e: items) {
+			if (filter.check(e)) {
+				es.add(e);
 			}
 		}
 		

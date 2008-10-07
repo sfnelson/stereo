@@ -1,7 +1,6 @@
 package util.command.databases;
 
 import interfaces.DJInterface;
-import interfaces.Track;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -11,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import music.Track;
 import util.command.Command;
 import util.node.Node;
 import util.queryparser.ApplyFilter;
@@ -37,9 +37,9 @@ public class Browse implements Command {
 
 	public Node run(DJInterface dj) {
 
-		List<? extends Track> songs = dj.library().getLibrary();
+		Iterable<? extends Track> songs = dj.library().tracks();
 
-		System.out.println("library has " + songs.size() + " elements");
+		System.out.println("library has " + dj.library().size() + " elements");
 
 		if (args != null && args.containsKey("filter")) {
 			Filter f = QueryParser.parse(args.get("filter"));
@@ -50,7 +50,7 @@ public class Browse implements Command {
 		Set<String> results = new HashSet<String>();
 
 		for (Track t: songs) {
-			String name = (String)t.getTag(field);
+			String name = (String)t.get(field);
 			if (name != null) results.add(name);
 		}
 
@@ -61,7 +61,7 @@ public class Browse implements Command {
 
 		Collections.sort(list);
 
-		System.out.println("returning " + list.size() + " elements from " + songs.size());
+		System.out.println("returning " + list.size() + " elements from " + dj.library().size());
 
 		try {
 			return DACPTreeBuilder.buildBrowseResponse(code, list);

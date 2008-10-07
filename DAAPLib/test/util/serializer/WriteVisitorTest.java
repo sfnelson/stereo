@@ -253,7 +253,7 @@ public class WriteVisitorTest {
 
 	@Test
 	public void testVisitLongLongNode() throws Exception {
-		Node node = new LongLongNode(5, 1, 2);
+		Node node = new LongLongNode(5, 1, 2, 3, 4);
 		visitor.visit(node, out);
 		
 		int length = 24;
@@ -261,7 +261,7 @@ public class WriteVisitorTest {
 		assertTrue(in.available() == length);
 		
 		byte[] read = new byte[length];
-		byte[] check = new byte[] { 0, 0, 0, 5, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 2 };
+		byte[] check = new byte[] { 0, 0, 0, 5, 0, 0, 0, 16, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, 4 };
 		in.read(read);
 		
 		assertTrue(compare(read, check));

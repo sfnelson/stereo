@@ -1,48 +1,34 @@
 package daap;
 
+import interfaces.AbstractAlbum;
+
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
 import util.DACPConstants;
 
-import interfaces.Album;
+public class DAAPAlbum extends AbstractAlbum {
 
-public class DAAPAlbum implements Album {
-
-	private int id;
-	private Map<Integer, Object> tags;
-	
-	private DAAPAlbum(int id) {
-		this.id = id;
-		this.tags = new HashMap<Integer, Object>();
+	private DAAPAlbum(int id, long persistentId) {
+		super(id, persistentId);
 	}
 	
 	public int getItems() {
-		return (Integer)tags.get(DACPConstants.mimc);
+		return (Integer)get(DACPConstants.mimc);
 	}
 	
 	public void setItems(int size) {
-		tags.put(DACPConstants.mimc, size);
-	}
-	
-	public Map<Integer, Object> getAllTags() {
-		return tags;
-	}
-
-	public Object getTag(int keyId) {
-		return tags.get(keyId);
-	}
-	
-	private void addTag(int tagId, Object value) {
-		tags.put(tagId, value);
+		put(DACPConstants.mimc, size);
 	}
 	
 	private static int lastId = 0;
+	private static Map<Long, DAAPAlbum> albums = new HashMap<Long, DAAPAlbum>();
+	
 	static DAAPAlbum createAlbum(String name, String artist) {
 		
-		DAAPAlbum a = new DAAPAlbum(++lastId);
-		a.addTag(DACPConstants.miid, a.id); //album id (local)
+		if (name == null) name = "";
+		if (artist == null) artist = "";
 		
 		int na = name.hashCode();
 		int ar = artist.hashCode();
@@ -57,18 +43,28 @@ public class DAAPAlbum implements Album {
 		persistant[6] = (byte)(ar>>8  & 0xFF);
 		persistant[7] = (byte)(ar	  & 0xFF);
 		
+		int id = ++lastId;
 		long per = new BigInteger(persistant).longValue();
 		
-		a.addTag(DACPConstants.asai, per); //album id (persistant)
-		a.addTag(DACPConstants.ALBUM, name);
-		a.addTag(DACPConstants.ARTIST, artist);
-		
-		return a;
+		if (albums.containsKey(per)) {
+			return albums.get(per);
+		}
+		else {
+			DAAPAlbum a = new DAAPAlbum(id, per);
+			a.put(DACPConstants.miid, id); //album id (local)
+			a.put(DACPConstants.asai, per); //album id (persistant)
+			a.put(DACPConstants.ALBUM, name);
+			a.put(DACPConstants.ARTIST, artist);
+
+			albums.put(per, a);
+			
+			return a;
+		}
 	}
 	
 	public static void main(String[] args) {
 		DAAPAlbum album = DAAPAlbum.createAlbum("Eyes Open", "Snow Patrol");
-		long id = (Long)album.getTag(DACPConstants.asai);
+		long id = (Long)album.get(DACPConstants.asai);
 		System.out.println(id);
 		System.out.println(new BigInteger("15739427192547115913").longValue());
 		

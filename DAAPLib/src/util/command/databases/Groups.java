@@ -4,6 +4,7 @@ import interfaces.Album;
 import interfaces.DJInterface;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -28,7 +29,7 @@ public class Groups implements Command {
 
 	public Node run(DJInterface dj) {
 
-		List<? extends Album> albums = dj.library().getAlbums();
+		Iterable<? extends Album> albums = dj.library().albums();
 		
 		if (args == null) {
 			throw new IllegalArgumentException("no arguments to group query");
@@ -36,12 +37,20 @@ public class Groups implements Command {
 		
 		//don't query, as albums store name as minm not asal
 		
+		List<? extends Album> als;
 		if (args.containsKey("query")) {
 			String query = args.get("query").replace(' ', '_');
 			Filter q = QueryParser.parse(query);
 			System.out.println(q);
-			albums = ApplyFilter.filter(q, albums);
+			als = ApplyFilter.filter(q, albums);
 		}
+		else {
+			List<Album> as = new ArrayList<Album>();
+			for (Album a: albums) {
+				as.add(a);
+			}
+			als = as;
+ 		}
 		
 		/*
 		meta=all
@@ -56,18 +65,18 @@ public class Groups implements Command {
 			throw new IllegalArgumentException("trying to handle unknown group-type: " + args.get("group-type"));
 		}
 		
-		Collections.sort(albums, new Comparator<Album>() {
+		Collections.sort(als, new Comparator<Album>() {
 			public int compare(Album o1, Album o2) {
-				String a = (String)o1.getTag(DAAPConstants.ALBUM);
-				String b = (String)o2.getTag(DAAPConstants.ALBUM);
+				String a = (String)o1.get(DAAPConstants.ALBUM);
+				String b = (String)o2.get(DAAPConstants.ALBUM);
 				return a.compareTo(b);
 			}
 		});
 		
-		System.out.println("returning " + albums.size() + " elements");
+		System.out.println("returning " + als.size() + " elements");
 
 		try {
-			return DACPTreeBuilder.buildAlbumResponse(DACPConstants.agal, albums);
+			return DACPTreeBuilder.buildAlbumResponse(DACPConstants.agal, als);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			return null;

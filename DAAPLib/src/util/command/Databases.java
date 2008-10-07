@@ -20,8 +20,8 @@ public class Databases extends PathNode implements Command {
 	}
 
 	public Node run(DJInterface dj) {
-		int items = dj.library().getLibrary().size();
-		int containers = dj.library().getPlaylists().size();
+		int items = dj.library().size();
+		int containers = dj.library().numCollections();
 		try {
 			return DACPTreeBuilder.buildDatabaseResponse(items, containers);
 		} catch (UnsupportedEncodingException e) {

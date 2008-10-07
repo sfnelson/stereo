@@ -1,6 +1,6 @@
 package util.queryparser;
 
-import interfaces.Element;
+import interfaces.HasMetadata;
 
 import java.math.BigInteger;
 
@@ -36,14 +36,14 @@ public class Token implements Filter {
 		}
 	}
 	
-	public boolean check(Element t) {
+	public boolean check(HasMetadata t) {
 		
-		Integer code = DAAPConstants.shortCodes.get(property);
+		Integer code = DAAPConstants.nameToCodeMap.get(property);
 		
 		if (code != null) {
 			
 			Object tval = null;
-			Object pval = t.getTag(code);
+			Object pval = t.get(code);
 			
 			int ae00 = 0x61650000;
 			if ((0xFFFF0000 & code) == ae00) {
@@ -51,7 +51,7 @@ public class Token implements Filter {
 				//this should change?
 				return true;
 			}
-			switch (DAAPConstants.types.get(code)) {
+			switch (DAAPConstants.codeToTypeMap.get(code)) {
 			case 1: tval = Byte.parseByte(value); break;
 			case 5: tval = Integer.parseInt(value); break;
 			//using big integer ensures unsigned longs are parsed correctly
@@ -59,7 +59,7 @@ public class Token implements Filter {
 			case 9: tval = value; break; //string
 			default:
 				throw new IllegalArgumentException("unknown or unimplemented type: "
-						+ DAAPConstants.types.get(code)	+ " for " + property);
+						+ DAAPConstants.codeToTypeMap.get(code)	+ " for " + property);
 			}
 			
 			return (pval != null && tval.equals(pval)) ^ falseify;

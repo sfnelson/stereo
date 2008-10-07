@@ -1,14 +1,13 @@
 package dacp;
 
 import interfaces.Album;
-import interfaces.Playlist;
-import interfaces.Track;
+import interfaces.collection.Collection;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+import music.Track;
 import util.DACPConstants;
 import util.node.BooleanNode;
 import util.node.ByteNode;
@@ -19,6 +18,17 @@ import util.node.LongNode;
 import util.node.Node;
 import util.node.StringNode;
 import util.node.VersionNode;
+
+
+/* TODO support playlists:
+ * add a playlist
+ * : /databases/1/edit?action=add?&edit-params='dmap.itemname:Test' -> medc (mstt 200, miid [playlist id])
+ * delete a playlist
+ * : /databases/1/edit?action=remove?&edit-params='dmap.itemid:[playlist id]' -> 204 No Content
+ * both followed by a reply to update
+ * 
+ * : /databases/1/containers/[id]/edit?action=add&edit-params='dmap.itemid:[id]' -> need to decode response
+ */
 
 public class DACPTreeBuilder {
 
@@ -108,6 +118,8 @@ public class DACPTreeBuilder {
 			byte shuffle,
 			byte repeat,
 			Track track,
+			int playlistId,
+			int position,
 			int elapsed) throws UnsupportedEncodingException {
 
 		Composite response = createResponse(DACPConstants.cmst);
@@ -136,35 +148,58 @@ public class DACPTreeBuilder {
 			//now  0x0000002a000000000000000000000f1b //paused
 			//was  0x000000280000210f00002df300000f19 //playing
 			// 2a (42) is the database number - significant?
+			
+			//ok, some new revelations on cans of peas (canp):
+			//1: definitely the database id
+			//2: playlist id. Not sure what this means when the playlist isn't a playlist per se, ie from an album
+			//3: always (slightly) bigger than the playlist id. playlist position? should check if overlap.
+			//4: item id (track id)
+			
+			//more poking around: playlist ids are sequential and generally seperated by the number of items
+			//in the preceding one, plus 3. There are exceptions however, and the relationship is not maintained
+			//while the library is open (changes to playlists do not change ids).
+			
+			//exciting news! cue requests return a tag if they result in a new playlist:
+			//cacr (mstt 200, miid [playlist id])
+			//otherwise, the request (playspec) returns 204 (no content)
+			//this playlist id matches the 2nd field of canp.
+			//fairly certain now that the third field is the current track (with offset in playlist).
+			//not sure how this is used though as remote shows a speaker icon wherever the current track is
+			//found, presumably by checking for the song id.
+			
+			//more poking. party shuffle is like an unnamed playlist: creates a new playlist id (although
+			//internally consistent - persists while itunes is open. Third int in canp is song position plus
+			//3 from playlist id. Starts 5 in (+8) but can't go back before those 5. offset continues to
+			//increment while playlist is active. Doesn't reset.
 
-			int id = (Integer)track.getTag(DACPConstants.TRACK_ID);
+			int dbid = 1;
+			int id = (Integer)track.get(DACPConstants.TRACK_ID);
 
-			//don't know what this is
-			response.append(new LongLongNode(DACPConstants.canp, 1, id, 2,id));
+			response.append(new LongLongNode(DACPConstants.canp, dbid, playlistId, position, id));
 
-			String name = (String)track.getTag(DACPConstants.NAME);
+			String name = (String)track.get(DACPConstants.NAME);
 			if (name==null) name = "";
 			response.append(new StringNode(DACPConstants.cann, name));
 
-			String artist = (String)track.getTag(DACPConstants.ARTIST);
+			String artist = (String)track.get(DACPConstants.ARTIST);
 			if (artist==null) artist = "";
 			response.append(new StringNode(DACPConstants.cana, artist));
 
-			String album = (String)track.getTag(DACPConstants.ALBUM);
+			String album = (String)track.get(DACPConstants.ALBUM);
 			if (album==null) album = "";
 			response.append(new StringNode(DACPConstants.canl, album));
 
-			String genre = (String)track.getTag(DACPConstants.GENRE);
+			String genre = (String)track.get(DACPConstants.GENRE);
 			if (genre==null) genre = "";
 			response.append(new StringNode(DACPConstants.cang, genre));
 
-			long albumid = (Long)track.getAlbum().getTag(DACPConstants.asai);
+			long albumid = (Long)track.getAlbum().get(DACPConstants.asai);
 
 			//TODO get the album id
 			response.append(new LongNode(DACPConstants.asai, albumid)); //album id
 			response.append(new IntegerNode(DACPConstants.cmmk, 1)); //media kind?
 
-			Integer time = (Integer)track.getTag(DACPConstants.SONG_TIME);
+			Integer time = (Integer)track.get(DACPConstants.SONG_TIME);
 			if (time == null) time = new Integer(0);
 			response.append(new IntegerNode(DACPConstants.cant, time-elapsed)); //remaining
 			response.append(new IntegerNode(DACPConstants.cast, time)); //total
@@ -186,13 +221,13 @@ public class DACPTreeBuilder {
 		return response;
 	}
 
-	public static Node buildPlaylistsResponse(List<? extends Playlist<? extends Track>> list2) throws UnsupportedEncodingException {
+	public static Node buildPlaylistsResponse(Iterable<Collection<? extends Track>> list2, int size) throws UnsupportedEncodingException {
 
 		Composite response = createResponse(DACPConstants.aply);
 
-		Composite list = createList(response, DACPConstants.mlcl, 0, list2.size());
+		Composite list = createList(response, DACPConstants.mlcl, 0, size);
 
-		for (Playlist<? extends Track> p: list2) {
+		for (Collection<? extends Track> p: list2) {
 			list.append(buildPlaylistNode(p));
 		}
 
@@ -284,9 +319,8 @@ public class DACPTreeBuilder {
 	private static Composite buildTrackNode(Track track) throws UnsupportedEncodingException {
 
 		List<Node> tags = new ArrayList<Node>();
-		Map<Integer, Object> tagMap = track.getAllTags();
-		for(int code : tagMap.keySet()){
-			Object tagValue = track.getTag(code);
+		for(int code : track.getAllTags()){
+			Object tagValue = track.get(code);
 			if(tagValue instanceof Byte){
 				tags.add(new ByteNode(code, (Byte)tagValue));
 			}else if(tagValue instanceof Boolean){
@@ -312,27 +346,27 @@ public class DACPTreeBuilder {
 
 		Composite albumNode = new Composite(DACPConstants.mlit);
 
-		albumNode.append(new IntegerNode(DACPConstants.miid, (Integer)album.getTag(DACPConstants.miid)));
-		albumNode.append(new LongNode(DACPConstants.mper, (Long)album.getTag(DACPConstants.asai)));
-		albumNode.append(new StringNode(DACPConstants.minm, (String)album.getTag(DACPConstants.ALBUM)));
-		albumNode.append(new StringNode(DACPConstants.asaa, (String)album.getTag(DACPConstants.ARTIST)));
+		albumNode.append(new IntegerNode(DACPConstants.miid, (Integer)album.get(DACPConstants.miid)));
+		albumNode.append(new LongNode(DACPConstants.mper, (Long)album.get(DACPConstants.asai)));
+		albumNode.append(new StringNode(DACPConstants.minm, (String)album.get(DACPConstants.ALBUM)));
+		albumNode.append(new StringNode(DACPConstants.asaa, (String)album.get(DACPConstants.ARTIST)));
 
 		return albumNode;
 	}
 
-	private static Node buildPlaylistNode(Playlist<? extends Track> p) throws UnsupportedEncodingException {
+	private static Node buildPlaylistNode(Collection<? extends Track> p) throws UnsupportedEncodingException {
 
 		Composite playlistNode = new Composite(DACPConstants.mlit);
 
 		playlistNode.append(new IntegerNode(DACPConstants.miid, p.id()));
-		playlistNode.append(new LongNode(DACPConstants.mper, p.persistantId()));
+		playlistNode.append(new LongNode(DACPConstants.mper, p.persistentId()));
 		playlistNode.append(new StringNode(DACPConstants.minm, p.name()));
 
 		if (p.isRoot()) {
 			playlistNode.append(new BooleanNode(DACPConstants.abpl, true));
 		}
 
-		Playlist<? extends Track> par = p.parent();
+		Collection<? extends Track> par = p.parent();
 		int pid = (par == null)?0:par.id();
 		playlistNode.append(new IntegerNode(DACPConstants.mpco, pid));
 

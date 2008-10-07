@@ -141,6 +141,7 @@ public class DAAPConstants {
 	public static final int mudl = 1836409964;
 	public static final int mupd = 1836413028;
 	public static final int musr = 1836413810;
+	public static final int muty = 1836414073;
     
 	public static final int ITEM_KIND = mikd;
 	public static final int TRACK_ID = miid;
@@ -155,15 +156,24 @@ public class DAAPConstants {
     public static final int START_TIME = asst;
     public static final int STOP_TIME = assp;
     
-    public static final Map<Integer, String> longCodes
+    public static final Map<Integer, String> codeToNameMap
     		= new HashMap<Integer, String>();
-    public static final Map<String, Integer> shortCodes
+    public static final Map<String, Integer> nameToCodeMap
     		= new HashMap<String, Integer>();
-    public static final Map<Integer, Integer> types
+    public static final Map<Integer, Integer> codeToTypeMap
 			= new HashMap<Integer, Integer>();
     
-    protected static int parseInt(String code) {
+    public static int stringToCode(String code) {
         return readInteger(code.toCharArray());
+    }
+    
+    public static String codeToString(int code) {
+    	byte[] bytes = new byte[4];
+    	bytes[0] = (byte)((code >> 24) & 255);
+    	bytes[1] = (byte)((code >> 16) & 255);
+    	bytes[2] = (byte)((code >> 8) & 255);
+    	bytes[3] = (byte)(code & 255);
+    	return new String(bytes);
     }
     
     private static int readInteger(char[] b) {
@@ -182,9 +192,9 @@ public class DAAPConstants {
     static {
 		CCBuilder b = new CCBuilder() {
 			public CCBuilder type(int raw, String shortCode, String longCode, int type) {
-				longCodes.put(raw, longCode);
-				shortCodes.put(longCode, raw);
-				types.put(raw, type);
+				codeToNameMap.put(raw, longCode);
+				nameToCodeMap.put(longCode, raw);
+				codeToTypeMap.put(raw, type);
 				return this;
 			}
 		};
@@ -333,6 +343,7 @@ public class DAAPConstants {
 		.type(mudl, "mudl", "dmap.deletedidlisting"                    ,  12)
 		.type(mupd, "mupd", "dmap.updateresponse"                      ,  12)
 		.type(musr, "musr", "dmap.serverrevision"                      ,   5)
+		.type(muty, "muty", "dmap.updatetype"                          ,   1)
 		;
     }
 }

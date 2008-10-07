@@ -1,11 +1,11 @@
 package util.command.ctrlint;
 
 import interfaces.DJInterface;
-import interfaces.Track;
 
 import java.util.List;
 import java.util.Map;
 
+import music.Track;
 import util.command.Command;
 import util.node.Node;
 import util.queryparser.ApplyFilter;
@@ -21,24 +21,23 @@ public class Cue implements Command {
 	}
 
 	public Node run(DJInterface dj) {
-
-		List<? extends Track> playlist = dj.library().getLibrary();
-		
-		System.out.println("library has " + playlist.size() + " elements");
 		
 		if (args == null) {
 			return null;
 		}
 		
 		if (args.containsKey("query")) {
+			
+			Iterable<? extends Track> playlist = dj.library().tracks();
+			System.out.println("library has " + dj.library().size() + " elements");
 		
 			Filter f = QueryParser.parse(args.get("query"));
 			System.out.println(f);
-			playlist = ApplyFilter.filter(f, playlist);
+			List<? extends Track > pl = ApplyFilter.filter(f, playlist);
 			
-			System.out.println("enqueuing " + playlist.size() + " elements");
+			System.out.println("enqueuing " + pl.size() + " elements");
 
-			dj.playbackControl().enqueue(playlist);
+			dj.playbackControl().enqueue(pl);
 			
 		}
 		

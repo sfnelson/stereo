@@ -1,6 +1,6 @@
 package util.queryparser;
 
-import interfaces.Element;
+import interfaces.HasMetadata;
 
 public class Or extends BinOp {
 	
@@ -8,7 +8,7 @@ public class Or extends BinOp {
 		super(a, b);
 	}
 	
-	public boolean check(Element t) {
+	public boolean check(HasMetadata t) {
 		return a.check(t) || b.check(t);
 	}
 	

@@ -176,11 +176,15 @@ body {
 	display: none;
 }
 
-.playlists #browse-playlists {
+.playlists #browse-playlists, .playlist-tracks #browse-playlists {
 	display: block;
 }
 
 .playlists .content #browse-playlists-container {
+	display: block;
+}
+
+.playlist-tracks .content #browse-playlists-tracks {
 	display: block;
 }
 

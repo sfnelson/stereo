@@ -32,7 +32,7 @@ public class Update implements Command, LibraryListener {
 
 		if (this.revision >= dj.library().version()) {
 
-			dj.library().registerListener(this);
+			dj.library().registerLibraryListener(this);
 			
 			try {
 				synchronized (this) {
@@ -42,7 +42,7 @@ public class Update implements Command, LibraryListener {
 				e.printStackTrace();
 			}
 			
-			dj.library().removeListener(this);
+			dj.library().removeLibraryListener(this);
 		}
 
 		//TODO use version to check whether update is needed

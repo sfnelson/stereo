@@ -1,15 +1,12 @@
 package daap;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
-public class DAAPEntry implements Iterable<DAAPEntry> {
+public class DAAPEntry {
 	
 	// see http://tapjam.net/daap/
 	
@@ -27,19 +24,82 @@ public class DAAPEntry implements Iterable<DAAPEntry> {
 												// as two shorts, e.g. 1.0)
 	public static final short LIST = 12;		// list
 	
-	public static DAAPEntry parseStream(InputStream stream, Map<Integer, Short> types) throws IOException {
+	public static DAAPEntry parseStream(InputStream stream) throws IOException {
 		
-		DAAPEntry.types = types;
+		//if we throw our toys here then all bets are off
+		int code = DAAPEntry.readInteger(read(stream, 4), 0);
+		int length = DAAPEntry.readInteger(read(stream, 4), 0);
 		
-		DAAPEntry.stream = new BufferedInputStream(stream);
+		byte[] bytes = read(stream, length);
 		
-		DAAPEntry entry = new DAAPEntry();
-		entry.init();
+		DAAPEntry entry = new DAAPEntry(code, length, bytes, 0);
 		
 		return entry;
 	}
 	
-	private static byte[] read(int length) throws IOException {
+	private final int code;
+	private final int length;
+	private final Object value;
+	private final List<DAAPEntry> children = new ArrayList<DAAPEntry>();
+	
+	public DAAPEntry(int code, int length, byte[] bytes, int pos) throws IOException {
+		
+		this.code = code;
+		this.length = length;
+		
+		Integer type = DAAPConstants.codeToTypeMap.get(code);
+		
+		if (type == null) {
+			throw new IOException("parser: unknown entry '" + DAAPConstants.codeToString(code) + " " + code + "' (" + length + ")");
+		}
+
+		switch (type) {
+		case LONG:
+			this.value = readLong(bytes, pos);
+			break;
+		case INTEGER:
+			this.value = readInteger(bytes, pos);
+			break;
+		case SHORT:
+			this.value = readShort(bytes, pos);
+			break;
+		case BYTE:
+			this.value = readByte(bytes, pos);
+			break;
+		case VERSION:
+			String version = "";
+			version += readByte(bytes, pos);
+			for (int i = 1; i < 4; i++) {
+				version += "." + readByte(bytes, pos+i);
+			}
+			this.value = version;
+			break;
+		case LIST:
+			int offset = 0;
+			while (offset < length) {
+				int c = readInteger(bytes, pos+offset);
+				int l = readInteger(bytes, pos+offset+4);
+				try {
+					children.add(new DAAPEntry(c, l, bytes, pos+offset+8));
+				}
+				catch (IOException ex) {
+					ex.printStackTrace();
+				}
+				offset += 8 + l;
+			}
+			value = "";
+			break;
+		case STRING:
+			this.value = readString(bytes, pos, length);
+			break;
+		default:
+			System.err.println("Unknown type: " + type + " of length " + length + " for " + DAAPConstants.codeToString(code));
+			this.value = readString(bytes, pos, length);
+			break;
+		}
+	}
+	
+	private static byte[] read(InputStream stream, int length) throws IOException {
 		
 		byte[] buffer = new byte[length];
 		
@@ -52,293 +112,65 @@ public class DAAPEntry implements Iterable<DAAPEntry> {
 		return buffer;
 	}
 	
-	private static String readString(int length) throws IOException {
-		
-		byte[] buffer = read(length);
-		
-		return new String(buffer);
+	public int code() {
+		return code;
 	}
 	
-	private static long readLong() throws IOException {
-		
-		byte[] buffer = read(8);
-		
+	public int length() {
+		return length;
+	}
+	
+	public Object value() {
+		return value;
+	}
+	
+	public Iterable<DAAPEntry> children() {
+		return children;
+	}
+	
+	public String toString() {
+		String out = DAAPConstants.codeToString(code) + " " + length + " " + value + "\n";
+		for (DAAPEntry e: children()) {
+			Scanner sc = new Scanner(e.toString());
+			while (sc.hasNextLine()) {
+				out += "  " + sc.nextLine() + "\n";
+			}
+		}
+		return out;
+	}
+	
+	private static String readString(byte[] buffer, int pos, int length) {
+		return new String(buffer, pos, length);
+	}
+	
+	private static long readLong(byte[] buffer, int pos) {
         int value = 0;
         for (int i = 0; i < 8; i++) {
             int shift = (8 - 1 - i) * 8;
-            value += (buffer[i] & 0x000000FF) << shift;
+            value += (buffer[pos+i] & 0x000000FF) << shift;
         }
         return value;
     }
 	
-	private static int readInteger() throws IOException {
-		
-		byte[] buffer = read(4);
-		
-		return parseInteger(buffer);
-    }
-	
-	private static int parseInteger(byte[] buffer) throws IOException {
-		
-		if (buffer.length != 4) return 0;
-		
+	private static int readInteger(byte[] buffer, int pos) {
         int value = 0;
         for (int i = 0; i < 4; i++) {
             int shift = (4 - 1 - i) * 8;
-            value += (buffer[i] & 0x000000FF) << shift;
+            value += (buffer[pos+i] & 0x000000FF) << shift;
         }
         return value;
     }
 	
-	private static short readShort() throws IOException {
-		
-		byte[] buffer = read(2);
-		
+	private static short readShort(byte[] buffer, int pos) {
         short value = 0;
         for (int i = 0; i < 2; i++) {
             int shift = (2 - 1 - i) * 8;
-            value += (buffer[i] & 0x000000FF) << shift;
+            value += (buffer[pos+i] & 0x000000FF) << shift;
         }
         return value;
     }
 	
-	private static byte readByte() throws IOException {
-		
-		byte[] buffer = read(1);
-		
-        return buffer[0];
+	private static byte readByte(byte[] buffer, int pos) throws IOException {
+        return buffer[pos];
     }
-
-	private static BufferedInputStream stream;
-	private static Map<Integer,Short> types;
-	
-	/*
-	 * Instance Methods
-	 */
-	
-	public int getName() {
-		return this.name;
-	}
-	
-	public int getNumChildren() {
-		return this.length;
-	}
-	
-	public short getType() {
-		return this.type;
-	}
-	
-	public Object getValue() {
-		return this.value;
-	}
-	
-	public boolean hasChildren() {
-		return this.type == DAAPEntry.LIST;
-	}
-	
-	public Iterator<DAAPEntry> iterator() {
-		
-		if (this.type != DAAPEntry.LIST) {
-			return null;
-		}
-		
-		return this.iterator;
-	}
-	
-	public Map<Integer,Object> getValueMap() {
-		
-		if (!hasChildren()) return null;
-		
-		if (this.valueMap != null) {
-			while (!this.valueMap.isEmpty()) {
-				this.valueMap.remove(this.valueMap.keySet().iterator().next());
-			}
-		}
-		else {
-			this.valueMap = new HashMap<Integer, Object>();
-		}
-		
-		for (DAAPEntry entry: this) {
-			if (entry == null) continue;
-			
-			if (!this.valueMap.containsKey(entry.name)) {
-				this.valueMap.put(entry.name, entry.value);
-			}
-		}
-		
-		return this.valueMap;
-	}
-	
-	/**
-	 * Private constructor enforces singleton pattern
-	 *
-	 */
-	private DAAPEntry() {
-		//initialization is performed elsewhere
-	}
-	
-	protected boolean init() throws IOException {
-		
-		int name = DAAPEntry.readInteger();
-		int length = DAAPEntry.readInteger();
-		
-		Short type = DAAPEntry.types.get(name);
-		
-		if (type == null) {
-			System.err.println("parser: entry '" + DAAPUtilities.intToString(name) + "' of length "+ length + "(" + DAAPUtilities.intToString(length) + ") not found");
-			return false;
-		}
-
-		this.name = name;
-		this.length = length;
-		this.type = type;
-
-		readValue();
-		
-		return true;
-	}
-	
-	private void readValue() throws IOException {
-		
-		switch (this.type) {
-		case LONG:
-			this.value = readLong();
-			break;
-		case INTEGER:
-			this.value = readInteger();
-			break;
-		case SHORT:
-			this.value = readShort();
-			break;
-		case BYTE:
-			this.value = readByte();
-			break;
-		case VERSION:
-			String version = "";
-			version += readByte();
-			for (int i = 1; i < 4; i++) {
-				version += "." + readByte();
-			}
-			this.value = version;
-			break;
-		case LIST:
-			this.iterator = new DaapEntryIterator(this);
-			break;
-		case STRING:
-			this.value = readString(this.length);
-			break;
-		default:
-			System.err.println("unknown type: " + this.type + " of length " + this.length + " for " + DAAPUtilities.intToString(this.name));
-		this.value = readString(this.length);
-			break;
-		}
-	}
-	
-	protected int recover(int remaining) throws IOException {
-		
-		System.err.println("parser: parsing error, trying to recover with " + remaining + " bytes to go.");
-		
-		stream.reset();
-		
-		byte[] bytes = new byte[4];
-		
-		int read = 0;
-		
-		while (read < remaining) {
-
-			for (int i = 0; i < 3; i++) {
-				bytes[i] = bytes[i+1];
-			}
-			
-			bytes[3] = readByte();
-			read += 1;
-			
-			int value = parseInteger(bytes);
-			
-	        if (DAAPEntry.types.containsKey(value)) {
-	        	
-	        	read = read-4;
-	        	
-	        	this.name = value;
-	        	this.length = DAAPEntry.readInteger();
-	        	this.type = DAAPEntry.types.get(value);
-	        	readValue();
-	        	
-	        	System.err.println("recovered after " + read + " bytes: " + DAAPUtilities.intToString(value) + " length " + this.length + ", type " + this.type + ": " + value);
-	        		
-	        	return read;
-	        }
-		}
-		return -1;
-	}
-	
-	protected int getLength() {
-		return this.length;
-	}
-	
-	protected static BufferedInputStream getStream() {
-		return DAAPEntry.stream;
-	}
-	
-	private int name;
-	private int length;
-	private short type;
-	
-	private Object value;
-	
-	private DaapEntryIterator iterator;
-	private Map<Integer, Object> valueMap;
-	
-	private class DaapEntryIterator implements Iterator<DAAPEntry> {
-		
-		private DAAPEntry entry;
-		private int length;
-		private int consumed;
-		
-		public DaapEntryIterator(DAAPEntry entry) {
-			this.entry = entry;
-			this.length = entry.getLength();
-		}
-		
-		public boolean hasNext() {
-			return this.length > this.consumed;
-		}
-		
-		public DAAPEntry next() {
-			
-			if (this.length <= this.consumed) {
-				return null;
-			}
-
-			//System.out.print("new entry: ");
-			try {
-				DAAPEntry.getStream().mark(64);
-				
-				if (this.entry.init()) {
-					this.consumed += this.entry.getLength() + 8;
-				}
-				else {
-					int error = this.entry.recover(this.length-this.consumed);
-					if (error > 0) {
-						this.consumed += error + this.entry.getLength() + 8;
-					}
-					else {
-						this.consumed = this.length;
-						return null;
-					}
-				}
-			}
-			catch (IOException ex) {
-				//ex.printStackTrace();
-				System.err.println("Failed to get DAAP stream");
-				return null;
-			}
-			
-			return this.entry;
-		}
-		
-		public void remove() {
-			throw new NotImplementedException();
-		}
-	}
 }

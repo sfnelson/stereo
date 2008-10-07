@@ -20,7 +20,7 @@ public class Containers extends PathNode implements Command {
 		//TODO only reply with the parameters requested in the args
 		
 		try {
-			return DACPTreeBuilder.buildPlaylistsResponse(dj.library().getPlaylists());
+			return DACPTreeBuilder.buildPlaylistsResponse(dj.library().collections(), dj.library().numCollections());
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			return null;

@@ -37,7 +37,7 @@ public class DJTest {
 
 	@Test
 	public void testTracksAdded() {
-		a.getPlaylist().size();
+		assertTrue(a.playlist().hasNext());
 	}
 
 	@Test

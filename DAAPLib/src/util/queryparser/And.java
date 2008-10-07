@@ -1,13 +1,13 @@
 package util.queryparser;
 
-import interfaces.Element;
+import interfaces.HasMetadata;
 
 public class And extends BinOp {
 	public And(Filter a, Filter b) {
 		super(a, b);
 	}
 	
-	public boolean check(Element t) {
+	public boolean check(HasMetadata t) {
 		return a.check(t) && b.check(t);
 	}
 	

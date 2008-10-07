@@ -1,31 +1,22 @@
 package util.node;
 
 public class LongLongNode extends Node {
-    private final long value;
-    private final long value2;
-    
-    public LongLongNode(int code, long value, long value2) {
-        super(code);
-        this.value = value;
-        this.value2 = value2;
-    }
+    private final int values[] = new int[4];
     
     public LongLongNode(int code, int i, int j, int k, int l) {
 		super(code);
-		this.value = ((long)i<<32) | j;
-		this.value2 = ((long)k<<32) | l;
+		this.values[0] = i;
+		this.values[1] = j;
+		this.values[2] = k;
+		this.values[3] = l;
 	}
 
 	public String toString() {
-        return "<" + super.toString() + " value=\"" + value  + " " + value2 + "\" />";
+        return "<" + super.toString() + " value=\"" + values[0]  + " "  + values[1]  + " " + values[2]  + " " + values[3]  + "\" />";
     }
 
-	public long getValue() {
-		return value;
-	}
-
-	public long getValue2() {
-		return value2;
+	public int[] getValues() {
+		return values;
 	}
 
 	@Override

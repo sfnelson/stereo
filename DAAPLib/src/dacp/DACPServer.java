@@ -1,6 +1,5 @@
 package dacp;
 
-import interfaces.ControlServerCreator;
 import interfaces.DJInterface;
 
 import java.io.IOException;
@@ -15,7 +14,6 @@ import java.util.Set;
 import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceInfo;
 
-import music.DJ;
 import reader.DACPRequestParser;
 import util.command.Command;
 import util.node.Node;
@@ -41,19 +39,6 @@ public class DACPServer {
 
 		Set<InetAddress> addresses = new HashSet<InetAddress>();
 
-		/*
-		for (Enumeration<NetworkInterface> e = NetworkInterface.getNetworkInterfaces(); e.hasMoreElements();) {
-			NetworkInterface i = e.nextElement();
-			for (Enumeration<InetAddress> f = i.getInetAddresses(); f.hasMoreElements();) {
-				InetAddress a = f.nextElement();
-				if (a.isAnyLocalAddress()) continue;
-				if (a.isLoopbackAddress()) continue;
-
-				//TODO obviously, we should support ipv6 :)
-				if (a instanceof Inet4Address) addresses.add(a);
-			}
-		}
-		*/
 		addresses.add(InetAddress.getByName(device));
 
 		String hostname = InetAddress.getLocalHost().getHostName();
@@ -142,25 +127,5 @@ public class DACPServer {
 			this.sock = s;
 		}
 
-	}
-
-	public static void register(String device) {
-		DJ.registerServerCreator(new DACPServerCreator(device));
-	}
-
-	private static class DACPServerCreator implements ControlServerCreator {
-		private final String device;
-		public DACPServerCreator(String device) {
-			this.device = device;
-		}
-		public void create(DJInterface dj) {
-			try {
-				new DACPServer(device, 3689, dj);
-			}
-			catch (IOException ex) {
-				System.err.println("Unable to create DACP Server");
-				ex.printStackTrace();
-			}
-		}
 	}
 }

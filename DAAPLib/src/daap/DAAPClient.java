@@ -1,237 +1,166 @@
 package daap;
 
+import interfaces.collection.AbstractSetCollection;
+import interfaces.collection.Collection;
+import interfaces.collection.Source;
+
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-public class DAAPClient {
-
-	private String hostname;
-	private String dbname;
-	private int id;
-	private int dbid;
-	private int revisionNumber;
-	private int sessionID;
-	private int port;
-	private DAAPUtilities helper;
-
-	public DAAPClient(String hostname, int port, int id) throws IOException {
-		//This method should login and get a session ID,
-		//the database ID (dbid) by updating and currentVersion [of database]
-		this.hostname = hostname;
-		this.port = port;
-		this.id = id;
-
-		try {
-			helper = new DAAPUtilities(hostname, port);
-		} catch (IOException e) {
-			System.err.println("Unable to connect to " + hostname + " on " + port);
-			e.printStackTrace();
-		}
-		//Get a session Id
-		getSessionDetails();
-		sessionID = getSessionID();
-		revisionNumber = getRevisionNumber();
-		dbid = getDatabaseId();
-
-	}
+public class DAAPClient extends AbstractSetCollection<DAAPTrack> {
 	
-	/**
-	 * This should be the name of the library, but for now is the hostname
-	 * TODO: use the library name rather than the hostname
-	 * @return
-	 */
-	public String getName() {
-		return dbname;
-	}
-	
-	public int id() {
-		return id;
-	}
-	
-	public long getPersistantId() {
-		return (((long)hostname.hashCode())<<32)|((long)dbname.hashCode());
-	}
-	
-
-	public void getTracks(DAAPPlaylist tracks) {	
-		if(dbid < 0) return;
+	public static List<DAAPClient> create(String hostname, int port, int id) throws IOException {
 		
-		String request = "databases/"
-			+ dbid
-			+ "/items?type=music&meta=dmap.itemkind,dmap.itemid,dmap.itemname,daap.songalbum,daap.songartist,daap.songgenre,daap.songcomposer,daap.songbitrate,daap.songsamplerate,daap.songstarttime,daap.songstoptime,daap.songtime&session-id="
-			+ sessionID + "&revision-id=" + revisionNumber;
-
-		InputStream in = null;
+		DAAPUtilities helper = new DAAPUtilities(hostname, port);
 		
-		try {
-			in = helper.request(hostname, port, request);
-			DAAPEntry entry = DAAPEntry.parseStream(in, helper.types);
-
-			if ((entry == null)
-					|| (entry.getName() != DAAPUtilities.stringToInt("adbs"))) {
-				return;
-			}
-
-			for (DAAPEntry e : entry) {
-				if (e.getName() == DAAPUtilities.stringToInt("mlcl")) {
-					entry = e;
-					break;
-				}
-			}
-
-			tracks.clear();
+		final String name = helper.connect();
+		System.out.println("connected to " + name + " (" + hostname + ")");
+		
+		final int revision = helper.update(0);
+		
+		List<DAAPEntry> dbs = helper.databases(revision);
+		
+		List<DAAPClient> collections = new ArrayList<DAAPClient>(dbs.size());
+		
+		for (DAAPEntry e: dbs) {
+			String dbname = null;
+			int dbid = 0;
 			
-			for (DAAPEntry e : entry) {
-				if ((entry == null) || !entry.hasChildren()) {
-					continue;
+			for (DAAPEntry a: e.children()) {
+				switch (a.code()) {
+				case DAAPConstants.miid: dbid = (Integer)a.value(); break;
+				case DAAPConstants.minm: dbname = (String)a.value(); break;
 				}
-				final Map<Integer, Object> values = e.getValueMap();
-				tracks.add(new DAAPTrack(values, this));
-
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}finally{
-			//helper.release(in);
+			
+			System.out.println(dbname);
+			
+			int na = dbname.hashCode();
+			int hs = hostname.hashCode();
+			
+			byte[] persistant = new byte[8];
+			persistant[0] = (byte)(na>>24 & 0xFF);
+			persistant[1] = (byte)(na>>16 & 0xFF);
+			persistant[2] = (byte)(na>>8  & 0xFF);
+			persistant[3] = (byte)(na	  & 0xFF);
+			persistant[4] = (byte)(hs>>24 & 0xFF);
+			persistant[5] = (byte)(hs>>16 & 0xFF);
+			persistant[6] = (byte)(hs>>8  & 0xFF);
+			persistant[7] = (byte)(hs	  & 0xFF);
+
+			long per = new BigInteger(persistant).longValue();
+			
+			if (dbname == null) throw new IOException("Database name not found (" + hostname + ")");
+			
+			collections.add(new DAAPClient(id++, per, revision, dbid, dbname, helper));
 		}
+		
+		return collections;
+	}
+	
+	private final DAAPUtilities connection;
+	
+	private final int dbid;
+	private final String name;
+	
+	private int revision;
+
+	public DAAPClient(int id, long per, int rev, int dbid, String name, DAAPUtilities connection) {
+		super(id, per);
+		
+		this.revision = rev;
+		this.dbid = dbid;
+		this.name = name;
+		this.connection = connection;
+		
+		updateTracks();
+	}
+	
+	public String name() {
+		return name;
+	}
+	
+	public void update() throws IOException {
+
+		int rev = connection.update(revision);
+
+		if (rev > revision) {
+			updateTracks();
+		}
+	}
+	
+	public void close() {
+		
+		List<DAAPTrack> tracks = this.store.tracks();
+		Set<DAAPTrack> trackSet = new HashSet<DAAPTrack>(tracks);
+		
+		for (Source.Listener l: this.listeners()) {
+			l.removed(trackSet);
+		}
+	}
+
+	private void updateTracks() {
+		
+		List<DAAPEntry> tracks;
+		
+		try {
+			tracks = connection.tracks(dbid, revision);
+		}
+		catch (IOException ex) {
+			System.err.println("Unable to get track list");
+			ex.printStackTrace();
+			return;
+		}
+		
+		List<DAAPTrack> added = new ArrayList<DAAPTrack>();
+		Set<DAAPTrack> update = new HashSet<DAAPTrack>();
+		for (DAAPEntry e : tracks) {
+			DAAPTrack track = DAAPTrack.create(e, this);
+			if (track != null) {
+				update.add(track);
+				if (!this.store.contains(track)) {
+					added.add(track);
+				}
+			}
+		}
+		
+		Set<DAAPTrack> removed = new HashSet<DAAPTrack>();
+		for (DAAPTrack t: this.store.tracks()) {
+			if (!update.contains(t)) {
+				removed.add(t);
+			}
+		}
+		
+		for (DAAPTrack t: removed) {
+			this.store.remove(t);
+		}
+		
+		for (DAAPTrack t: added) {
+			this.store.add(t);
+		}
+		
+		for (Source.Listener l: this.listeners()) {
+			l.added(added);
+			l.removed(removed);
+		}
+		
 	}
 
 	public InputStream getStream(DAAPTrack track) throws IOException {
-		int song = track.getId();
-		return helper.songRequest(hostname, port, "databases/" + dbid + "/items/" + song
-				+ ".mp3?session-id=" + sessionID);
+		int song = track.id();
+		return connection.song(dbid, song);
 	}
 
-	public boolean isUpdated() throws ClientExpiredException{
-		int newRevisionNumber = getRevisionNumber();
-		if(newRevisionNumber == -1) throw new ClientExpiredException();
-		if(revisionNumber != newRevisionNumber){
-			revisionNumber = newRevisionNumber;
-			return true;
-		}else{
-			return false;
-		}
+	public boolean isRoot() {
+		return false;
 	}
 
-	private int getSessionDetails() {
-		String serverInfoRequest = "server-info";
-		InputStream in = null;
-
-		try {
-			in = helper.request(hostname, port, serverInfoRequest);
-			DAAPEntry entry = DAAPEntry.parseStream(in, helper.types);
-
-			for (DAAPEntry e : entry) {
-				switch(e.getName()) {
-				case DAAPConstants.minm:
-					dbname = (String) e.getValue();
-					break;
-				}
-			}
-
-			return -1;
-		} catch (IOException e) {
-			return -1;
-		}finally{
-			//helper.release(in);
-		}
-
-	}
-	
-	private int getSessionID() {
-		String loginRequest = "login";
-		InputStream in = null;
-
-		try {
-			in = helper.request(hostname, port, loginRequest);
-			DAAPEntry entry = DAAPEntry.parseStream(in, helper.types);
-
-			for (DAAPEntry e : entry) {
-				if (e.getName() == DAAPUtilities.stringToInt("mlid")) {
-					return (Integer) e.getValue();
-				}
-			}
-
-			return -1;
-		} catch (IOException e) {
-			return -1;
-		}finally{
-			//helper.release(in);
-		}
-
-	}
-
-	private int getRevisionNumber() {
-		if(sessionID < 0) return -1;
-		
-		InputStream in = null;
-
-		String request = "update?session-id=" + sessionID;
-
-		try {
-			in = helper.request(hostname, port, request);
-			DAAPEntry entry = DAAPEntry.parseStream(in, helper.types);
-
-			for (DAAPEntry e : entry) {
-				if (e.getName() == DAAPUtilities.stringToInt("musr")) {
-					return (Integer) e.getValue();
-				}
-			}
-			return -1;
-		} catch (IOException e) {
-			return -1;
-		}finally{
-			//helper.release(in);
-		}
-	}
-
-	private int getDatabaseId() {
-		InputStream in = null;
-
-
-		if(revisionNumber < 0) return -1;
-
-		String request = "databases?session-id=" + sessionID + "&revision-id="
-		+ revisionNumber;
-
-
-		try {
-			in = helper.request(hostname, port, request);
-			DAAPEntry entry = DAAPEntry.parseStream(in, helper.types);
-
-			for (DAAPEntry e : entry) {
-				if (e.getName() == DAAPUtilities.stringToInt("mlcl")) {
-					entry = e;
-					break;
-				}
-			}
-
-			for (DAAPEntry e : entry) {
-				if (e.getName() == DAAPUtilities.stringToInt("mlit")) {
-					entry = e;
-					break;
-				}
-			}
-
-			for (DAAPEntry e : entry) {
-				if (e.getName() == DAAPUtilities.stringToInt("miid")) {
-					entry = e;
-					return (Integer) e.getValue();
-				}
-			}
-
-			return -1;
-
-		} catch (IOException e) {
-			return -1;
-		}finally{
-			//helper.release(in);
-		}
-
-	}
-	
-	public class ClientExpiredException extends Throwable{
-		private static final long serialVersionUID = 1L;
+	public Collection<DAAPTrack> parent() {
+		return null;
 	}
 }

@@ -1,77 +1,76 @@
 package dacp;
 
-import interfaces.Playlist;
-import interfaces.Track;
+import interfaces.collection.AbstractCollection;
+import interfaces.collection.Collection;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-public class CLIPlaylist extends ArrayList<CLITrack> implements Playlist<CLITrack> {
+import music.Track;
 
-	private static final long serialVersionUID = 7054413946148938080L;
+public class CLIPlaylist extends AbstractCollection<CLITrack> {
 
-	private int id = 0;
-	private long persistantId = 0;
-	private boolean isRoot = false;
-	private String name = "";
-	private int parentId = 0;
-	private Playlist<Track> parent = null;
-	private int specifiedSize = 0;
+	private final List<CLITrack> tracks = new ArrayList<CLITrack>();
+	private final String name;
 	
-	public void setId(int value) {
-		this.id = value;
+	private boolean root = false;
+	private int parent = 0;
+	private int specifiedSize;
+	
+	public CLIPlaylist(int id, long persistent, String name) {
+		super(id, persistent);
+		this.name = name;
 	}
 	
-	public int id() {
-		return id;
-	}
-
-	public boolean isRoot() {
-		return isRoot;
-	}
-
 	public String name() {
 		return name;
 	}
+	
+	public void setRoot(boolean isRoot) {
+		this.root = isRoot;
+	}
+	
+	public boolean isRoot() {
+		return root;
+	}
 
-	public void setParent(Playlist<Track> parent) {
+	public void setParent(int parent) {
 		this.parent = parent;
 	}
 	
-	public Playlist<Track> parent() {
-		return this.parent;
+	public Collection<CLITrack> parent() {
+		//TODO store parents in accessible place so they can be retrieved
+		return null;
+	}
+
+	public void specifySize(int size) {
+		this.specifiedSize = size;
 	}
 	
-	public void setParentId(int id) {
-		this.parentId = id;
+	public int size() {
+		if (tracks.size() == 0) return specifiedSize; 
+		else return tracks.size();
+	}
+
+	public boolean hasNext() {
+		throw new RuntimeException("should not be called on cli");
+	}
+
+	public CLITrack next() {
+		throw new RuntimeException("should not be called on cli");
 	}
 	
-	public int parentId() {
-		return parentId;
+	public void add(CLITrack track) {
+		tracks.add(track);
 	}
 
-	public long persistantId() {
-		return persistantId;
+	public Iterable<? extends Track> tracks() {
+		return tracks;
+	}
+
+	public Iterator<CLITrack> iterator() {
+		return tracks.iterator();
 	}
 	
-	public void setPersistantId(long value) {
-		this.persistantId = value;
-	}
-
-	public void setName(String value) {
-		this.name = value;
-	}
-
-	public void setRoot(boolean value) {
-		this.isRoot = value;
-	}
-
-	public int specifiedSize() {
-		return this.specifiedSize;
-	}
-	
-	public void setSpecifiedSize(int value) {
-		this.specifiedSize = value;
-	}
-
-
 }

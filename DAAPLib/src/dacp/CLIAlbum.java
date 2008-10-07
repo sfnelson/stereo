@@ -1,9 +1,11 @@
 package dacp;
 
+import interfaces.Album;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import interfaces.Album;
+import daap.DAAPConstants;
 
 public class CLIAlbum implements Album {
 
@@ -13,12 +15,20 @@ public class CLIAlbum implements Album {
 		this.tags.put(tag, value);
 	}
 	
-	public Map<Integer, Object> getAllTags() {
-		return tags;
+	public Iterable<Integer> getAllTags() {
+		return tags.keySet();
 	}
 
-	public Object getTag(int tagID) {
+	public Object get(int tagID) {
 		return tags.get(tagID);
+	}
+
+	public int id() {
+		return (Integer)tags.get(DAAPConstants.miid);
+	}
+
+	public long persistentId() {
+		return (Long)tags.get(DAAPConstants.mper);
 	}
 
 }

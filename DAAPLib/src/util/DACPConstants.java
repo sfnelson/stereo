@@ -28,52 +28,52 @@ public class DACPConstants extends daap.DAAPConstants {
 	public static final int apso = 1634759535;
 	
 	
-	public static final int msrv = parseInt("msrv");
-	public static final int mpro = parseInt("mpro");
-	public static final int apro = parseInt("apro");
-	public static final int mlog = parseInt("mlog");
-	public static final int mlid = parseInt("mlid");
-	public static final int mdcl = parseInt("mdcl");
-	public static final int minm = parseInt("minm");
-	public static final int mupd = parseInt("mupd");
-	public static final int musr = parseInt("musr");
+	public static final int msrv = stringToCode("msrv");
+	public static final int mpro = stringToCode("mpro");
+	public static final int apro = stringToCode("apro");
+	public static final int mlog = stringToCode("mlog");
+	public static final int mlid = stringToCode("mlid");
+	public static final int mdcl = stringToCode("mdcl");
+	public static final int minm = stringToCode("minm");
+	public static final int mupd = stringToCode("mupd");
+	public static final int musr = stringToCode("musr");
 	
-	public static final int avdb = parseInt("avdb");
-	public static final int abro = parseInt("abro");
-	public static final int abar = parseInt("abar");
-	public static final int agal = parseInt("agal"); //daap.albumgroup?
+	public static final int avdb = stringToCode("avdb");
+	public static final int abro = stringToCode("abro");
+	public static final int abar = stringToCode("abar");
+	public static final int agal = stringToCode("agal"); //daap.albumgroup?
 	
-	public static final int mper = parseInt("mper");
-	public static final int mimc = parseInt("mimc");
-	public static final int mctc = parseInt("mctc");
-	public static final int miid = parseInt("miid");
+	public static final int mper = stringToCode("mper");
+	public static final int mimc = stringToCode("mimc");
+	public static final int mctc = stringToCode("mctc");
+	public static final int miid = stringToCode("miid");
 	
-	public static final int caci = parseInt("caci"); //dmcp.ctrl-int
+	public static final int caci = stringToCode("caci"); //dmcp.ctrl-int
 	
 	//all boolean flags. What do they mean?
 	//c: control
 	//m/a: media, audio
 	//s: setting?
-	public static final int cmik = parseInt("cmik");
-	public static final int cmsp = parseInt("cmsp");
-	public static final int cmsv = parseInt("cmsv");
-	public static final int cass = parseInt("cass");
-	public static final int casu = parseInt("casu");
+	public static final int cmik = stringToCode("cmik");
+	public static final int cmsp = stringToCode("cmsp");
+	public static final int cmsv = stringToCode("cmsv");
+	public static final int cass = stringToCode("cass");
+	public static final int casu = stringToCode("casu");
 	
-	public static final int cmgt = parseInt("cmgt"); //something to do with volume - GeT property?
-	public static final int cmvo = parseInt("cmvo"); //dmcp.volume? includes integer volume 0-100?
+	public static final int cmgt = stringToCode("cmgt"); //something to do with volume - GeT property?
+	public static final int cmvo = stringToCode("cmvo"); //dmcp.volume? includes integer volume 0-100?
 	
-	public static final int casp = parseInt("casp"); //dacp.speakers maybe
-	public static final int msma = parseInt("msma"); //no idea (long, 0 in itunes)
-	public static final int caia = parseInt("caia"); //boolean (true for itunes) is available?
+	public static final int casp = stringToCode("casp"); //dacp.speakers maybe
+	public static final int msma = stringToCode("msma"); //no idea (long, 0 in itunes)
+	public static final int caia = stringToCode("caia"); //boolean (true for itunes) is available?
 	
-	public static final int cmcp = parseInt("cmcp"); //control prompt update response
+	public static final int cmcp = stringToCode("cmcp"); //control prompt update response
 	
 	//these nodes are used for indexes
-	public static final int mshl = parseInt("mshl"); //list, composed of mlit nodes
-	public static final int mshc = parseInt("mshc"); //two bytes - range? second is ascii letter
-	public static final int mshi = parseInt("mshi"); //index
-	public static final int mshn = parseInt("mshn"); //number of items
+	public static final int mshl = stringToCode("mshl"); //list, composed of mlit nodes
+	public static final int mshc = stringToCode("mshc"); //two bytes - range? second is ascii letter
+	public static final int mshi = stringToCode("mshi"); //index
+	public static final int mshn = stringToCode("mshn"); //number of items
 	
 	/*
 	public static final int cmst = parseInt("cmst");

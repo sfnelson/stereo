@@ -197,8 +197,9 @@ public class DACPResponseGenerator {
 		public int visitLongLongNode(LongLongNode node) {
 			int length = len.visit(node);
 			DACPResponseGenerator.writeNodeHeader(node, length, output);
-			DACPResponseGenerator.writeLong(node.getValue(), output);
-			DACPResponseGenerator.writeLong(node.getValue2(), output);
+			for (int i: node.getValues()) {
+				DACPResponseGenerator.writeInt(i, output);
+			}
 			return length;
 		}
 

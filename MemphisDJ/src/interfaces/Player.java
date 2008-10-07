@@ -1,5 +1,6 @@
 package interfaces;
 
+import music.Track;
 import notification.EventGenerator;
 import notification.PlayerListener;
 

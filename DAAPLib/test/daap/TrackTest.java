@@ -32,12 +32,12 @@ public class TrackTest {
 
 	@Test
 	public void testGetTag() {
-		assertEquals("The album", t.getTag(DAAPConstants.ALBUM));
+		assertEquals("The album", t.get(DAAPConstants.ALBUM));
 	}
 	
 	@Test
 	public void testUnsetTag() {
-		assertNull(t.getTag(-1));
+		assertNull(t.get(-1));
 	}
 
 	

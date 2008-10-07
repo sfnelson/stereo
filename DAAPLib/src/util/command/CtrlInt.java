@@ -11,6 +11,7 @@ import util.command.ctrlint.NextItem;
 import util.command.ctrlint.NowPlayingArtwork;
 import util.command.ctrlint.Pause;
 import util.command.ctrlint.PlayPause;
+import util.command.ctrlint.PlaySpec;
 import util.command.ctrlint.PlayStatusUpdate;
 import util.command.ctrlint.Playlist;
 import util.command.ctrlint.PrevItem;
@@ -80,6 +81,10 @@ public class CtrlInt extends PathNode implements Command {
 	
 	public Command cue(int db) {
 		return new Cue();
+	}
+	
+	public Command playspec(int db) {
+		return new PlaySpec();
 	}
 }
 

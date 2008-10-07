@@ -1,9 +1,9 @@
 package util.queryparser;
 
-import interfaces.Element;
+import interfaces.HasMetadata;
 
 public interface Filter {
 
-	public boolean check(Element e);
+	public boolean check(HasMetadata e);
 	
 }

@@ -1,13 +1,10 @@
 package player;
 
-import interfaces.Album;
-import interfaces.Track;
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
 
 import music.Player;
+import music.Track;
 
 public class PlayerTest {
 
@@ -83,37 +80,17 @@ public class PlayerTest {
 		
 	}
 	
-	private static class FakeTrack implements Track {
+	private static class FakeTrack extends Track {
 
 		private InputStream stream;
 		
 		public FakeTrack(InputStream stream) {
+			super(0, 0);
 			this.stream = stream;
 		}
 		
-		public Album getAlbum() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
 		public InputStream getStream() throws IOException {
 			return stream;
 		}
-
-		public void setAlbum(Album album) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		public Map<Integer, Object> getAllTags() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		public Object getTag(int tagID) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-		
 	}
 }

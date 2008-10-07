@@ -1,10 +1,21 @@
 function Node(text) {
 	
 	var parseNum = function (index, len) {
+		if (len > 4) return parseBigNum(index, len);
+		
 		var num = text.charCodeAt(index) & 255;
 		for (var i = 1; i < len; i++) {
-			num = num << 8;
+			num = num * 256;
 			num += text.charCodeAt(index + i) & 255;
+		}
+		return num;
+	};
+	
+	var parseBigNum = function (index, len) {
+		var num = new BigNumber(text.charCodeAt(index) & 255);
+		for (var i = 1; i < len; i++) {
+			num = num.multiply(256);
+			num = num.add(text.charCodeAt(index + i) & 255);
 		}
 		return num;
 	};
@@ -92,6 +103,7 @@ function PlayStatusUpdate(tree, index) {
 	this.id = 0;
 	this.status = 0;
 	this.revision = 0;
+	this.container = 0;
 	
 	for (child in kids) {
 		var node = kids[child];
@@ -115,6 +127,7 @@ function PlayStatusUpdate(tree, index) {
 			this.genre = tree.stringVal(node);
 			break;
 		case "canp":
+			this.container = tree.longlongVal(node)[1];
 			this.id = tree.longlongVal(node)[3];
 			break;
 		}
@@ -146,7 +159,7 @@ function getItems(tree, index, handler) {
 function Container(tree, index) {
 	
 	this.id = 0;
-	this.persistantId = 0;
+	this.persistent = 0;
 	this.name = "";
 	this.base = false;
 	this.parent = 0;
@@ -160,7 +173,7 @@ function Container(tree, index) {
 			this.id = tree.intVal(node);
 			break;
 		case "mper":
-			this.persistantId = tree.longVal(node);
+			this.persistent = tree.longVal(node);
 			break;
 		case "minm":
 			this.name = tree.stringVal(node);
@@ -233,6 +246,7 @@ function Track(tree, index) {
 	this.artist = "";
 	this.genre = "";
 	this.id = 0;
+	this.persistent = 0;
 	
 	var kids = tree.children(index);
 	for (child in kids) {
@@ -252,6 +266,9 @@ function Track(tree, index) {
 			break;
 		case "miid":
 			this.id = tree.intVal(node);
+			break;
+		case "mper":
+			this.persistent = tree.longVal(node);
 			break;
 		}
 	}

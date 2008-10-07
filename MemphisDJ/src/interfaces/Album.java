@@ -1,5 +1,6 @@
 package interfaces;
 
-public interface Album extends Element {
+
+public interface Album extends HasMetadata {
 
 }

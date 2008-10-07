@@ -2,9 +2,8 @@ package daap;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.HttpClient;
@@ -16,25 +15,119 @@ import org.apache.commons.httpclient.params.HttpMethodParams;
 
 public class DAAPUtilities {
 
-	private HttpClient  client;	
-	private HttpClient  clientSong;	
+	public static final String SERVER_INFO_REQUEST = "server-info";
+	public static final String LOGIN_REQUEST = "login";
+	public static final String UPDATE_REQUEST = "update";
+	public static final String DATABASE_REQUEST = "databases";
 	
-	protected DAAPUtilities(final String hostname, final int port) throws IOException {
+	private final HttpClient  client;	
+	private final HttpClient  clientSong;
+	
+	private final String hostname;
+	private final int port;
+	
+	private int session;
+	
+	public static DAAPEntry getProperty(DAAPEntry response, int property) throws IOException {
+		
+		for (DAAPEntry e : response.children()) {
+			if (e.code() == property) {
+				return e;
+			}
+		}
+		
+		return null;
+	}
+	
+	public DAAPUtilities(final String hostname, final int port) {
+		this.hostname = hostname;
+		this.port = port;
 		
 		client = new HttpClient();
 		clientSong = new HttpClient();
-		
-		this.names = new HashMap<Integer,String>();
-		this.types = new HashMap<Integer,Short>();
-		
-		//this.requests = new HashMap<InputStream, HttpMethod>();
-		
-		DAAPUtilities.initContentCodes(this.names, this.types);
-		
-		this.retrieveContentCodes(hostname, port);
 	}
 	
-	private  InputStream request(HttpClient client, String hostname, int port, String request) throws IOException {
+	public String connect() throws IOException {
+
+		String name = (String)getProperty(SERVER_INFO_REQUEST, DAAPConstants.minm).value();
+		if (name == null) throw new IOException("Database name not found");
+		
+		DAAPEntry session = getProperty(LOGIN_REQUEST, DAAPConstants.mlid);
+		if (session == null) throw new IOException("Unsuccessful login: no id returned");
+		
+		this.session = (Integer)session.value();
+		
+		return name;
+	}
+	
+	public int update(int revision) throws IOException {
+
+		String request = UPDATE_REQUEST + "?session-id=" + session;
+		if (revision > 0) request += "&revision-id=" + revision;
+		
+		DAAPEntry nr = getProperty(request, DAAPConstants.musr);
+		if (nr == null) throw new IOException("Unsuccessful update: no revision returned");
+		
+		return (Integer)nr.value();
+	}
+	
+	public List<DAAPEntry> databases(int revision) throws IOException {
+
+		String request = DATABASE_REQUEST + "?session-id=" + session + "&revision-id=" + revision;
+		
+		DAAPEntry response = getProperty(request, DAAPConstants.mlcl);
+		if (response == null) throw new IOException("Unsuccessful database request: no databases returned");
+		
+		List<DAAPEntry> dbs = new ArrayList<DAAPEntry>();
+		for (DAAPEntry e: response.children()) {
+			dbs.add(e);
+		}
+		
+		return dbs;
+	}
+	
+	public List<DAAPEntry> tracks(int dbid, int revision) throws IOException {
+		
+		String request = DATABASE_REQUEST + "/" + dbid + "/items?"
+			+ "type=music&meta=dmap.itemkind,dmap.itemid,dmap.itemname,daap.songalbum,daap.songartist,daap.songgenre,daap.songcomposer,daap.songbitrate,daap.songsamplerate,daap.songstarttime,daap.songstoptime,daap.songtime"
+			+ "&session-id=" + session
+			+ "&revision-id=" + revision;
+
+		DAAPEntry response = getProperty(request, DAAPConstants.mlcl);
+		if (response == null) throw new IOException("Unsuccessful database request: no tracks returned");
+		
+		List<DAAPEntry> tracks = new ArrayList<DAAPEntry>();
+		for (DAAPEntry e: response.children()) {
+			tracks.add(e);
+		}
+		
+		return tracks;
+	}
+	
+	public InputStream song(int db, int song) throws IOException {
+		
+		String request = DATABASE_REQUEST + "/" + db + "/items/" + song + ".mp3"
+								+ "?session-id=" + session;
+		
+		return songRequest(request);
+	}
+	
+	private DAAPEntry getProperty(String request, int property) throws IOException {
+		
+		DAAPEntry response = request(request);
+
+		return getProperty(response, property);
+	}
+	
+	private DAAPEntry request(String request) throws IOException {
+		return DAAPEntry.parseStream(request(client, hostname, port, request));
+	}
+	
+	private InputStream songRequest(String request) throws IOException {
+		return request(clientSong, hostname, port, request);
+	}
+	
+	private static InputStream request(HttpClient client, String hostname, int port, String request) throws IOException {
 		String requestURI = "http://" + hostname + ":" + port + "/" + request;
 		
 		HttpMethod method = new GetMethod(requestURI);
@@ -55,103 +148,14 @@ public class DAAPUtilities {
 
 	        // Read the response body.
 	        responseBody = method.getResponseBodyAsStream();
-
-	        //this.requests.put(responseBody, method);
 	        
 	        return responseBody;
 
 	    } catch (HttpException e) {
 	        System.err.println("Fatal protocol violation: " + e.getMessage());
-	        //e.printStackTrace();
+	        e.printStackTrace();
 	    }
 
 	    return null;
-	}
-	
-	protected InputStream request(String hostname, int port, String request) throws IOException {
-		return request(client, hostname, port, request);
-	}
-	
-	protected InputStream songRequest(String hostname, int port, String request) throws IOException {
-		return request(clientSong, hostname, port, request);
-	}
-	/*
-	protected void release(InputStream request) {
-		if ((request != null) && (this.requests.get(request) != null)) {
-			try {
-				request.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			this.requests.get(request).releaseConnection();
-			this.requests.remove(request);
-		}
-	}*/
-	
-	private void retrieveContentCodes(final String hostname, int port) throws IOException {
-		
-		InputStream response = this.request(hostname, port, "content-codes");
-		
-		if (response == null) {
-			throw new NullPointerException();
-		}
-		
-		DAAPEntry entry = DAAPEntry.parseStream(response, this.types);
-
-		if (entry.getName() == stringToInt("mccr")) {
-			for (DAAPEntry e: entry) {
-
-				if (e.getName() != stringToInt("mdcl")) {
-					continue;
-				}
-
-				Map<Integer,Object> values = e.getValueMap();
-
-				String name = (String)values.get(stringToInt("mcna"));
-				short type = (Short)values.get(stringToInt("mcty"));
-				int number = (Integer)values.get(stringToInt("mcnm"));
-
-				this.names.put(number, name);
-				this.types.put(number, type);
-			}
-		}
-
-		//this.release(response);
-	}
-	
-	protected Map<Integer, String> names;
-	protected Map<Integer, Short> types;
-	
-	//private Map<InputStream, HttpMethod> requests;
-	
-	private static void initContentCodes(Map<Integer, String> names, Map<Integer, Short> types) {
-		names.put(stringToInt("mdcl"), "dmap.dictionary");
-		types.put(stringToInt("mdcl"), DAAPEntry.LIST);
-		names.put(stringToInt("mstt"), "dmap.status");
-		types.put(stringToInt("mstt"), DAAPEntry.INTEGER);
-		names.put(stringToInt("mcnm"), "dmap.contentcodesnumber");
-		types.put(stringToInt("mcnm"), DAAPEntry.INTEGER);
-		names.put(stringToInt("mcty"), "dmap.contentcodestype");
-		types.put(stringToInt("mcty"), DAAPEntry.SHORT);
-		names.put(stringToInt("mcna"), "dmap.contentcodesname");
-		types.put(stringToInt("mcna"), DAAPEntry.STRING);
-		names.put(stringToInt("mccr"), "dmap.contentcodes");
-		types.put(stringToInt("mccr"), DAAPEntry.LIST);
-		names.put(stringToInt("msrv"), "dmap.serverinforesponse");
-		types.put(stringToInt("msrv"), DAAPEntry.LIST);
-	}
-	
-	public static int stringToInt(String name) {
-		return new BigInteger(name.getBytes()).intValue();
-	}
-	
-	public static String intToString(int name) {
-		byte[] bytes = new byte[4];
-		int n = name;
-		for (int i = 0; i < 4; i++) {
-			bytes[3-i] = (byte)(n % 256);
-			n = n / 256;
-		}
-		return new String(bytes);
 	}
 }
