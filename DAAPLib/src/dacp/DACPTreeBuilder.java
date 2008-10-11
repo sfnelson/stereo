@@ -36,8 +36,18 @@ public class DACPTreeBuilder {
 
 		Composite serverInfo = createResponse(DACPConstants.msrv);
 
-		serverInfo.append(new VersionNode(DACPConstants.mpro, new byte[] { 0, 2, 0, 4}));
-		serverInfo.append(new VersionNode(DACPConstants.apro, new byte[] { 0, 3, 0, 6}));
+		serverInfo.append(new VersionNode(DACPConstants.mpro, new byte[] { 0, 2, 0, 5}));
+		serverInfo.append(new VersionNode(DACPConstants.apro, new byte[] { 0, 3, 0, 7}));
+		
+		serverInfo.append(new BooleanNode(DACPConstants.msed, true)); //supports edit
+		serverInfo.append(new BooleanNode(DACPConstants.msup, true)); //supports update
+		serverInfo.append(new BooleanNode(DACPConstants.mspi, true)); //supports persistent ids
+		serverInfo.append(new BooleanNode(DACPConstants.msex, true)); //supports extensions
+		serverInfo.append(new BooleanNode(DACPConstants.msbr, true)); //supports browse
+		serverInfo.append(new BooleanNode(DACPConstants.msqy, true)); //supports query
+		serverInfo.append(new BooleanNode(DACPConstants.msix, true)); //supports index
+		serverInfo.append(new BooleanNode(DACPConstants.msrs, true)); //supports resolve
+		serverInfo.append(new IntegerNode(DACPConstants.msdc, 1)); //number of databases
 
 		return serverInfo;
 	}

@@ -19,6 +19,14 @@ function createSVGcontrols() {
 		node.setAttribute('style', style);
 		return node;
 	}
+	var createCircle = function (x, y, radius, style) {
+		var node = document.createElementNS(ns, 'circle');
+		node.setAttribute('cx', x);
+		node.setAttribute('cy', y);
+		node.setAttribute('r', radius);
+		node.setAttribute('style', style);
+		return node;
+	}
 	var replace = function(id, img) {
 		var node = document.getElementById(id);
 		node.removeChild(node.firstChild);
@@ -27,6 +35,8 @@ function createSVGcontrols() {
 
 	var barStyle = 'fill: #222;';
 	var arrowStyle = 'fill: #222;stroke:#222;stroke-width:0.2em;stroke-linejoin:round;';
+	var sliderTrackStyle = 'stroke:#888;stroke-width:0.4em;stroke-linecap:round;';
+	var sliderButton = 'fill:#222;';
 	
 	var prev = createImage(33, 30);
 	prev.appendChild(createPath('m 0,3 4,0 0,24 -4,0 z', barStyle));
@@ -48,4 +58,16 @@ function createSVGcontrols() {
 	next.appendChild(createPath('m 15,4 10,11 -10,11 z', arrowStyle));
 	next.appendChild(createPath('m 27,3 4,0 0,24 -4,0 z', barStyle));
 	replace("next", next);
+	
+	var wrapper = document.createElement("SPAN");
+	wrapper.id = "volume-wrapper";
+	replace("volume", wrapper);
+	
+	var volume = createImage(300, 30);
+	volume.appendChild(createPath('m 15,15 270,0', sliderTrackStyle));
+	wrapper.appendChild(volume);
+	
+	var button = createCircle(15,15,8, sliderButton)
+	button.id = "volume-control";
+	volume.appendChild(button);
 }

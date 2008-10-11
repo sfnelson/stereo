@@ -68,6 +68,7 @@ DAAPLib/src/util/command/ctrlint/SetProperty.java -text
 DAAPLib/src/util/command/ctrlint/Stop.java -text
 DAAPLib/src/util/command/databases/Browse.java -text
 DAAPLib/src/util/command/databases/Containers.java -text
+DAAPLib/src/util/command/databases/Edit.java -text
 DAAPLib/src/util/command/databases/Groups.java -text
 DAAPLib/src/util/command/databases/Items.java -text
 DAAPLib/src/util/node/BooleanNode.java -text
@@ -128,6 +129,7 @@ MemphisDJ/src/music/PlaybackController.java -text
 MemphisDJ/src/music/PlaybackQueue.java -text
 MemphisDJ/src/music/Player.java -text
 MemphisDJ/src/music/Track.java -text
+MemphisDJ/src/music/UserCollection.java -text
 MemphisDJ/src/music/VolumeControl.java -text
 MemphisDJ/src/music/setvolume.sh -text
 MemphisDJ/src/notification/AbstractEventGenerator.java -text

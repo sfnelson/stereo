@@ -10,6 +10,7 @@ import dacp.DACPTreeBuilder;
 import util.DACPConstants;
 import util.command.databases.Browse;
 import util.command.databases.Containers;
+import util.command.databases.Edit;
 import util.command.databases.Groups;
 import util.node.Node;
 
@@ -40,6 +41,10 @@ public class Databases extends PathNode implements Command {
 	
 	public Command containers(int db) {
 		return new Containers();
+	}
+	
+	public Command edit(int db) {
+		return new Edit();
 	}
 	
 	public Command artists() {

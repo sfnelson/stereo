@@ -112,12 +112,12 @@ body {
 #control {
 	position: fixed;
 	bottom: 0;
-	height: 4ex;
+	height: 6ex;
 	padding: 2ex 0;
 	width: 100%;
 	text-align: center;
-	opacity: 0.8;
-	background-color: #ccc;
+	/*opacity: 0.8;*/
+	background-color: rgba(204,204,204,0.8);
 }
 
 #control div {
@@ -129,7 +129,7 @@ body {
 }
 
 #control #volume {
-	display: none;
+	display: block;
 }
 
 #play,#pause {

@@ -169,6 +169,28 @@
 		ajax.request(request, fn);
 	}
 
+	function getVolume() {
+
+		var request = "/ctrl-int/1/getproperty?properties=dmcp.volume"
+		var fn = function (text) {
+			
+			var tree = new Node(text);
+
+			var volume = tree.intVal(findNode(tree, 0, "cmvo"));
+
+			var vol = 15 + (volume * 270 / 100);
+			window.console.debug(volume + " " + vol);
+			document.getElementById("volume-control").setAttribute("cx", vol);
+		}
+		ajax.request(request, fn);
+	}
+
+	function setVolume(volume) {
+		var request = new XMLHttpRequest();
+		request.open("GET", "/ctrl-int/1/setproperty?dmcp.volume="+volume);
+		request.send(null);
+	}
+
 	function next() {
 		var request = new XMLHttpRequest();
 		request.open("GET", "/ctrl-int/1/nextitem", true);
@@ -322,6 +344,30 @@
 		}
 		document.getElementById("next").onclick = function() {
 			next();
+		}
+
+		var dragging = false;
+		document.getElementById("volume-control").onmousedown = function() {
+			dragging = true;
+		}
+		document.getElementById("volume").onmouseup = function() {
+			dragging = false;
+		}
+		document.getElementById("volume").onmouseout = function(e) {
+			if (e.target == document.getElementById("volume")) {
+				dragging = false;
+			}
+		}
+		document.getElementById("volume").onmousemove = function(e) {
+			if (dragging) {
+				var x = e.clientX-document.getElementById("volume-wrapper").offsetLeft;
+				if (x < 15) x = 15;
+				if (x > 285) x = 285;
+				var control = document.getElementById("volume-control");
+				control.setAttribute("cx", x);
+				var volume = Math.round((x - 15) * 100 / 270);
+				setVolume(volume);
+			}
 		}
 
 		document.getElementById("playlist").onclick = function(e) {
@@ -584,7 +630,7 @@
 <link rel="stylesheet" type="text/css" href="style.css" />
 
 </head>
-<body onload="registerControls(); getPlaybackStatusUpdate();">
+<body onload="registerControls(); getPlaybackStatusUpdate(); getVolume();">
 <div id="navigation">
 <div id="back">Back</div>
 <div id="playing">Now Playing</div>

@@ -53,10 +53,10 @@ public class DACPServer {
 
 		records.put("CtlN","Stereo on " + hostname);
 		records.put("OSsi","0x1F6");
-		records.put("Ver","131072");
+		records.put("Ver","131073");
 		records.put("txtvers","1");
 		records.put("DvTy","iTunes");
-		records.put("DvSv","1905");
+		records.put("DvSv","2049");
 		records.put("DbId", hash);
 
 		ServiceInfo dmcp = ServiceInfo.create("_touch-able._tcp.local.", hash, PORT, 0, 0, records);

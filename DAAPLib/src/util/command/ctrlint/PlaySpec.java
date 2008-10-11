@@ -3,6 +3,7 @@ package util.command.ctrlint;
 import interfaces.DJInterface;
 import interfaces.collection.Collection;
 
+import java.math.BigInteger;
 import java.util.Map;
 
 import music.Track;
@@ -20,7 +21,7 @@ public class PlaySpec implements Command {
 
 	public Node run(DJInterface dj) {
 		
-		long playlist = Long.parseLong(this.playlist);
+		long playlist = new BigInteger(this.playlist).longValue();
 		
 		for (Collection<? extends Track> c: dj.library().collections()) {
 			if (c.persistentId() == playlist) {

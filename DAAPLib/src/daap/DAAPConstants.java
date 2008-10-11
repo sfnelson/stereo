@@ -124,6 +124,7 @@ public class DAAPConstants {
 	public static final int msau = 1836278133;
 	public static final int msbr = 1836278386;
 	public static final int msdc = 1836278883;
+	public static final int msed = 1836279140;
 	public static final int msex = 1836279160;
 	public static final int msix = 1836280184;
 	public static final int mslr = 1836280946;
@@ -326,6 +327,7 @@ public class DAAPConstants {
 		.type(msau, "msau", "dmap.authenticationmethod"                ,   1)
 		.type(msbr, "msbr", "dmap.supportsbrowse"                      ,   1)
 		.type(msdc, "msdc", "dmap.databasescount"                      ,   5)
+		.type(msdc, "msed", "dmap.supportsedit"                        ,   1)
 		.type(msex, "msex", "dmap.supportsextensions"                  ,   1)
 		.type(msix, "msix", "dmap.supportsindex"                       ,   1)
 		.type(mslr, "mslr", "dmap.loginrequired"                       ,   1)
