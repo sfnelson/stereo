@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
-        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:svg="http://www.w3.org/2000/svg">
 <head>
@@ -10,7 +10,7 @@
 //<![CDATA[
 	function getPlaybackStatusUpdate() {
 		var request = "/ctrl-int/1/playstatusupdate";
-		
+
 		if (lastUpdate && lastUpdate.revision) {
 			request += "?revision-number="+lastUpdate.revision;
 		}
@@ -56,7 +56,7 @@
 				var tree = new Node(text);
 
 				var list = findNode(tree, 0, "mlcl");
-				
+
 				var playlists = getItems(tree, list, function (t, i) {
 					return new Container(t, i);
 				});
@@ -69,16 +69,16 @@
 				for (p in playlists) {
 					var item = document.createElement("DIV");
 					item.className="item";
-					
+
 					item.appendChild(createNode("title", playlists[p].name));
 					item.appendChild(createNode("count", playlists[p].items));
 					item.collection = playlists[p].id;
 					item.persistent = playlists[p].persistent;
-					
+
 					if (playlists[p].id == lastUpdate.container) {
 						item.className += " current";
 					}
-					
+
 					parent.appendChild(item);
 				}
 		}
@@ -88,11 +88,11 @@
 	function getArtists() {
 		var request = "/databases/1/browse/artists";
 		var callback = function (text) {
-			
+
 			var tree = new Node(text);
 
 			var list = findNode(tree, 0, "abar");
-			
+
 			var artists = getItems(tree, list, function (t, i) {
 				return t.stringVal(i);
 			});
@@ -106,9 +106,9 @@
 				var item = document.createElement("DIV");
 				item.className="item";
 				item.query="'daap.songartist:"+artists[a]+"'";
-				
+
 				item.appendChild(createNode("title", artists[a]));
-				
+
 				parent.appendChild(item);
 			}
 		}
@@ -118,11 +118,11 @@
 	function getAlbums(query, callback) {
 		var request = "/databases/1/groups?group-type=albums&sort=albums&query="+query;
 		var fn = function (text) {
-			
+
 			var tree = new Node(text);
 
 			var list = findNode(tree, 0, "mlcl");
-			
+
 			var albums = getItems(tree, list, function (t, i) {
 				return new Album(t, i);
 			});
@@ -130,18 +130,18 @@
 			callback(albums);
 		}
 		ajax.request(request, fn);
-	
+
 	}
 
 	function getTracks(query, callback) {
 
 		var request = "/databases/1/containers/1/items?query="+query;
 		var fn = function (text) {
-			
+
 			var tree = new Node(text);
 
 			var list = findNode(tree, 0, "mlcl");
-			
+
 			var tracks = getItems(tree, list, function (t, i) {
 				return new Track(t, i);
 			});
@@ -155,11 +155,11 @@
 
 		var request = "/databases/1/containers/" + collection + "/items";
 		var fn = function (text) {
-			
+
 			var tree = new Node(text);
 
 			var list = findNode(tree, 0, "mlcl");
-			
+
 			var tracks = getItems(tree, list, function (t, i) {
 				return new Track(t, i);
 			});
@@ -173,7 +173,7 @@
 
 		var request = "/ctrl-int/1/getproperty?properties=dmcp.volume"
 		var fn = function (text) {
-			
+
 			var tree = new Node(text);
 
 			var volume = tree.intVal(findNode(tree, 0, "cmvo"));
@@ -264,6 +264,7 @@
 			setText(document.getElementById("artist"), update.artist);
 			setText(document.getElementById("album"), update.album);
 			setText(document.getElementById("genre"), update.genre);
+			document.title = update.title + " - " + update.artist;
 
 			document.getElementById("play").className = "hidden";
 			document.getElementById("pause").className = "";
@@ -403,10 +404,10 @@
 				if (node == document.body)
 					return;
 			}
-			
+
 			var collection = node.collection;
 			var persistent = node.persistent;
-			
+
 			getCollectionTracks(collection, function (tracks) {
 				var parent = document.getElementById("browse-playlists-tracks");
 				while (parent.childNodes.length > 0) {
@@ -420,16 +421,16 @@
 				shuffle.appendChild(createNode("title", "Shuffle"));
 				shuffle.appendChild(createNode("artist", ""));
 				parent.appendChild(shuffle);
-				
+
 				for (t in tracks) {
 					var item = document.createElement("DIV");
 					item.className="item";
 					item.persistent=persistent;
 					item.query="'dmap.persistentid:"+tracks[t].persistent+"'";
-				
+
 					item.appendChild(createNode("title", tracks[t].title));
 					item.appendChild(createNode("artist", tracks[t].artist));
-				
+
 					parent.appendChild(item);
 				}
 				previousPane.push("playlists");
@@ -444,7 +445,7 @@
 				if (node == document.body)
 					return;
 			}
-			
+
 			var query = node.query;
 			var persistent = node.persistent;
 
@@ -458,7 +459,7 @@
 			previousPane.push("playlist-tracks");
 			document.body.className = "playing";
 		}
-		
+
 		document.getElementById("browse-artists-container").onclick = function(e) {
 			var node = e.target;
 			while (!node.className.match("item")) {
@@ -466,9 +467,9 @@
 				if (node == document.body)
 					return;
 			}
-			
+
 			var query = node.query;
-			
+
 			getAlbums(query, function (albums) {
 				var parent = document.getElementById("browse-artists-albums");
 				while (parent.childNodes.length > 0) {
@@ -478,9 +479,9 @@
 					var item = document.createElement("DIV");
 					item.className="item";
 					item.query="'daap.songalbum="+albums[a].name+"'";
-				
+
 					item.appendChild(createNode("title", albums[a].name));
-				
+
 					parent.appendChild(item);
 				}
 				previousPane.push("artists");
@@ -501,19 +502,19 @@
 				while (parent.childNodes.length > 0) {
 					parent.removeChild(parent.firstChild);
 				}
-				
+
 				var item = document.createElement("DIV");
 				item.className="item";
 				item.query = query;
 				item.appendChild(createNode("title", "All Songs"));
 				parent.appendChild(item);
-				
+
 				for (t in tracks) {
 					item = document.createElement("DIV");
 					item.className="item";
 					item.query = query+"+'dmap.itemname:"+tracks[t].title+"'";
 					item.appendChild(createNode("title", tracks[t].title));
-				
+
 					parent.appendChild(item);
 				}
 				previousPane.push("artist-albums");
@@ -528,7 +529,7 @@
 				if (node == document.body)
 					return;
 			}
-			
+
 			var query = node.query;
 
 			clear();
@@ -545,15 +546,15 @@
 				if (node == document.body)
 					return;
 			}
-			
+
 			var query = node.query;
-			
+
 			getTracks(query, function (tracks) {
 				var parent = document.getElementById("browse-albums-tracks");
 				while (parent.childNodes.length > 0) {
 					parent.removeChild(parent.firstChild);
 				}
-				
+
 				var item = document.createElement("DIV");
 				item.className="item";
 				item.query = query;
@@ -568,7 +569,7 @@
 					item.appendChild(createNode("artist", tracks[t].artist));
 					parent.appendChild(item);
 				}
-				
+
 				previousPane.push("albums");
 				document.body.className = "album-tracks";
 			});
@@ -581,7 +582,7 @@
 				if (node == document.body)
 					return;
 			}
-			
+
 			var query = node.query;
 
 			clear();
@@ -609,9 +610,9 @@
 						var item = document.createElement("DIV");
 						item.className="item";
 						item.query="'daap.songalbum:"+albums[a].name+"'";
-					
+
 						item.appendChild(createNode("title", albums[a].name));
-					
+
 						parent.appendChild(item);
 					}
 					document.body.className = "albums";
