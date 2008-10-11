@@ -19,7 +19,6 @@ public class DAAPLackey {
 	public static final int DAAP_PORT = 3689;
 
 	private final Set<DAAPClient> clients;
-	private volatile int playlists = Library.FIRST_AVAILABLE_ID;
 	
 	private final Library<? extends Track> library;
 
@@ -86,7 +85,7 @@ public class DAAPLackey {
 				if (line.equals("GET /")) {
 					String server = socket.getInetAddress().getHostAddress();
 					
-					List<DAAPClient> pls =  DAAPClient.create(server, DAAP_PORT, ++playlists);
+					List<DAAPClient> pls =  DAAPClient.create(server, DAAP_PORT, library.nextCollectionId());
 					
 					for (DAAPClient c: pls) {
 						add(c);

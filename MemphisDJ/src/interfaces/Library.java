@@ -14,6 +14,7 @@ public interface Library<T extends Track> extends Collection<T> {
 	public boolean removeCollection(Collection<? extends Track> collection);
 	public int numCollections();
 	public Iterable<Collection<? extends Track>> collections();
+	public int nextCollectionId();
 	
 	public Iterable<? extends Album> albums();
 	public int numAlbums();

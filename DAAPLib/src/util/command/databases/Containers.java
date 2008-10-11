@@ -30,5 +30,9 @@ public class Containers extends PathNode implements Command {
 	public Command items(int container) {
 		return new Items(container);
 	}
+	
+	public Command edit(int container) {
+		return new ContainerEdit(container);
+	}
 
 }

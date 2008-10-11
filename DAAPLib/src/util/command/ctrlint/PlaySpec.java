@@ -7,9 +7,10 @@ import java.math.BigInteger;
 import java.util.Map;
 
 import music.Track;
-
 import util.command.Command;
 import util.node.Node;
+import util.queryparser.QueryParser;
+import util.queryparser.Token;
 
 public class PlaySpec implements Command {
 
@@ -21,7 +22,9 @@ public class PlaySpec implements Command {
 
 	public Node run(DJInterface dj) {
 		
-		long playlist = new BigInteger(this.playlist).longValue();
+		Token t = (Token)QueryParser.parse(playlist);
+
+		long playlist = new BigInteger(t.value).longValue();
 		
 		for (Collection<? extends Track> c: dj.library().collections()) {
 			if (c.persistentId() == playlist) {

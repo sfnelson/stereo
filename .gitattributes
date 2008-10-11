@@ -67,6 +67,7 @@ DAAPLib/src/util/command/ctrlint/PrevItem.java -text
 DAAPLib/src/util/command/ctrlint/SetProperty.java -text
 DAAPLib/src/util/command/ctrlint/Stop.java -text
 DAAPLib/src/util/command/databases/Browse.java -text
+DAAPLib/src/util/command/databases/ContainerEdit.java -text
 DAAPLib/src/util/command/databases/Containers.java -text
 DAAPLib/src/util/command/databases/Edit.java -text
 DAAPLib/src/util/command/databases/Groups.java -text

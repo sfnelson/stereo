@@ -107,6 +107,8 @@ public class DAAPConstants {
 	public static final int mcti = 1835234409;
 	public static final int mcty = 1835234425;
 	public static final int mdcl = 1835295596;
+	public static final int medc = 1835361379;
+	public static final int meds = 1835361395;
 	public static final int miid = 1835624804;
 	public static final int mikd = 1835625316;
 	public static final int mimc = 1835625827;
@@ -310,6 +312,8 @@ public class DAAPConstants {
 		.type(mcti, "mcti", "dmap.containeritemid"                     ,   5)
 		.type(mcty, "mcty", "dmap.contentcodestype"                    ,   3)
 		.type(mdcl, "mdcl", "dmap.dictionary"                          ,  12)
+		.type(medc, "medc", "dmap.editdictionary"                      ,  12)
+		.type(meds, "meds", "dmap.editstatus"                          ,  12)
 		.type(miid, "miid", "dmap.itemid"                              ,   5)
 		.type(mikd, "mikd", "dmap.itemkind"                            ,   1)
 		.type(mimc, "mimc", "dmap.itemcount"                           ,   5)

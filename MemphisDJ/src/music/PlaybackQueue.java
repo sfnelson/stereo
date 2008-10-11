@@ -230,6 +230,10 @@ class PlaybackQueue extends AbstractEventGenerator<QueueListener>
 		public Track next() {
 			return trackIt.next();
 		}
+		
+		public int editStatus() {
+			return GENERATED;
+		}
 
 		public Iterable<? extends Track> tracks() {
 			return tracks;

@@ -7,6 +7,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
+import daap.DAAPConstants;
+
 import music.Track;
 import util.DACPConstants;
 import util.node.BooleanNode;
@@ -19,16 +21,6 @@ import util.node.Node;
 import util.node.StringNode;
 import util.node.VersionNode;
 
-
-/* TODO support playlists:
- * add a playlist
- * : /databases/1/edit?action=add?&edit-params='dmap.itemname:Test' -> medc (mstt 200, miid [playlist id])
- * delete a playlist
- * : /databases/1/edit?action=remove?&edit-params='dmap.itemid:[playlist id]' -> 204 No Content
- * both followed by a reply to update
- * 
- * : /databases/1/containers/[id]/edit?action=add&edit-params='dmap.itemid:[id]' -> need to decode response
- */
 
 public class DACPTreeBuilder {
 
@@ -243,6 +235,16 @@ public class DACPTreeBuilder {
 
 		return response;
 	}
+	
+
+	public static Node buildNewPlaylistResponse(int id) {
+		
+		Composite response = createResponse(DAAPConstants.medc);
+		
+		response.append(new IntegerNode(DACPConstants.miid, id));
+		
+		return response;
+	}
 
 	public static Node buildControlPromptUpdate(int promptId) {
 
@@ -375,6 +377,11 @@ public class DACPTreeBuilder {
 		if (p.isRoot()) {
 			playlistNode.append(new BooleanNode(DACPConstants.abpl, true));
 		}
+		
+		if (p.editStatus() == Collection.GENERATED) {
+			playlistNode.append(new BooleanNode(DACPConstants.aeSP, true));
+		}
+		playlistNode.append(new IntegerNode(DACPConstants.meds, p.editStatus()));
 
 		Collection<? extends Track> par = p.parent();
 		int pid = (par == null)?0:par.id();

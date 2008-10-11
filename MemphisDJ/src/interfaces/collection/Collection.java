@@ -15,9 +15,14 @@ public interface Collection<T extends Track>
 	public static final int FIRST_AVAILABLE_ID = 7;
 	public static final long FIRST_AVAILABLE_PERSISTENT_ID = 7;
 	
+	public static final int NOT_EDITABLE = 0;
+	public static final int GENERATED = 0x60;
+	public static final int EDITABLE = 0x67;
+	
 	public String name();
 	public boolean isRoot();
 	public Collection<T> parent();
 	public int size();
+	public int editStatus();
 	
 }

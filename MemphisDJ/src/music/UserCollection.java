@@ -35,9 +35,35 @@ public class UserCollection extends AbstractCollection<Track> implements Source.
 	public synchronized int size() {
 		return songs.size();
 	}
+	
+	public int editStatus() {
+		return EDITABLE;
+	}
 
 	public synchronized Iterator<Track> iterator() {
 		return new ArrayList<Track>(songs).iterator();
+	}
+	
+	public synchronized void add(Iterable<? extends Track> tracks) {
+		List<Track> added = new ArrayList<Track>();
+		for (Track t: tracks) {
+			if (!songs.contains(t)) {
+				added.add(t);
+				songs.add(t);
+			}
+		}
+		added(added); //assume tracks are available
+	}
+	
+	public synchronized void remove(Iterable<? extends Track> tracks) {
+		Set<Track> removed = new HashSet<Track>();
+		for (Track t: tracks) {
+			if (songs.contains(t)) {
+				removed.add(t);
+				songs.remove(t);
+			}
+		}
+		removed(removed); //assume tracks are available
 	}
 	
 	// Source methods: only returns available tracks

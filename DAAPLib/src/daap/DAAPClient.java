@@ -85,6 +85,10 @@ public class DAAPClient extends AbstractSetCollection<DAAPTrack> {
 		return name;
 	}
 	
+	public int editStatus() {
+		return GENERATED;
+	}
+	
 	public void update() throws IOException {
 
 		int rev = connection.update(revision);

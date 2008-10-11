@@ -36,7 +36,7 @@ public class PlayStatusUpdate implements Command, PlaybackListener {
 
 			try {
 				synchronized (this) {
-					this.wait(10000); //wait 10 seconds if nothing has changed
+					this.wait(60000); //wait 60 seconds if nothing has changed
 				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();

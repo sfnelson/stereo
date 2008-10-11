@@ -20,15 +20,22 @@ public class Library extends AbstractSetCollection<LibraryTrack>
 	private final Set<Collection<? extends Track>> collections = new HashSet<Collection<? extends Track>>();
 	private final String name;
 	
+	private volatile int nextCollection = FIRST_AVAILABLE_ID;
+	
 	public Library(String name) {
 		super(Collection.LIBRARY_ID, Collection.LIBRARY_PERSISTENT_ID);
 		this.name = name;
 		
 		addCollection(this); //library is a collection in the library
+		monitor.nextVersion();
 	}
 	
 	public String name() {
 		return name;
+	}
+	
+	public int editStatus() {
+		return NOT_EDITABLE;
 	}
 	
 	public boolean addSource(Source<? extends Track> source) {
@@ -63,8 +70,8 @@ public class Library extends AbstractSetCollection<LibraryTrack>
 			added.add(l);
 		}
 
-		monitor.nextVersion();
 		add(added);
+		monitor.nextVersion();
 	}
 
 	public void removed(Set<? extends Track> tracks) {
@@ -81,12 +88,20 @@ public class Library extends AbstractSetCollection<LibraryTrack>
 			}
 		}
 
-		monitor.nextVersion();
 		remove(removed);
+		monitor.nextVersion();
+	}
+	
+	public synchronized int nextCollectionId() {
+		return nextCollection++;
 	}
 
 	public boolean addCollection(Collection<? extends Track> collection) {
-		return collections.add(collection);
+		boolean added = collections.add(collection);
+		if (added) {
+			monitor.nextVersion();
+		}
+		return added;
 	}
 
 	public Iterable<Collection<? extends Track>> collections() {
@@ -98,7 +113,11 @@ public class Library extends AbstractSetCollection<LibraryTrack>
 	}
 
 	public boolean removeCollection(Collection<? extends Track> collection) {
-		return collections.remove(collection);
+		boolean removed = collections.remove(collection);
+		if (removed) {
+			monitor.nextVersion();
+		}
+		return removed;
 	}
 
 	public boolean isRoot() {
@@ -146,6 +165,9 @@ public class Library extends AbstractSetCollection<LibraryTrack>
 		}
 		public synchronized void nextVersion() {
 			version++;
+			for (LibraryListener l: listeners()) {
+				l.libraryVersionChanged(version);
+			}
 		}
 	}
 }
