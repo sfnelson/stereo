@@ -14,7 +14,9 @@
   </target>
   <target depends="clean" name="cleanall">
   </target>
-  <target name="build">
+  <target depends="build-project" name="build">
+  </target>
+  <target name="build-project">
     <echo message="${ant.project.name}: ${ant.file}"/>
     <javac debug="true" debuglevel="${debuglevel}" destdir="" source="${source}" target="${target}">
     	<src path="."/>
