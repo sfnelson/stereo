@@ -20,7 +20,7 @@
     <echo message="${ant.project.name}: ${ant.file}"/>
     <javac debug="true" debuglevel="${debuglevel}" destdir="" source="${source}" target="${target}">
     	<src path="."/>
-    	<classpath refid="DAAPLib.classpath"/>
+    	<classpath refid="Asunder.classpath"/>
     </javac>
   </target>
 </project>
