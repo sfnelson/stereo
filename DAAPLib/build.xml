@@ -70,6 +70,7 @@
 
   <target name="build-subprojects">
     <ant antfile="${MemphisDJ.location}/build.xml" inheritAll="false" target="build-project"/>
+  	<ant antfile="${Asunder.location}/build.xml" inheritAll="false" target="build-project"/>
   </target>
   <target depends="init" name="build-project">
     <echo message="${ant.project.name}: ${ant.file}"/>
