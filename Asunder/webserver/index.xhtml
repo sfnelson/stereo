@@ -353,10 +353,20 @@
 		}
 		document.getElementById("volume").onmouseup = function() {
 			dragging = false;
+			var x = e.clientX-document.getElementById("volume-wrapper").offsetLeft;
+			if (x < 15) x = 15;
+			if (x > 285) x = 285;
+			var volume = Math.round((x - 15) * 100 / 270);
+			setVolume(volume);
 		}
 		document.getElementById("volume").onmouseout = function(e) {
 			if (e.target == document.getElementById("volume")) {
 				dragging = false;
+				var x = e.clientX-document.getElementById("volume-wrapper").offsetLeft;
+				if (x < 15) x = 15;
+				if (x > 285) x = 285;
+				var volume = Math.round((x - 15) * 100 / 270);
+				setVolume(volume);
 			}
 		}
 		document.getElementById("volume").onmousemove = function(e) {
@@ -366,8 +376,6 @@
 				if (x > 285) x = 285;
 				var control = document.getElementById("volume-control");
 				control.setAttribute("cx", x);
-				var volume = Math.round((x - 15) * 100 / 270);
-				setVolume(volume);
 			}
 		}
 
