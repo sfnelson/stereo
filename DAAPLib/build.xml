@@ -11,9 +11,9 @@
 
   <property name="ivy.install.version" value="2.0.0-beta2"/>
 
-  <available file="lib/ivy.jar" propert="ivy.exists" />
+  <available file="lib/ivy.jar" property="ivy.available" />
 
-  <target name="download-ivy" unless="ivy.exists">
+  <target name="download-ivy" unless="ivy.available">
     <!-- download Ivy from web site so that it can be used even without any special installation -->
     <echo message="installing ivy..."/>
     <mkdir dir="lib"/>
