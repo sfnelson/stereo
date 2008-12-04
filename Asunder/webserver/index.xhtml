@@ -32,7 +32,10 @@
 			}
 
 			lastUpdate = up;
-			if (up.status) getPlaybackStatusUpdate();
+			if (up.status) {
+				getPlaybackStatusUpdate();
+				getVolume();
+			}
 		});
 	}
 
