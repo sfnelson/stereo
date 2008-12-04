@@ -355,15 +355,17 @@
 			dragging = true;
 		}
 		document.getElementById("volume").onmouseup = function(e) {
-			dragging = false;
-			var x = e.clientX-document.getElementById("volume-wrapper").offsetLeft;
-			if (x < 15) x = 15;
-			if (x > 285) x = 285;
-			var volume = Math.round((x - 15) * 100 / 270);
-			setVolume(volume);
+			if (dragging) {
+				dragging = false;
+				var x = e.clientX-document.getElementById("volume-wrapper").offsetLeft;
+				if (x < 15) x = 15;
+				if (x > 285) x = 285;
+				var volume = Math.round((x - 15) * 100 / 270);
+				setVolume(volume);
+			}
 		}
 		document.getElementById("volume").onmouseout = function(e) {
-			if (e.target == document.getElementById("volume")) {
+			if (dragging && e.target == document.getElementById("volume")) {
 				dragging = false;
 				var x = e.clientX-document.getElementById("volume-wrapper").offsetLeft;
 				if (x < 15) x = 15;
