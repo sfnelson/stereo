@@ -179,7 +179,7 @@
 			var volume = tree.intVal(findNode(tree, 0, "cmvo"));
 
 			var vol = 15 + (volume * 270 / 100);
-			window.console.debug(volume + " " + vol);
+			
 			document.getElementById("volume-control").setAttribute("cx", vol);
 		}
 		ajax.request(request, fn);
