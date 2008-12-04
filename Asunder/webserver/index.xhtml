@@ -351,7 +351,7 @@
 		document.getElementById("volume-control").onmousedown = function() {
 			dragging = true;
 		}
-		document.getElementById("volume").onmouseup = function() {
+		document.getElementById("volume").onmouseup = function(e) {
 			dragging = false;
 			var x = e.clientX-document.getElementById("volume-wrapper").offsetLeft;
 			if (x < 15) x = 15;
