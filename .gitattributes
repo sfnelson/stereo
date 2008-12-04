@@ -135,6 +135,7 @@ MemphisDJ/src/music/Player.java -text
 MemphisDJ/src/music/Track.java -text
 MemphisDJ/src/music/UserCollection.java -text
 MemphisDJ/src/music/VolumeControl.java -text
+MemphisDJ/src/music/getvolume.sh -text
 MemphisDJ/src/music/setvolume.sh -text
 MemphisDJ/src/notification/AbstractEventGenerator.java -text
 MemphisDJ/src/notification/EventGenerator.java -text
