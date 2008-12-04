@@ -7,6 +7,6 @@ if [ "x" != "x$mixerctl" ]; then
 	$mixerctl -w outputs.mono=255
 	$mixerctl -w outputs.master=$vol
 #	$mixerctl -w inputs.dac=255
-elif [ "x" != "x$amixer" ]; then
+elif [ "x" != "x$aumix" ]; then
 	$aumix -w $1
 fi
