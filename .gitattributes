@@ -18,9 +18,11 @@ CLI/.classpath -text
 CLI/.project -text
 CLI/build.xml -text
 CLI/ivy.xml -text
-CLI/src/cli/CLITest.java -text
-CLI/src/cli/ServerSideController.java -text
 CLI/src/clinterface/CLI.java -text
+CLI/src/clinterface/CLIAlbum.java -text
+CLI/src/clinterface/CLIPlaylist.java -text
+CLI/src/clinterface/CLITrack.java -text
+CLI/src/clinterface/DACPDJInterface.java -text
 CLI/test/clinterface/CLITest.java -text
 DAAPLib/.classpath -text
 DAAPLib/.project -text
