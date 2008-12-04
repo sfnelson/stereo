@@ -71,6 +71,7 @@ public class DACPResponseParser {
 		reply.register(DACPConstants.cmmk, new IntegerNodeHandler());
 		reply.register(DACPConstants.cant, new IntegerNodeHandler());
 		reply.register(DACPConstants.cast, new IntegerNodeHandler());
+		reply.register(DACPConstants.cmvo, new IntegerNodeHandler());
 	}
 
 	private void addPlaylistRequest(Handler reply) {
