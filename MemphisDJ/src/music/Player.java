@@ -1,12 +1,11 @@
 package music;
 
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javazoom.jl.decoder.Bitstream;
-import javazoom.jl.decoder.JavaLayerException;
 import notification.AbstractEventGenerator;
 import notification.PlayerListener;
 import de.vdheide.mp3.ID3v2;
@@ -20,7 +19,7 @@ import de.vdheide.mp3.NoID3v2TagException;
 //TODO: find a way to pause playback which doesn't involve deprecated methods
 
 public class Player extends AbstractEventGenerator<PlayerListener> implements interfaces.Player {
-	
+
 	public Player() {
 		/*final Player player = this;
 		Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -72,11 +71,11 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 			state = STOPPED;
 		}
 	}
-	
+
 	public synchronized byte status() {
 		return state;
 	}
-	
+
 	public synchronized int elapsed() {
 		if (thread != null) {
 			return thread.elapsed();
@@ -85,7 +84,7 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 			return 0;
 		}
 	}
-	
+
 	public synchronized byte[] getAlbumArt() {
 		if (thread != null) {
 			System.out.println("retrieving album art for " + thread.track);
@@ -119,23 +118,23 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 
 	private volatile TrackThread thread;
 	private volatile byte state = STOPPED;
-	
+
 	public static final byte STOPPED = 2;
 	public static final byte PAUSED = 3;
 	public static final byte PLAYING = 4;
 
 	private class TrackThread extends Thread {
 
-		private javazoom.jl.player.Player player;
+		private AudioPlayer player;
 		private volatile boolean stopped = false;
 		private final Track track;
 		private final InputStream in;
 		private byte[] image;
 
 		public TrackThread(Track track) {
-			
+
 			this.track = track;
-			
+
 			InputStream stream = null;
 			try {
 				stream = track.getStream();
@@ -143,113 +142,115 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 				System.err.println("Unable to get track stream, failing");
 				e2.printStackTrace();
 			}
-			
-			in = stream;
-			
+
 			if (stream == null) {
+				in = null;
 				return;
 			}
-			
+
+			in = new BufferedInputStream(stream);
+			in.mark(-1);
+
 			try {
+
 				Thread.sleep(100); //TODO Tag reader doesn't block to read the whole tag 
-				Bitstream s = new Bitstream(in);
-				InputStream tags = s.getRawID3v2();
-				if (tags != null) {
-					try {
-						ID3v2 t = new ID3v2(tags);
-						
-						ID3v2Frame img = (ID3v2Frame)t.getFrame("APIC").firstElement();
-						byte[] bytes = img.getContent();
-						ByteArrayInputStream ba = new ByteArrayInputStream(bytes);
-						
-						int read = 0;
-						
-						ba.read(); //read the first null byte
+
+				try {
+					ID3v2 t = new ID3v2(in);
+
+					ID3v2Frame img = (ID3v2Frame)t.getFrame("APIC").firstElement();
+					byte[] bytes = img.getContent();
+					ByteArrayInputStream ba = new ByteArrayInputStream(bytes);
+
+					int read = 0;
+
+					ba.read(); //read the first null byte
+					read++;
+
+					String contentType = "";
+
+					//read content type from stream:
+					while (true) {
+						int b = ba.read();
 						read++;
-						
-						String contentType = "";
-						
-						//read content type from stream:
-						while (true) {
-							int b = ba.read();
-							read++;
-							
-							if (b == 0) break;
-							contentType += (char)b;
-						}
-						System.out.println("Album art: " + contentType);
-						
-						ba.read(); //picture type;
-						read++;
-						
-						//read description
-						while (true) {
-							int b = ba.read();
-							read++;
-							
-							if (b == 0) break;
-						}
-						
-						image = new byte[bytes.length - read];
-						ba.read(image);
-						
-					} catch (ID3v2IllegalVersionException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (ID3v2WrongCRCException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (ID3v2DecompressionException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (NegativeArraySizeException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (NoID3v2TagException e) {
-						System.out.println("no album art available");
-					} catch (ID3v2NoSuchFrameException e) {
-						System.out.println("no album art available");
+
+						if (b == 0) break;
+						contentType += (char)b;
 					}
+					System.out.println("Album art: " + contentType);
+
+					ba.read(); //picture type;
+					read++;
+
+					//read description
+					while (true) {
+						int b = ba.read();
+						read++;
+
+						if (b == 0) break;
+					}
+
+					image = new byte[bytes.length - read];
+					ba.read(image);
+
+				} catch (ID3v2IllegalVersionException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (ID3v2WrongCRCException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (ID3v2DecompressionException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (NegativeArraySizeException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (NoID3v2TagException e) {
+					System.out.println("no album art available");
+				} catch (ID3v2NoSuchFrameException e) {
+					System.out.println("no album art available");
 				}
-				
-				player = new javazoom.jl.player.Player(in);
+
+				in.reset();
+
+				player = new AudioPlayer(in);
 			}
-			catch (JavaLayerException ex) {
-				System.err.println("Funky error with JavaLayer - could not create Player");
+			catch (InterruptedException ex) {
+				//ex.printStackTrace();
+			}
+			catch (Exception ex) {
 				ex.printStackTrace();
-				player.close();
 				try {
 					in.close();
 				} catch (IOException e) {
 					//e.printStackTrace();
 				}
 				player = null;
-				
-			} catch (InterruptedException e) {
-				//e.printStackTrace();
-			}
 
+			}
 		}
-		
+
 		public int elapsed() {
 			return player.getPosition();
 		}
 
 		public void run() {
-			
+			System.out.println("running");
 			if (in == null) {
 				trackFinished();
 				return;
 			}
-			
+
 			trackStarted();
 			try {
+				System.out.println("playing");
 				player.play();
+				System.out.println("done");
 			}
-			catch (JavaLayerException ex) {
+			catch (IOException ex) {
 				System.out.println("playback stopped with an exception");
 				ex.printStackTrace();
 			}

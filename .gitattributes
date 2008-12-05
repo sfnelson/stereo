@@ -126,6 +126,7 @@ MemphisDJ/src/interfaces/collection/AbstractCollection.java -text
 MemphisDJ/src/interfaces/collection/AbstractSetCollection.java -text
 MemphisDJ/src/interfaces/collection/Collection.java -text
 MemphisDJ/src/interfaces/collection/Source.java -text
+MemphisDJ/src/music/AudioPlayer.java -text
 MemphisDJ/src/music/DJ.java -text
 MemphisDJ/src/music/Library.java -text
 MemphisDJ/src/music/LibraryTrack.java -text
@@ -150,6 +151,7 @@ MemphisDJ/test/music/LibraryTest.java -text
 MemphisDJ/test/music/PlaylistTest.java -text
 MemphisDJ/test/player/PlayerTest.java -text
 MemphisDJ/test/player/music.mp3 -text
+MemphisDJ/test/player/music.ogg -text
 StereoPair/Classes/StereoPairAppDelegate.h -text
 StereoPair/Classes/StereoPairAppDelegate.m -text
 StereoPair/Classes/StereoPairViewController.h -text

@@ -1,17 +1,23 @@
 package player;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import music.Player;
 import music.Track;
 
 public class PlayerTest {
 
-	public static void main(String args[]) {
+	public static void main(String args[]) throws Exception {
 
-		InputStream in1 = PlayerTest.class.getResourceAsStream("music.mp3");
+		InputStream in1 = new BufferedInputStream(PlayerTest.class.getResourceAsStream("music.ogg"));
 		InputStream in2 = PlayerTest.class.getResourceAsStream("music.mp3");
+		
+		//new AudioPlayer(in1).play();
+		
 		testSkip(in1, in2);
 //		try{
 //			DAAPClient client = new DAAPClient(hostname, port);
@@ -60,7 +66,7 @@ public class PlayerTest {
 		player.stop();
 	}
 	
-	public static void testSkip(InputStream in1, InputStream in2){
+	public static void testSkip(InputStream in1, InputStream in2) throws UnsupportedAudioFileException, IOException {
 		Player player = new Player();
 		player.setTrack(new FakeTrack(in1));
 		try {
