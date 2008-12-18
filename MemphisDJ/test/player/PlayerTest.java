@@ -1,6 +1,5 @@
 package player;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -13,8 +12,8 @@ public class PlayerTest {
 
 	public static void main(String args[]) throws Exception {
 
-		InputStream in1 = new BufferedInputStream(PlayerTest.class.getResourceAsStream("music.ogg"));
-		InputStream in2 = PlayerTest.class.getResourceAsStream("music.mp3");
+		InputStream in1 = PlayerTest.class.getResourceAsStream("music.mp3");
+		InputStream in2 = PlayerTest.class.getResourceAsStream("music.oggO");
 		
 		//new AudioPlayer(in1).play();
 		
