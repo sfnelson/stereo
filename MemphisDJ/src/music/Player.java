@@ -234,7 +234,10 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 		}
 
 		public int elapsed() {
-			return player.getPosition();
+			if (player != null) {
+				return player.getPosition();
+			}
+			return 0;
 		}
 
 		public void run() {
@@ -265,7 +268,9 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 
 		public void close() {
 			stopped = true;
-			player.close();
+			if (player != null) {
+				player.close();
+			}
 		}
 	}
 

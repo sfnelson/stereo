@@ -66,9 +66,9 @@ public class DACPRequestParser {
 				pathString = "/client";
 				System.out.println("rewriting as " + pathString);
 			}
-			else if (uri.contains(".") && argsString.equals("")) {
+			else if (pathString.contains(".")) {
+				argsString = "request=" + ((pathString.charAt(0)=='/')?pathString.substring(1):pathString) + ((!argsString.equals(""))?("&" + argsString):"");
 				pathString = "/client";
-				argsString = "request=" + ((uri.charAt(0)=='/')?uri.substring(1):uri);
 				System.out.println("rewriting as " + pathString + "?" + argsString);
 			}
 			
@@ -82,7 +82,7 @@ public class DACPRequestParser {
 			while (args.hasNext()) {
 				Scanner param = new Scanner(args.next());
 				param.useDelimiter("[=]");
-				argsMap.put(param.next(), param.next());
+				argsMap.put(param.next(), param.hasNext()?param.next():null);
 			}
 			
 			RequestNode node = base;
