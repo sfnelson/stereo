@@ -6,6 +6,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.sound.sampled.UnsupportedAudioFileException;
+
 import notification.AbstractEventGenerator;
 import notification.PlayerListener;
 import de.vdheide.mp3.ID3v2;
@@ -128,108 +130,103 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 		private AudioPlayer player;
 		private volatile boolean stopped = false;
 		private final Track track;
-		private final InputStream in;
+		//private final BufferedInputStream in;
 		private byte[] image;
 
-		public TrackThread(Track track) {
+		public TrackThread(final Track track) {
 
 			this.track = track;
 
-			InputStream stream = null;
+			getAlbumArt(track);
+			
 			try {
-				stream = track.getStream();
-			} catch (IOException e2) {
+				InputStream stream = track.getStream();
+				
+				if (stream == null) {
+					player = null;
+					return;
+				}
+				player = new AudioPlayer(new BufferedInputStream(stream));
+				
+			} catch (IOException e) {
 				System.err.println("Unable to get track stream, failing");
-				e2.printStackTrace();
-			}
-
-			if (stream == null) {
-				in = null;
+				e.printStackTrace();
+				player = null;
+				return;
+			} 
+			catch (UnsupportedAudioFileException e) {
+				e.printStackTrace();
+				player = null;
 				return;
 			}
-
-			in = new BufferedInputStream(stream);
-			in.mark(-1);
+		}
+		
+		private void getAlbumArt(Track track) {
+			
+			try {
+			Thread.sleep(500); //TODO Tag reader doesn't block to read the whole tag
+			}
+			catch (InterruptedException ex) {}
 
 			try {
+				InputStream in = track.getStream();
+				ID3v2 t = new ID3v2(in);
+				in.close();
 
-				Thread.sleep(100); //TODO Tag reader doesn't block to read the whole tag 
+				ID3v2Frame img = (ID3v2Frame)t.getFrame("APIC").firstElement();
+				byte[] bytes = img.getContent();
+				ByteArrayInputStream ba = new ByteArrayInputStream(bytes);
 
-				try {
-					ID3v2 t = new ID3v2(in);
+				int read = 0;
 
-					ID3v2Frame img = (ID3v2Frame)t.getFrame("APIC").firstElement();
-					byte[] bytes = img.getContent();
-					ByteArrayInputStream ba = new ByteArrayInputStream(bytes);
+				ba.read(); //read the first null byte
+				read++;
 
-					int read = 0;
+				String contentType = "";
 
-					ba.read(); //read the first null byte
+				//read content type from stream:
+				while (true) {
+					int b = ba.read();
 					read++;
 
-					String contentType = "";
+					if (b == 0) break;
+					contentType += (char)b;
+				}
+				System.out.println("Album art: " + contentType);
 
-					//read content type from stream:
-					while (true) {
-						int b = ba.read();
-						read++;
+				ba.read(); //picture type;
+				read++;
 
-						if (b == 0) break;
-						contentType += (char)b;
-					}
-					System.out.println("Album art: " + contentType);
-
-					ba.read(); //picture type;
+				//read description
+				while (true) {
+					int b = ba.read();
 					read++;
 
-					//read description
-					while (true) {
-						int b = ba.read();
-						read++;
-
-						if (b == 0) break;
-					}
-
-					image = new byte[bytes.length - read];
-					ba.read(image);
-
-				} catch (ID3v2IllegalVersionException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (ID3v2WrongCRCException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (ID3v2DecompressionException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (NegativeArraySizeException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (NoID3v2TagException e) {
-					System.out.println("no album art available");
-				} catch (ID3v2NoSuchFrameException e) {
-					System.out.println("no album art available");
+					if (b == 0) break;
 				}
 
-				in.reset();
+				image = new byte[bytes.length - read];
+				ba.read(image);
 
-				player = new AudioPlayer(in);
-			}
-			catch (InterruptedException ex) {
-				//ex.printStackTrace();
-			}
-			catch (Exception ex) {
-				ex.printStackTrace();
-				try {
-					in.close();
-				} catch (IOException e) {
-					//e.printStackTrace();
-				}
-				player = null;
-
+			} catch (ID3v2IllegalVersionException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (ID3v2WrongCRCException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (ID3v2DecompressionException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (NegativeArraySizeException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (NoID3v2TagException e) {
+				System.out.println("no album art available");
+			} catch (ID3v2NoSuchFrameException e) {
+				System.out.println("no album art available");
 			}
 		}
 
@@ -242,7 +239,7 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 
 		public void run() {
 			System.out.println("running");
-			if (in == null) {
+			if (player == null) {
 				trackFinished();
 				return;
 			}
@@ -258,11 +255,6 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 				ex.printStackTrace();
 			}
 			player.close();
-			try {
-				in.close();
-			} catch (IOException e) {
-				//e.printStackTrace();
-			}
 			if (!stopped) trackFinished();
 		}
 

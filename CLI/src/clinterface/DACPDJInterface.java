@@ -87,6 +87,8 @@ public class DACPDJInterface implements DJInterface {
 			case DACPConstants.cang:
 				t.put(DACPConstants.GENRE, ((StringNode)n).getValue());
 				break;
+			case DACPConstants.cast:
+				t.put(DACPConstants.SONG_TIME, ((IntegerNode)n).getValue());
 			}
 		}
 		
@@ -221,7 +223,7 @@ public class DACPDJInterface implements DJInterface {
 	}
 
 	public PlaybackStatus playbackStatus() {
-		return this.status;
+		return new RemotePlaybackStatus();
 	}
 	
 	private Library<CLITrack> library = new Library<CLITrack>() {
@@ -404,10 +406,16 @@ public class DACPDJInterface implements DJInterface {
 		}
 	};
 	
-	private PlaybackStatus status = new PlaybackStatus() {
+	private class RemotePlaybackStatus implements PlaybackStatus {
+		
+		private final Composite status;
+		
+		public RemotePlaybackStatus() {
+			status = request("/ctrl-int/1/playstatusupdate");
+		}
 
 		public Track current() {
-			Composite c = request("/ctrl-int/1/playstatusupdate");
+			Composite c = status;
 
 			if (c == null) return null;
 
@@ -417,13 +425,15 @@ public class DACPDJInterface implements DJInterface {
 		}
 
 		public int elapsedTime() {
-			Composite c = request("/ctrl-int/1/playstatusupdate");
+			Composite c = status;
 
 			if (c == null) return -1;
 			
+			int time = (Integer)(this.current().get(DACPConstants.SONG_TIME));
+			
 			for (Node n : c.nodes) {
 				if (n.code == DACPConstants.cant) {
-					return ((IntegerNode)n).getValue();
+					return time - ((IntegerNode)n).getValue();
 				}
 			}
 			
@@ -444,7 +454,7 @@ public class DACPDJInterface implements DJInterface {
 		}
 
 		public byte state() {
-			Composite c = request("/ctrl-int/1/playstatusupdate");
+			Composite c = status;
 
 			if (c == null) return -1;
 			
@@ -458,7 +468,7 @@ public class DACPDJInterface implements DJInterface {
 		}
 
 		public int position() {
-			Composite c = request("/ctrl-int/1/playstatusupdate");
+			Composite c = status;
 
 			if (c == null) return -1;
 			

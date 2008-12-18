@@ -1,6 +1,7 @@
 package clinterface;
 
 import interfaces.DJInterface;
+import interfaces.PlaybackStatus;
 import interfaces.collection.Collection;
 import music.Track;
 
@@ -9,6 +10,8 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
+
+import util.DACPConstants;
 
 import daap.DAAPConstants;
 
@@ -83,17 +86,21 @@ public class CLI {
 		}
 
 		public void status(){
-			switch(dj.playbackStatus().state()) {
+			PlaybackStatus status = dj.playbackStatus();
+			switch(status.state()) {
 			case 2: System.out.println("Stopped"); break;
 			case 3:
-				System.out.print(dj.playbackStatus().current());
+				System.out.print(status.current());
 				System.out.println(" (Paused)");
 				break;
 			case 4:
-				System.out.print(dj.playbackStatus().current());
-				System.out.println(" (Playing)");
+				System.out.print(status.current());
+				int elapsed = status.elapsedTime();
+				Integer time = (Integer)(status.current().get(DACPConstants.SONG_TIME));
+				if (time == null) time = 0;
+				System.out.printf(" (%d:%d of %d:%d)\n", elapsed/60000, elapsed/1000%60, time/60000, time/1000%60);
 				break;
-			default: System.out.println("Unknown status: " + dj.playbackStatus());
+			default: System.out.println("Unknown status: " + status);
 			}
 		}
 

@@ -12,8 +12,8 @@ public class PlayerTest {
 
 	public static void main(String args[]) throws Exception {
 
-		InputStream in1 = PlayerTest.class.getResourceAsStream("music.mp3");
-		InputStream in2 = PlayerTest.class.getResourceAsStream("music.oggO");
+		String in1 = "music.mp3";
+		String in2 = "music.ogg";
 		
 		//new AudioPlayer(in1).play();
 		
@@ -36,13 +36,13 @@ public class PlayerTest {
 	}
 	
 
-	public static void testCompletePlay(InputStream stream) {
+	public static void testCompletePlay(String stream) {
 		Player player = new Player();
 		player.setTrack(new FakeTrack(stream));
 	}
 	
 	
-	public static void testPlayer(InputStream stream) {
+	public static void testPlayer(String stream) {
 		Player player = new Player();
 		player.setTrack(new FakeTrack(stream));
 
@@ -65,7 +65,7 @@ public class PlayerTest {
 		player.stop();
 	}
 	
-	public static void testSkip(InputStream in1, InputStream in2) throws UnsupportedAudioFileException, IOException {
+	public static void testSkip(String in1, String in2) throws UnsupportedAudioFileException, IOException {
 		Player player = new Player();
 		player.setTrack(new FakeTrack(in1));
 		try {
@@ -87,15 +87,15 @@ public class PlayerTest {
 	
 	private static class FakeTrack extends Track {
 
-		private InputStream stream;
+		private String file;
 		
-		public FakeTrack(InputStream stream) {
+		public FakeTrack(String file) {
 			super(0, 0);
-			this.stream = stream;
+			this.file = file;
 		}
 		
 		public InputStream getStream() throws IOException {
-			return stream;
+			return PlayerTest.class.getResourceAsStream(file);
 		}
 	}
 }

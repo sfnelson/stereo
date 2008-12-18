@@ -162,6 +162,10 @@ public class AudioPlayer {
 	}
 
 	public void close() {
+		try {
+			if (stream != null) stream.close();
+		}
+		catch (IOException ex) {}
 		line.close();
 	}
 
