@@ -59,8 +59,6 @@ public class AudioPlayer {
 	private final SourceDataLine line;
 	private final AudioInputStream stream;
 
-	private volatile int read;
-
 	public AudioPlayer(InputStream inputStream) throws UnsupportedAudioFileException, IOException {
 
 		stream = convertAudioStream(inputStream);
@@ -146,7 +144,6 @@ public class AudioPlayer {
 		{
 			read = stream.read(abData, 0, abData.length);
 			if (read > 0) line.write(abData, 0, read);
-			this.read += read;
 		}
 		if (DEBUG) System.out.println("AudioPlayer.main(): finished main loop");
 
@@ -155,10 +152,7 @@ public class AudioPlayer {
 	}
 
 	public int getPosition() {
-		AudioFormat format = stream.getFormat();
-		int sampleSize = format.getSampleSizeInBits(); // bits per sample
-		float sampleRate = format.getSampleRate(); // samples per second
-		return (int)((read * 8000) / (sampleSize * sampleRate));
+		return (int)(line.getMicrosecondPosition() / 1000);
 	}
 
 	public void close() {
