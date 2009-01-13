@@ -19,6 +19,8 @@ public abstract class Track implements HasMetadata {
 	public Track(int id, long persistentId) {
 		this.id = id;
 		this.persistentId = persistentId; 
+		this.tags.put(1835624804, id);
+		this.tags.put(1836082546, persistentId);
 	}
 	
 	public int id() {
@@ -52,7 +54,7 @@ public abstract class Track implements HasMetadata {
 		return tags.get(tag);
 	}
 	
-	protected void put(int tag, Object value) {
+	public void put(int tag, Object value) {
 		tags.put(tag, value);
 	}
 
@@ -68,4 +70,7 @@ public abstract class Track implements HasMetadata {
 	 */
 	public abstract InputStream getStream() throws IOException;
 	
+	public interface TrackFactory {
+		public Track create(int id, long persistentId);
+	}
 }
