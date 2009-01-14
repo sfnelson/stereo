@@ -7,6 +7,7 @@ import java.util.Map;
 
 import music.Track;
 import music.UserCollection;
+import util.DACPConstants;
 import util.command.Command;
 import util.node.Node;
 import util.queryparser.QueryParser;
@@ -38,7 +39,7 @@ public class Edit implements Command {
 		
 		if (action.equals("add")) {
 			
-			if (params.property.equals("dmap.itemname")) {
+			if (params.property == DACPConstants.minm) {
 				int id = dj.library().nextCollectionId();
 				System.out.printf("creating new collection: %s (%d)\n", params.value, id);
 				Collection<? extends Track> c = new UserCollection(params.value, id, params.value.hashCode(), dj.library());
@@ -52,7 +53,7 @@ public class Edit implements Command {
 		else if (action.equals("remove")) {
 			int id = Integer.parseInt(params.value);
 			
-			if (params.property.equals("dmap.itemid")) {
+			if (params.property == DACPConstants.miid) {
 				for (Collection<? extends Track> c: dj.library().collections()) {
 					if (c.id() == id) {
 						System.out.printf("removing collection: %s (%d)\n", c.name(), id);
