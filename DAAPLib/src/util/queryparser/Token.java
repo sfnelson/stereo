@@ -3,18 +3,20 @@ package util.queryparser;
 import interfaces.HasMetadata;
 
 import java.math.BigInteger;
+import java.util.regex.Pattern;
 
 import daap.DAAPConstants;
 
 public class Token implements Filter {
 	
 	public final boolean falseify;
-	public final String property;
-	public final String value;
+	public final int property;
+	public final Match match;
 	
 	public Token(String t) {
 		System.out.println("token: " + t);
 		String p;
+		String value, property;
 		
 		int i = t.indexOf(':');
 		if (i > 0) {
@@ -34,42 +36,101 @@ public class Token implements Filter {
 			falseify = false;
 			property = p;
 		}
-	}
-	
-	public boolean check(HasMetadata t) {
 		
 		Integer code = DAAPConstants.nameToCodeMap.get(property);
 		
 		if (code != null) {
 			
-			Object tval = null;
-			Object pval = t.get(code);
+			this.property = code;
 			
 			int ae00 = 0x61650000;
 			if ((0xFFFF0000 & code) == ae00) {
 				//TODO we ignore apple codes because mt-daapd doesn't implement them
 				//this should change?
-				return true;
+				match = new AlwaysMatch(value);
+				return;
 			}
+			
+			Object matchValue = null;
+			
 			switch (DAAPConstants.codeToTypeMap.get(code)) {
-			case 1: tval = Byte.parseByte(value); break;
-			case 5: tval = Integer.parseInt(value); break;
+			case 1: matchValue = Byte.parseByte(value); break;
+			case 5: matchValue = Integer.parseInt(value); break;
 			//using big integer ensures unsigned longs are parsed correctly
-			case 7: tval = new BigInteger(value).longValue(); break;
-			case 9: tval = value; break; //string
+			case 7: matchValue = new BigInteger(value).longValue(); break;
+			case 9: match = new MatchString(value); return;
 			default:
 				throw new IllegalArgumentException("unknown or unimplemented type: "
 						+ DAAPConstants.codeToTypeMap.get(code)	+ " for " + property);
 			}
 			
-			return (pval != null && tval.equals(pval)) ^ falseify;
+			match = new MatchValue(matchValue);
 		}
 		else {
 			throw new IllegalArgumentException("unknown property: " + property);
 		}
+		
 	}
 	
+	public boolean check(HasMetadata t) {
+		
+		return this.match.matches(t.get(property)) ^ falseify;
+		
+	}
+
 	public String toString() {
-		return "'"+property+(falseify?"!":"")+":"+value+"'";
+		return "'"+DAAPConstants.codeToString(property)+(falseify?"!":"")+":"+match+"'";
+	}
+	
+	private interface Match {
+		public boolean matches(Object lval);
+	}
+	
+	private class MatchValue implements Match {
+		private Object value;
+		public MatchValue(Object value) {
+			this.value = value;
+		}
+		public boolean matches(Object lval) {
+			return this.value.equals(lval);
+		}
+		public String toString() {
+			return value.toString();
+		}
+	}
+	
+	private class AlwaysMatch implements Match {
+		private Object value;
+		public AlwaysMatch(Object value) {
+			this.value = value;
+		}
+		public boolean matches(Object lval) {
+			return true;
+		}
+		public String toString() {
+			return value.toString();
+		}
+	}
+	
+	private class MatchString implements Match {
+		private String value;
+		private Pattern pattern;
+		
+		public MatchString(String value) {
+			this.value = value.replace("*", ".*");
+			this.pattern = Pattern.compile(this.value, Pattern.CASE_INSENSITIVE);
+		}
+		
+		public boolean matches(Object lval) {
+			if (lval == null) return value == null;
+			if (lval instanceof String) {
+				return pattern.matcher((String)lval).matches();
+			}
+			return false;
+		}
+		
+		public String toString() {
+			return value;
+		}
 	}
 }
