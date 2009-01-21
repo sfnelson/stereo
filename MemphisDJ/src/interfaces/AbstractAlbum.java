@@ -1,19 +1,50 @@
 package interfaces;
 
-
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AbstractAlbum implements Album {
 
+	public Object get(Constants code) {
+		switch (code) {
+		case dmap_itemid:
+			return id;
+		case dmap_persistentid:
+			return persistentId;
+		case dmap_itemname:
+			return name;
+		case daap_songalbumartist:
+			return artist;
+		case dmap_itemcount:
+			return tracks;
+		default:
+			return null;
+		}
+	}
+
+	public Iterable<Constants> getAllTags() {
+		List<Constants> tags = new ArrayList<Constants>();
+		tags.add(Constants.dmap_itemid);
+		tags.add(Constants.dmap_persistentid);
+		tags.add(Constants.dmap_itemname);
+		tags.add(Constants.daap_songalbumartist);
+		tags.add(Constants.dmap_itemcount);
+		return tags;
+	}
+
 	private final int id;
 	private final long persistentId;
+	private final String name;
+	private final String artist;
 	
-	private final Map<Integer, Object> tags = new HashMap<Integer, Object>();
+	private int tracks;
 	
-	public AbstractAlbum(int id, long persistentId) {
+	public AbstractAlbum(int id, long persistentId, String name, String artist, int tracks) {
 		this.id = id;
 		this.persistentId = persistentId;
+		this.name = name;
+		this.artist = artist;
+		this.tracks = tracks;
 	}
 	
 	public int id() {
@@ -23,16 +54,20 @@ public class AbstractAlbum implements Album {
 	public long persistentId() {
 		return persistentId;
 	}
-
-	public Object get(int tag) {
-		return tags.get(tag);
+	
+	public String name() {
+		return name;
 	}
 	
-	protected void put(int tag, Object value) {
-		tags.put(tag, value);
+	public String artist() {
+		return artist;
 	}
-
-	public Iterable<Integer> getAllTags() {
-		return tags.keySet();
+	
+	public int tracks() {
+		return tracks;
+	}
+	
+	protected void setTracks(int tracks) {
+		this.tracks = tracks;
 	}
 }

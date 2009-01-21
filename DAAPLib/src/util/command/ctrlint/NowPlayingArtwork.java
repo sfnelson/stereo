@@ -5,8 +5,8 @@ import interfaces.DJInterface;
 import java.util.Map;
 
 import util.command.Command;
-import util.node.ImageNode;
-import util.node.Node;
+import util.command.Image;
+import api.Response;
 
 public class NowPlayingArtwork implements Command {
 
@@ -14,16 +14,9 @@ public class NowPlayingArtwork implements Command {
 		// TODO read maximum width and height and actually use these
 	}
 
-	public Node run(DJInterface dj) {
-		
-		byte[] image = dj.playbackStatus().getAlbumArt();
-		
-		if (image != null) {
-			return new ImageNode(image);
-		}
-		else {
-			return null;
-		}
+	public Response run(DJInterface dj) {
+
+		return new Image(dj.playbackStatus().getAlbumArt());
 	}
 
 }

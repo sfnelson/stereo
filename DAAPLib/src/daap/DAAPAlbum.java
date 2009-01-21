@@ -6,20 +6,10 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
-import util.DACPConstants;
-
 public class DAAPAlbum extends AbstractAlbum {
 
-	private DAAPAlbum(int id, long persistentId) {
-		super(id, persistentId);
-	}
-	
-	public int getItems() {
-		return (Integer)get(DACPConstants.mimc);
-	}
-	
-	public void setItems(int size) {
-		put(DACPConstants.mimc, size);
+	private DAAPAlbum(int id, long persistentId, String name, String artist) {
+		super(id, persistentId, name, artist, 0);
 	}
 	
 	private static int lastId = 0;
@@ -47,27 +37,17 @@ public class DAAPAlbum extends AbstractAlbum {
 		long per = new BigInteger(persistant).longValue();
 		
 		if (albums.containsKey(per)) {
-			return albums.get(per);
+			DAAPAlbum album = albums.get(per);
+			album.setTracks(album.tracks()+1);
+			return album;
 		}
 		else {
-			DAAPAlbum a = new DAAPAlbum(id, per);
-			a.put(DACPConstants.miid, id); //album id (local)
-			a.put(DACPConstants.asai, per); //album id (persistant)
-			a.put(DACPConstants.ALBUM, name);
-			a.put(DACPConstants.ARTIST, artist);
+			DAAPAlbum a = new DAAPAlbum(id, per, name, artist);
+			a.setTracks(1);
 
 			albums.put(per, a);
 			
 			return a;
 		}
 	}
-	
-	public static void main(String[] args) {
-		DAAPAlbum album = DAAPAlbum.createAlbum("Eyes Open", "Snow Patrol");
-		long id = (Long)album.get(DACPConstants.asai);
-		System.out.println(id);
-		System.out.println(new BigInteger("15739427192547115913").longValue());
-		
-	}
-
 }

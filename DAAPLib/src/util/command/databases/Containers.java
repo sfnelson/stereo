@@ -2,13 +2,12 @@ package util.command.databases;
 
 import interfaces.DJInterface;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import util.command.Command;
 import util.command.PathNode;
-import util.node.Node;
-import dacp.DACPTreeBuilder;
+import util.response.databases.Playlists;
+import api.Response;
 
 public class Containers extends PathNode implements Command {
 
@@ -16,15 +15,11 @@ public class Containers extends PathNode implements Command {
 		//no args used
 	}
 
-	public Node run(DJInterface dj) {
+	public Response run(DJInterface dj) {
 		//TODO only reply with the parameters requested in the args
 		
-		try {
-			return DACPTreeBuilder.buildPlaylistsResponse(dj.library().collections(), dj.library().numCollections());
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-			return null;
-		}
+		return new Playlists(dj.library().collections());
+		
 	}
 	
 	public Command items(int container) {

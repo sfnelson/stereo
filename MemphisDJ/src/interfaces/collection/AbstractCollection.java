@@ -1,6 +1,8 @@
 package interfaces.collection;
 
 
+import interfaces.Constants;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,7 +11,7 @@ import notification.AbstractEventGenerator;
 
 public abstract class AbstractCollection<T extends Track> extends AbstractEventGenerator<Source.Listener> implements Collection<T> {
 
-	private Map<Integer, Object> tags = new HashMap<Integer, Object>();
+	private Map<Constants, Object> tags = new HashMap<Constants, Object>();
 	private final int id;
 	private final long persistentId;
 	
@@ -18,15 +20,15 @@ public abstract class AbstractCollection<T extends Track> extends AbstractEventG
 		this.persistentId = persistentId;
 	}
 	
-	protected void put(int tag, Object value) {
+	protected void put(Constants tag, Object value) {
 		tags.put(tag, value);
 	}
 	
-	public Object get(int tag) {
+	public Object get(Constants tag) {
 		return tags.get(tag);
 	}
 
-	public Iterable<Integer> getAllTags() {
+	public Iterable<Constants> getAllTags() {
 		return tags.keySet();
 	}
 	

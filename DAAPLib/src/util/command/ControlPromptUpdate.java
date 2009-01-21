@@ -4,9 +4,7 @@ import interfaces.DJInterface;
 
 import java.util.Map;
 
-import dacp.DACPTreeBuilder;
-
-import util.node.Node;
+import api.Response;
 
 public class ControlPromptUpdate implements Command {
 
@@ -19,10 +17,8 @@ public class ControlPromptUpdate implements Command {
 		}
 	}
 
-	public Node run(DJInterface dj) {
-		return DACPTreeBuilder.buildControlPromptUpdate(promptId);
+	public Response run(DJInterface dj) {
+		return new util.response.ControlPromptUpdate(promptId);
 	}
 	
-	
-
 }

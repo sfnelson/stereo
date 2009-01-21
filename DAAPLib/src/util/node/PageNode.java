@@ -2,13 +2,15 @@ package util.node;
 
 import java.io.UnsupportedEncodingException;
 
-public class PageNode extends Node {
+import api.Response;
+
+public class PageNode extends Response {
 
 	private final String contentType;
 	private final byte[] text;
 	
 	public PageNode(String contentType, String text) throws UnsupportedEncodingException {
-		super(0);
+		super(null, Response.OK);
 		this.contentType = contentType;
 		this.text = text.getBytes("UTF-8");
 	}
@@ -23,11 +25,6 @@ public class PageNode extends Node {
 	
 	public byte[] text() {
 		return text;
-	}
-
-	@Override
-	public int visit(Visitor visitor) {
-		return visitor.visitPageNode(this);
 	}
 
 }

@@ -5,8 +5,7 @@ import interfaces.DJInterface;
 import java.util.Map;
 
 import notification.LibraryListener;
-import util.node.Node;
-import dacp.DACPTreeBuilder;
+import api.Response;
 
 public class Update implements Command, LibraryListener {
 
@@ -28,7 +27,7 @@ public class Update implements Command, LibraryListener {
 		}
 	}
 
-	public Node run(DJInterface dj) {
+	public Response run(DJInterface dj) {
 
 		if (this.revision >= dj.library().version()) {
 
@@ -46,7 +45,7 @@ public class Update implements Command, LibraryListener {
 		}
 
 		//TODO use version to check whether update is needed
-		return DACPTreeBuilder.buildUpdateResponse(dj.library().version());
+		return new util.response.Update(dj.library().version());
 	}
 
 	public void libraryVersionChanged(int version) {

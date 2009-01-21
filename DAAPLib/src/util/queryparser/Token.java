@@ -1,22 +1,23 @@
 package util.queryparser;
 
+import interfaces.Constants;
 import interfaces.HasMetadata;
 
 import java.math.BigInteger;
 import java.util.regex.Pattern;
 
-import daap.DAAPConstants;
 
 public class Token implements Filter {
 	
 	public final boolean falseify;
-	public final int property;
+	public final String name;
+	public final Constants property;
+	public final String value;
 	public final Match match;
 	
 	public Token(String t) {
 		System.out.println("token: " + t);
 		String p;
-		String value, property;
 		
 		int i = t.indexOf(':');
 		if (i > 0) {
@@ -30,21 +31,21 @@ public class Token implements Filter {
 		
 		if (p.charAt(p.length()-1) == '!') {
 			falseify = true;
-			property = p.substring(0, p.length()-1);
+			name = p.substring(0, p.length()-1);
 		}
 		else {
 			falseify = false;
-			property = p;
+			name = p;
 		}
 		
-		Integer code = DAAPConstants.nameToCodeMap.get(property);
+		Constants code = Constants.get(name);
 		
 		if (code != null) {
 			
 			this.property = code;
 			
 			int ae00 = 0x61650000;
-			if ((0xFFFF0000 & code) == ae00) {
+			if ((0xFFFF0000 & code.code) == ae00) {
 				//TODO we ignore apple codes because mt-daapd doesn't implement them
 				//this should change?
 				match = new AlwaysMatch(value);
@@ -53,7 +54,7 @@ public class Token implements Filter {
 			
 			Object matchValue = null;
 			
-			switch (DAAPConstants.codeToTypeMap.get(code)) {
+			switch (code.type) {
 			case 1: matchValue = Byte.parseByte(value); break;
 			case 5: matchValue = Integer.parseInt(value); break;
 			//using big integer ensures unsigned longs are parsed correctly
@@ -61,25 +62,25 @@ public class Token implements Filter {
 			case 9: match = new MatchString(value); return;
 			default:
 				throw new IllegalArgumentException("unknown or unimplemented type: "
-						+ DAAPConstants.codeToTypeMap.get(code)	+ " for " + property);
+						+ code.longName	+ " for " + property);
 			}
 			
 			match = new MatchValue(matchValue);
 		}
 		else {
-			throw new IllegalArgumentException("unknown property: " + property);
+			throw new RuntimeException("unknown property encountered: " + name);
 		}
-		
 	}
 	
 	public boolean check(HasMetadata t) {
 		
+		if (property == null) throw new RuntimeException("unknown property: " + name);
 		return this.match.matches(t.get(property)) ^ falseify;
 		
 	}
 
 	public String toString() {
-		return "'"+DAAPConstants.codeToString(property)+(falseify?"!":"")+":"+match+"'";
+		return "'"+property.longName+(falseify?"!":"")+":"+match+"'";
 	}
 	
 	private interface Match {

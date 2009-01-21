@@ -1,5 +1,6 @@
 package util.command.databases;
 
+import interfaces.Constants;
 import interfaces.DJInterface;
 import interfaces.collection.Collection;
 
@@ -7,12 +8,10 @@ import java.util.Map;
 
 import music.Track;
 import music.UserCollection;
-import util.DACPConstants;
 import util.command.Command;
-import util.node.Node;
 import util.queryparser.QueryParser;
 import util.queryparser.Token;
-import dacp.DACPTreeBuilder;
+import api.Response;
 
 /* TODO support playlists:
  * add a playlist
@@ -32,19 +31,20 @@ public class Edit implements Command {
 		this.args = args;
 	}
 
-	public Node run(DJInterface dj) {
+	public Response run(DJInterface dj) {
 		
 		String action = args.get("action");
 		Token params = (Token)QueryParser.parse(args.get("edit-params"));
 		
 		if (action.equals("add")) {
 			
-			if (params.property == DACPConstants.minm) {
+			if (params.property == Constants.dmap_itemname) {
 				int id = dj.library().nextCollectionId();
 				System.out.printf("creating new collection: %s (%d)\n", params.value, id);
 				Collection<? extends Track> c = new UserCollection(params.value, id, params.value.hashCode(), dj.library());
 				dj.library().addCollection(c);
-				return DACPTreeBuilder.buildNewPlaylistResponse(id);
+				
+				return new util.response.databases.NewPlaylist(id);
 			}
 			else {
 				throw new RuntimeException("unknown property: " + params.property);
@@ -53,22 +53,28 @@ public class Edit implements Command {
 		else if (action.equals("remove")) {
 			int id = Integer.parseInt(params.value);
 			
-			if (params.property == DACPConstants.miid) {
+			if (params.property == Constants.dmap_itemid) {
 				for (Collection<? extends Track> c: dj.library().collections()) {
 					if (c.id() == id) {
 						System.out.printf("removing collection: %s (%d)\n", c.name(), id);
 						dj.library().removeCollection(c);
 					}
 				}
+			}
+			else if (params.property == Constants.dmap_containeritemid) {
 				
-				return null;
 			}
 			else {
 				throw new RuntimeException("unknown property: " + params.property);
 			}
 		}
+		else if (action.equals("move")) {
+			if (params.name.equals("edit-param.move-pair")) {
+				//String pair = params.value;
+			}
+		}
 		
-		return null;
+		return new Response(null, Response.NO_CONTENT);
 	}
 
 }

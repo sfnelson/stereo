@@ -1,18 +1,15 @@
 package util.command;
 
+import interfaces.Constants;
 import interfaces.DJInterface;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
-import dacp.DACPTreeBuilder;
-
-import util.DACPConstants;
 import util.command.databases.Browse;
 import util.command.databases.Containers;
 import util.command.databases.Edit;
 import util.command.databases.Groups;
-import util.node.Node;
+import api.Response;
 
 public class Databases extends PathNode implements Command {
 
@@ -20,15 +17,15 @@ public class Databases extends PathNode implements Command {
 		// no parameters expected
 	}
 
-	public Node run(DJInterface dj) {
+	public Response run(DJInterface dj) {
 		int items = dj.library().size();
 		int containers = dj.library().numCollections();
-		try {
-			return DACPTreeBuilder.buildDatabaseResponse(items, containers);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-			return null;
-		}
+		
+		util.response.Databases databases =
+			new util.response.Databases(1, 0xf35226b7c8ee14d3l,
+					"Memphis Stereo", items, containers);
+		
+		return databases;
 	}
 	
 	public Command browse(int db) {
@@ -48,15 +45,15 @@ public class Databases extends PathNode implements Command {
 	}
 	
 	public Command artists() {
-		return new Browse(DACPConstants.abar, DACPConstants.ARTIST);
+		return new Browse(Constants.daap_browseartistlisting, Constants.daap_songartist);
 	}
 	
 	public Command albums() {
-		return new Browse(DACPConstants.abal, DACPConstants.ALBUM);
+		return new Browse(Constants.daap_browsealbumlisting, Constants.daap_songalbum);
 	}
 	
 	public Command genres() {
-		return new Browse(DACPConstants.abgn, DACPConstants.GENRE);
+		return new Browse(Constants.daap_browsegenrelisting, Constants.daap_songgenre);
 	}
 
 }

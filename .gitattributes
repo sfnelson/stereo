@@ -6,12 +6,56 @@ Asunder/.settings/org.eclipse.wst.jsdt.ui.superType.container -text
 Asunder/.settings/org.eclipse.wst.jsdt.ui.superType.name -text
 Asunder/.settings/org.eclipse.wst.validation.prefs -text
 Asunder/build.xml -text
+Asunder/stereo/README -text
+Asunder/stereo/clients/stereo/controllers/collection.js -text
+Asunder/stereo/clients/stereo/core.js -text
+Asunder/stereo/clients/stereo/english.lproj/body.css -text
+Asunder/stereo/clients/stereo/english.lproj/body.rhtml -text
+Asunder/stereo/clients/stereo/english.lproj/strings.js -text
+Asunder/stereo/clients/stereo/fixtures/album.js -text
+Asunder/stereo/clients/stereo/fixtures/collection.js -text
+Asunder/stereo/clients/stereo/fixtures/track.js -text
+Asunder/stereo/clients/stereo/main.js -text
+Asunder/stereo/clients/stereo/models/album.js -text
+Asunder/stereo/clients/stereo/models/collection.js -text
+Asunder/stereo/clients/stereo/models/track.js -text
+Asunder/stereo/clients/stereo/tests/controllers/collection.rhtml -text
+Asunder/stereo/clients/stereo/tests/models/album.rhtml -text
+Asunder/stereo/clients/stereo/tests/models/collection.rhtml -text
+Asunder/stereo/clients/stereo/tests/models/track.rhtml -text
+Asunder/stereo/sc-config -text
 Asunder/webserver/FileLoader.java -text
 Asunder/webserver/ajax.js -text
 Asunder/webserver/bignum.js -text
 Asunder/webserver/dacp.js -text
 Asunder/webserver/favicon.ico -text
 Asunder/webserver/index.xhtml -text
+Asunder/webserver/static/prototype/en/javascript.js -text
+Asunder/webserver/static/sproutcore/en/blank.gif -text
+Asunder/webserver/static/sproutcore/en/detect-browser -text
+Asunder/webserver/static/sproutcore/en/images/indicator.gif -text
+Asunder/webserver/static/sproutcore/en/images/sc-theme-sprite.png -text
+Asunder/webserver/static/sproutcore/en/images/sc-theme-ysprite.png -text
+Asunder/webserver/static/sproutcore/en/images/shared-icons.png -text
+Asunder/webserver/static/sproutcore/en/images/sproutcore-logo.png -text
+Asunder/webserver/static/sproutcore/en/images/sticky-note.png -text
+Asunder/webserver/static/sproutcore/en/javascript.js -text
+Asunder/webserver/static/sproutcore/en/panels/background-fat.jpg -text
+Asunder/webserver/static/sproutcore/en/panels/background-thin.jpg -text
+Asunder/webserver/static/sproutcore/en/panels/bottom-edge.png -text
+Asunder/webserver/static/sproutcore/en/panels/bottom-left-corner.png -text
+Asunder/webserver/static/sproutcore/en/panels/bottom-right-corner.png -text
+Asunder/webserver/static/sproutcore/en/panels/left-edge.png -text
+Asunder/webserver/static/sproutcore/en/panels/overlay.png -text
+Asunder/webserver/static/sproutcore/en/panels/right-edge.png -text
+Asunder/webserver/static/sproutcore/en/panels/top-edge.png -text
+Asunder/webserver/static/sproutcore/en/panels/top-left-corner.png -text
+Asunder/webserver/static/sproutcore/en/panels/top-right-corner.png -text
+Asunder/webserver/static/sproutcore/en/stylesheet.css -text
+Asunder/webserver/static/stereo/en/index.html -text svneol=unset#text/plain
+Asunder/webserver/static/stereo/en/javascript.js -text
+Asunder/webserver/static/stereo/en/stylesheet.css -text
+Asunder/webserver/static/stereo/index.html -text svneol=unset#text/plain
 Asunder/webserver/style.css -text
 Asunder/webserver/svgloader.js -text
 CLI/.classpath -text
@@ -30,20 +74,26 @@ DAAPLib/build.xml -text
 DAAPLib/etc/memphis-stereo.plist -text
 DAAPLib/etc/str2bin.pl -text
 DAAPLib/ivy.xml -text
+DAAPLib/src/api/Node.java -text svneol=unset#text/plain
+DAAPLib/src/api/Reader.java -text svneol=unset#text/plain
+DAAPLib/src/api/Response.java -text svneol=unset#text/plain
+DAAPLib/src/api/Writer.java -text svneol=unset#text/plain
+DAAPLib/src/api/nodes/AlbumNode.java -text svneol=unset#text/plain
+DAAPLib/src/api/nodes/PlaylistNode.java -text svneol=unset#text/plain
+DAAPLib/src/api/nodes/TrackNode.java -text svneol=unset#text/plain
 DAAPLib/src/daap/DAAPAlbum.java -text
 DAAPLib/src/daap/DAAPClient.java -text
-DAAPLib/src/daap/DAAPConstants.java -text
 DAAPLib/src/daap/DAAPEntry.java -text
 DAAPLib/src/daap/DAAPLackey.java -text
 DAAPLib/src/daap/DAAPTrack.java -text
 DAAPLib/src/daap/DAAPUtilities.java -text
 DAAPLib/src/daap/content-codes.txt -text
+DAAPLib/src/dacp/DACPReader.java -text svneol=unset#text/plain
 DAAPLib/src/dacp/DACPServer.java -text
-DAAPLib/src/dacp/DACPTreeBuilder.java -text
+DAAPLib/src/dacp/DACPWriter.java -text svneol=unset#text/plain
 DAAPLib/src/dacp/Main.java -text
 DAAPLib/src/reader/DACPRequestParser.java -text
 DAAPLib/src/reader/DACPResponseParser.java -text
-DAAPLib/src/util/DACPConstants.java -text
 DAAPLib/src/util/DACPPacket.java -text
 DAAPLib/src/util/DACPStatusPacket.java -text
 DAAPLib/src/util/command/Command.java -text
@@ -51,6 +101,7 @@ DAAPLib/src/util/command/ControlPromptUpdate.java -text
 DAAPLib/src/util/command/CtrlInt.java -text
 DAAPLib/src/util/command/Databases.java -text
 DAAPLib/src/util/command/HTMLClient.java -text
+DAAPLib/src/util/command/Image.java -text svneol=unset#text/plain
 DAAPLib/src/util/command/Login.java -text
 DAAPLib/src/util/command/Logout.java -text
 DAAPLib/src/util/command/PathNode.java -text
@@ -59,6 +110,7 @@ DAAPLib/src/util/command/ServerInfo.java -text
 DAAPLib/src/util/command/Update.java -text
 DAAPLib/src/util/command/ctrlint/Cue.java -text
 DAAPLib/src/util/command/ctrlint/GetProperty.java -text
+DAAPLib/src/util/command/ctrlint/GetSpeakers.java -text svneol=unset#text/plain
 DAAPLib/src/util/command/ctrlint/NextItem.java -text
 DAAPLib/src/util/command/ctrlint/NowPlayingArtwork.java -text
 DAAPLib/src/util/command/ctrlint/Pause.java -text
@@ -95,12 +147,40 @@ DAAPLib/src/util/queryparser/Filter.java -text
 DAAPLib/src/util/queryparser/Or.java -text
 DAAPLib/src/util/queryparser/QueryParser.java -text
 DAAPLib/src/util/queryparser/Token.java -text
+DAAPLib/src/util/response/ControlPromptUpdate.java -text svneol=unset#text/plain
+DAAPLib/src/util/response/CtrlInt.java -text svneol=unset#text/plain
+DAAPLib/src/util/response/Databases.java -text svneol=unset#text/plain
+DAAPLib/src/util/response/Login.java -text svneol=unset#text/plain
+DAAPLib/src/util/response/PlaylistSongs.java -text svneol=unset#text/plain
+DAAPLib/src/util/response/ServerInfo.java -text svneol=unset#text/plain
+DAAPLib/src/util/response/Update.java -text svneol=unset#text/plain
+DAAPLib/src/util/response/ctrlint/GetProperty.java -text svneol=unset#text/plain
+DAAPLib/src/util/response/ctrlint/GetSpeakers.java -text svneol=unset#text/plain
+DAAPLib/src/util/response/ctrlint/PlayStatusUpdate.java -text svneol=unset#text/plain
+DAAPLib/src/util/response/databases/Browse.java -text svneol=unset#text/plain
+DAAPLib/src/util/response/databases/Groups.java -text svneol=unset#text/plain
+DAAPLib/src/util/response/databases/NewPlaylist.java -text svneol=unset#text/plain
+DAAPLib/src/util/response/databases/Playlists.java -text svneol=unset#text/plain
 DAAPLib/src/writer/DACPRequestGenerator.java -text
 DAAPLib/src/writer/DACPResponseGenerator.java -text
 DAAPLib/test/client/ClientBroadcasterTest.java -text
-DAAPLib/test/client/ClientParserTest.java -text
 DAAPLib/test/server/ServerParserTest.java -text
-DAAPLib/test/util/serializer/WriteVisitorTest.java -text
+DAAPLib/test/test/Album.java -text svneol=unset#text/plain
+DAAPLib/test/test/DACPResponseParser.java -text svneol=unset#text/plain
+DAAPLib/test/test/Playlist.java -text svneol=unset#text/plain
+DAAPLib/test/test/StreamPrinter.java -text svneol=unset#text/plain
+DAAPLib/test/test/Track.java -text svneol=unset#text/plain
+DAAPLib/test/util/response/ControlPromptUpdateTest.java -text svneol=unset#text/plain
+DAAPLib/test/util/response/CtrlIntTest.java -text svneol=unset#text/plain
+DAAPLib/test/util/response/DatabasePlaylistsTest.java -text svneol=unset#text/plain
+DAAPLib/test/util/response/DatabasesTest.java -text svneol=unset#text/plain
+DAAPLib/test/util/response/LoginTest.java -text svneol=unset#text/plain
+DAAPLib/test/util/response/PlaylistSongsTest.java -text svneol=unset#text/plain
+DAAPLib/test/util/response/ServerInfoTest.java -text svneol=unset#text/plain
+DAAPLib/test/util/response/UpdateTest.java -text svneol=unset#text/plain
+DAAPLib/test/util/response/ctrlint/GetPropertyTest.java -text svneol=unset#text/plain
+DAAPLib/test/util/response/databases/BrowseTest.java -text svneol=unset#text/plain
+DAAPLib/test/util/response/databases/NewPlaylistTest.java -text svneol=unset#text/plain
 MemphisDJ/.classpath -text
 MemphisDJ/.project -text
 MemphisDJ/Sample/sample/CompositeEntry.java -text
@@ -114,6 +194,7 @@ MemphisDJ/build.xml -text
 MemphisDJ/ivy.xml -text
 MemphisDJ/src/interfaces/AbstractAlbum.java -text
 MemphisDJ/src/interfaces/Album.java -text
+MemphisDJ/src/interfaces/Constants.java -text
 MemphisDJ/src/interfaces/DJInterface.java -text
 MemphisDJ/src/interfaces/HasMetadata.java -text
 MemphisDJ/src/interfaces/Library.java -text
@@ -125,6 +206,7 @@ MemphisDJ/src/interfaces/VolumeControl.java -text
 MemphisDJ/src/interfaces/collection/AbstractCollection.java -text
 MemphisDJ/src/interfaces/collection/AbstractSetCollection.java -text
 MemphisDJ/src/interfaces/collection/Collection.java -text
+MemphisDJ/src/interfaces/collection/EditableCollection.java -text svneol=unset#text/plain
 MemphisDJ/src/interfaces/collection/Source.java -text
 MemphisDJ/src/music/AudioPlayer.java -text
 MemphisDJ/src/music/DJ.java -text

@@ -4,8 +4,7 @@ import interfaces.DJInterface;
 
 import java.util.Map;
 
-import util.node.Node;
-import dacp.DACPTreeBuilder;
+import api.Response;
 
 public class ServerInfo implements Command {
 
@@ -13,12 +12,10 @@ public class ServerInfo implements Command {
 		//no arguments
 	}
 
-	public Node run(DJInterface dj) {
-		System.out.println("Request for server info");
-
-		Node response = DACPTreeBuilder.buildServerInfoNode();
-
-		return response;
+	public Response run(DJInterface dj) {
+		
+		return new util.response.ServerInfo(dj.name(), 1);
+		
 	}
 
 }

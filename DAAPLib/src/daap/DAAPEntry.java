@@ -1,5 +1,7 @@
 package daap;
 
+import interfaces.Constants;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -37,23 +39,23 @@ public class DAAPEntry {
 		return entry;
 	}
 	
-	private final int code;
+	private final Constants code;
 	private final int length;
 	private final Object value;
 	private final List<DAAPEntry> children = new ArrayList<DAAPEntry>();
 	
 	public DAAPEntry(int code, int length, byte[] bytes, int pos) throws IOException {
 		
-		this.code = code;
+		this.code = Constants.get(code);
 		this.length = length;
 		
-		Integer type = DAAPConstants.codeToTypeMap.get(code);
-		
-		if (type == null) {
-			throw new IOException("parser: unknown entry '" + DAAPConstants.codeToString(code) + " " + code + "' (" + length + ")");
+		if (this.code == null) {
+			throw new IOException("parser: unknown entry '" + code + "' (" + length + ")");
 		}
+		
+		int type = this.code.type;
 
-		switch (type.shortValue()) {
+		switch (type) {
 		case LONG:
 			this.value = readLong(bytes, pos);
 			break;
@@ -93,7 +95,7 @@ public class DAAPEntry {
 			this.value = readString(bytes, pos, length);
 			break;
 		default:
-			System.err.println("Unknown type: " + type + " of length " + length + " for " + DAAPConstants.codeToString(code));
+			System.err.println("Unknown type: " + type + " of length " + length + " for " + this.code.longName);
 			this.value = readString(bytes, pos, length);
 			break;
 		}
@@ -112,7 +114,7 @@ public class DAAPEntry {
 		return buffer;
 	}
 	
-	public int code() {
+	public Constants code() {
 		return code;
 	}
 	
@@ -129,7 +131,7 @@ public class DAAPEntry {
 	}
 	
 	public String toString() {
-		String out = DAAPConstants.codeToString(code) + " " + length + " " + value + "\n";
+		String out = code.shortName + " " + length + " " + value + "\n";
 		for (DAAPEntry e: children()) {
 			Scanner sc = new Scanner(e.toString());
 			while (sc.hasNextLine()) {

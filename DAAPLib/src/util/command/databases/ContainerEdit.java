@@ -9,10 +9,10 @@ import java.util.Map;
 import music.Track;
 import music.UserCollection;
 import util.command.Command;
-import util.node.Node;
 import util.queryparser.ApplyFilter;
 import util.queryparser.Filter;
 import util.queryparser.QueryParser;
+import api.Response;
 
 //  /databases/1/containers/[id]/edit?action=add&edit-params='dmap.itemid:[id]' -> need to decode response
 
@@ -30,7 +30,7 @@ public class ContainerEdit implements Command {
 		this.args = args;
 	}
 
-	public Node run(DJInterface dj) {
+	public Response run(DJInterface dj) {
 
 		UserCollection collection = null;
 		for (Collection<? extends Track> c: dj.library().collections()) {
@@ -58,12 +58,12 @@ public class ContainerEdit implements Command {
 			System.out.println("found " + filtered.size() + " to add");
 
 			collection.add(filtered);
-
-			return null;
 		}
 		else {
 			throw new RuntimeException("unknown action: " + action);
 		}
+		
+		return new Response(null, Response.NO_CONTENT);
 	}
 
 }

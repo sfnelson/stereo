@@ -4,17 +4,20 @@ import interfaces.DJInterface;
 
 import java.util.Map;
 
-import util.node.Node;
-import dacp.DACPTreeBuilder;
+import api.Response;
 
 public class Login implements Command {
+	
+	private static int session = 0;
 
 	public void init(Map<String, String> args) {
 		System.out.println("logged in with argument: " + args);
 	}
 
-	public Node run(DJInterface dj) {
+	public Response run(DJInterface dj) {
 		
-		return DACPTreeBuilder.buildLoginNode();
+		int session = ++Login.session;
+		return new util.response.Login(session);
+		
 	}
 }

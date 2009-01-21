@@ -1,6 +1,7 @@
 package music;
 
 import interfaces.Album;
+import interfaces.Constants;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,15 +26,15 @@ public class LibraryTrack extends Track {
 		return current.id();
 	}
 
-	public Object get(int tag) {
+	public Object get(Constants tag) {
 		Track current = current();
 		if (current == null) return null;
 		return current.get(tag);
 	}
 
-	public Iterable<Integer> getAllTags() {
+	public Iterable<Constants> getAllTags() {
 		Track current = current();
-		if (current == null) return new ArrayList<Integer>(0);
+		if (current == null) return new ArrayList<Constants>(0);
 		return current.getAllTags();
 	}
 	

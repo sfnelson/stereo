@@ -3,18 +3,16 @@ package util.command.databases;
 import interfaces.DJInterface;
 import interfaces.collection.Collection;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import music.Track;
 import util.command.Command;
-import util.node.Node;
 import util.queryparser.ApplyFilter;
 import util.queryparser.Filter;
 import util.queryparser.QueryParser;
-import dacp.DACPTreeBuilder;
+import api.Response;
 
 public class Items implements Command {
 
@@ -29,7 +27,7 @@ public class Items implements Command {
 		this.args = args;
 	}
 
-	public Node run(DJInterface dj) {
+	public Response run(DJInterface dj) {
 
 		Collection<? extends Track> playlist = null;
 		
@@ -42,7 +40,6 @@ public class Items implements Command {
 		
 		if (playlist == null) {
 			System.err.println("requested playlist not found!");
-			return null;
 		}
 		
 		System.out.println("playlist has " + playlist.size() + " elements");
@@ -74,12 +71,7 @@ public class Items implements Command {
 		
 		System.out.println("returning " + playlist.size() + " elements");
 		
-		try {
-			return DACPTreeBuilder.buildPlaylistResponse(pl);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-			return null;
-		}
+		return new util.response.PlaylistSongs(pl);
 	}
 	
 }

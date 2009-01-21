@@ -6,7 +6,7 @@ import org.junit.Test;
 
 public class DJTest {
 	
-	DJ a = new DJ();
+	DJ a = new DJ("Test DJ");
 	
 	@Test
 	public void testFillPlaylist() {

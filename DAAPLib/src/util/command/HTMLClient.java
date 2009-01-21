@@ -8,9 +8,9 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-import util.node.Node;
 import util.node.PageNode;
 import webserver.FileLoader;
+import api.Response;
 
 public class HTMLClient implements Command {
 
@@ -23,7 +23,7 @@ public class HTMLClient implements Command {
 		}
 	}
 
-	public Node run(DJInterface dj) {
+	public Response run(DJInterface dj) {
 		
 		Scanner sc = new Scanner(request);
 		sc.useDelimiter(Pattern.compile("[.]"));

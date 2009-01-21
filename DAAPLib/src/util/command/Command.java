@@ -1,13 +1,14 @@
 package util.command;
 
+import interfaces.DJInterface;
+
 import java.util.Map;
 
-import interfaces.DJInterface;
-import util.node.Node;
+import api.Response;
 
 public interface Command extends RequestNode {
 
 	public void init(Map<String, String> args);
-	public Node run(DJInterface dj);
+	public Response run(DJInterface dj);
 	
 }

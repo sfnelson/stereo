@@ -12,6 +12,9 @@ import java.util.Set;
 
 public class DJ implements DJInterface, PlaybackStatus {
 
+	private final String name;
+	private final int id;
+	
 	private final Library library;
 	private final interfaces.Player player;
 	private final interfaces.PlaybackQueue queue;
@@ -20,7 +23,11 @@ public class DJ implements DJInterface, PlaybackStatus {
 	
 	private final Set<Collection<? extends Track>> collections;
 
-	public DJ() {
+	public DJ(String name) {
+		
+		this.name = name;
+		this.id = 1;
+		
 		collections = new HashSet<Collection<? extends Track>>();
 		
 		library = new Library("All Songs");
@@ -30,6 +37,14 @@ public class DJ implements DJInterface, PlaybackStatus {
 		player = new Player();
 		control = new PlaybackController(player, queue);
 		volume = new music.VolumeControl();
+	}
+	
+	public int id() {
+		return id;
+	}
+	
+	public String name() {
+		return name;
 	}
 
 	public Track current() {

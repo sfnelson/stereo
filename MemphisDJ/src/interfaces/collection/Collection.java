@@ -21,7 +21,7 @@ public interface Collection<T extends Track>
 	
 	public String name();
 	public boolean isRoot();
-	public Collection<T> parent();
+	public Collection<? extends T> parent();
 	public int size();
 	public int editStatus();
 	

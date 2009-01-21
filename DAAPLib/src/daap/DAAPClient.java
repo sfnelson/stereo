@@ -33,8 +33,8 @@ public class DAAPClient extends AbstractSetCollection<DAAPTrack> {
 			
 			for (DAAPEntry a: e.children()) {
 				switch (a.code()) {
-				case DAAPConstants.miid: dbid = (Integer)a.value(); break;
-				case DAAPConstants.minm: dbname = (String)a.value(); break;
+				case dmap_itemid: dbid = (Integer)a.value(); break;
+				case dmap_itemname: dbname = (String)a.value(); break;
 				}
 			}
 			

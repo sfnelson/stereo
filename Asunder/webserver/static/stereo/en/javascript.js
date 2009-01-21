@@ -1,0 +1,2 @@
+
+Object.extend(String.English,{});Stereo=SC.Object.create({server:SC.Server.create({prefix:['Stereo']}),FIXTURES:[]});function main(){Stereo.server.preload(Stereo.FIXTURES);SC.page.awake();};require('core');Stereo.collectionController=SC.Object.create({contentBinding:'Stereo.masterController.selection'});require('core');Stereo.Album=SC.Record.extend({});require('core');Stereo.Track=SC.Record.extend({});require('core');Stereo.Collection=SC.Record.extend({trackCount:function(){return this.get('tracks').get('length');}.property('tracks')});

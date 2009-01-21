@@ -7,10 +7,10 @@ import java.util.Map;
 
 import music.Track;
 import util.command.Command;
-import util.node.Node;
 import util.queryparser.ApplyFilter;
 import util.queryparser.Filter;
 import util.queryparser.QueryParser;
+import api.Response;
 
 public class Cue implements Command {
 
@@ -20,11 +20,9 @@ public class Cue implements Command {
 		this.args = args;
 	}
 
-	public Node run(DJInterface dj) {
+	public Response run(DJInterface dj) {
 		
-		if (args == null) {
-			return null;
-		}
+		if (args == null) return new Response(null, Response.NO_CONTENT);
 		
 		if (args.containsKey("query")) {
 			
@@ -61,8 +59,8 @@ public class Cue implements Command {
 				throw new IllegalArgumentException("unexpected command: " + cmd);
 			}
 		}
-
-		return null;
+		
+		return new Response(null, Response.NO_CONTENT);
 	}
 	
 }

@@ -8,9 +8,9 @@ import java.util.Map;
 
 import music.Track;
 import util.command.Command;
-import util.node.Node;
 import util.queryparser.QueryParser;
 import util.queryparser.Token;
+import api.Response;
 
 public class PlaySpec implements Command {
 
@@ -20,7 +20,7 @@ public class PlaySpec implements Command {
 		playlist = args.get("playlist-spec");
 	}
 
-	public Node run(DJInterface dj) {
+	public Response run(DJInterface dj) {
 		
 		Token t = (Token)QueryParser.parse(playlist);
 
@@ -30,11 +30,10 @@ public class PlaySpec implements Command {
 			if (c.persistentId() == playlist) {
 				System.out.println("playlist set: " + c.name());
 				dj.playbackControl().setCollection(c);
-				return null;
 			}
 		}
 		
-		return null;
+		return new Response(null, Response.NO_CONTENT);
 		
 	}
 

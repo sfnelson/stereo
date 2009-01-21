@@ -2,11 +2,11 @@ package util.command;
 
 import interfaces.DJInterface;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import util.command.ctrlint.Cue;
 import util.command.ctrlint.GetProperty;
+import util.command.ctrlint.GetSpeakers;
 import util.command.ctrlint.NextItem;
 import util.command.ctrlint.NowPlayingArtwork;
 import util.command.ctrlint.Pause;
@@ -17,8 +17,7 @@ import util.command.ctrlint.Playlist;
 import util.command.ctrlint.PrevItem;
 import util.command.ctrlint.SetProperty;
 import util.command.ctrlint.Stop;
-import util.node.Node;
-import dacp.DACPTreeBuilder;
+import api.Response;
 
 public class CtrlInt extends PathNode implements Command {
 
@@ -26,9 +25,10 @@ public class CtrlInt extends PathNode implements Command {
 		// no args
 	}
 
-	public Node run(DJInterface dj) {
+	public Response run(DJInterface dj) {
 		
-		return DACPTreeBuilder.buildCtrlIntNode();
+		return new util.response.CtrlInt(1);
+		
 	}
 	
 	public Command pause(int db) {
@@ -86,22 +86,4 @@ public class CtrlInt extends PathNode implements Command {
 	public Command playspec(int db) {
 		return new PlaySpec();
 	}
-}
-
-class GetSpeakers implements Command {
-
-	public void init(Map<String, String> args) {
-		// no args needed
-	}
-
-	public Node run(DJInterface dj) {
-			
-		try {
-			return DACPTreeBuilder.buildGetSpeakers();
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
 }

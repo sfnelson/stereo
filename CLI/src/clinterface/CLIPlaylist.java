@@ -2,25 +2,27 @@ package clinterface;
 
 import interfaces.collection.AbstractCollection;
 import interfaces.collection.Collection;
+import interfaces.collection.EditableCollection;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import music.Track;
+import api.nodes.PlaylistNode.PlaylistFactory;
 
-public class CLIPlaylist extends AbstractCollection<CLITrack> {
+public class CLIPlaylist extends AbstractCollection<CLITrack> implements EditableCollection<CLITrack> {
 
 	private final List<CLITrack> tracks = new ArrayList<CLITrack>();
-	private final String name;
 	
+	private String name = null;
 	private boolean root = false;
 	private int parent = 0;
-	private int specifiedSize;
+	private int size;
+	private int editStatus;
 	
-	public CLIPlaylist(int id, long persistent, String name) {
+	public CLIPlaylist(int id, long persistent) {
 		super(id, persistent);
-		this.name = name;
 	}
 	
 	public String name() {
@@ -43,13 +45,13 @@ public class CLIPlaylist extends AbstractCollection<CLITrack> {
 		//TODO store parents in accessible place so they can be retrieved
 		return null;
 	}
-
-	public void specifySize(int size) {
-		this.specifiedSize = size;
+	
+	public int parentId() {
+		return parent;
 	}
 	
 	public int size() {
-		if (tracks.size() == 0) return specifiedSize; 
+		if (tracks.size() == 0) return size; 
 		else return tracks.size();
 	}
 
@@ -74,8 +76,32 @@ public class CLIPlaylist extends AbstractCollection<CLITrack> {
 	}
 
 	public int editStatus() {
-		// TODO Auto-generated method stub
-		return 0;
+		return editStatus;
 	}
 	
+	public void setEditStatus(int editStatus) {
+		this.editStatus = editStatus;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setParentId(int parentId) {
+		this.parent = parentId;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
+	}
+	
+	public static PlaylistFactory factory() {
+		return factory;
+	}
+	private static CLIPlaylistFactory factory = new CLIPlaylistFactory();
+	private static class CLIPlaylistFactory implements PlaylistFactory {
+		public EditableCollection<? extends Track> create(int id, long pid) {
+			return new CLIPlaylist(id, pid);
+		}
+	}
 }

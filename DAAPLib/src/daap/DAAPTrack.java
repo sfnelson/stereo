@@ -1,6 +1,7 @@
 package daap;
 
 import interfaces.Album;
+import interfaces.Constants;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,7 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import music.Track;
-import util.DACPConstants;
 
 public class DAAPTrack extends Track {
 	
@@ -33,15 +33,15 @@ public class DAAPTrack extends Track {
 		
 		for (DAAPEntry e: entry.children()) {
 			switch (e.code()) {
-			case DAAPConstants.miid:
+			case dmap_itemid:
 				id = (Integer)e.value(); break;
-			case DAAPConstants.mper:
+			case dmap_persistentid:
 				per = (Long)e.value(); break;
-			case DAAPConstants.minm:
+			case dmap_itemname:
 				name = (String)e.value(); break;
-			case DAAPConstants.ARTIST:
+			case daap_songartist:
 				artist = (String)e.value(); break;
-			case DAAPConstants.ALBUM:
+			case daap_songalbum:
 				album = (String)e.value(); break;
 			}
 		}
@@ -97,12 +97,12 @@ public class DAAPTrack extends Track {
 	}
 	
 	public String toString() {
-		 return String.format("%s",get(DAAPConstants.NAME));
+		 return String.format("%s", get(Constants.dmap_itemname));
 	}
 
 	public void setAlbum(Album album) {
 		super.setAlbum(album);
-		put(DACPConstants.asai, album.get(DACPConstants.asai));
+		put(Constants.daap_songalbumid, album.get(Constants.dmap_persistentid));
 	}
 	
 	public InputStream getStream() throws IOException{

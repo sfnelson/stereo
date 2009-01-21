@@ -2,6 +2,7 @@ package music;
 
 
 import interfaces.Album;
+import interfaces.Constants;
 import interfaces.HasMetadata;
 
 import java.io.IOException;
@@ -14,13 +15,13 @@ public abstract class Track implements HasMetadata {
 	private final int id;
 	private final long persistentId;
 	private Album album;
-	private final Map<Integer, Object> tags = new HashMap<Integer, Object>();
+	private final Map<Constants, Object> tags = new HashMap<Constants, Object>();
 	
 	public Track(int id, long persistentId) {
 		this.id = id;
 		this.persistentId = persistentId; 
-		this.tags.put(1835624804, id);
-		this.tags.put(1836082546, persistentId);
+		this.tags.put(Constants.dmap_itemid, id);
+		this.tags.put(Constants.dmap_persistentid, persistentId);
 	}
 	
 	public int id() {
@@ -48,17 +49,18 @@ public abstract class Track implements HasMetadata {
 	
 	public void setAlbum(Album album) {
 		this.album = album;
+		tags.put(Constants.daap_songalbumid, album.id());
 	}
 	
-	public Object get(int tag) {
+	public Object get(Constants tag) {
 		return tags.get(tag);
 	}
 	
-	public void put(int tag, Object value) {
+	public void put(Constants tag, Object value) {
 		tags.put(tag, value);
 	}
 
-	public Iterable<Integer> getAllTags() {
+	public Iterable<Constants> getAllTags() {
 		return tags.keySet();
 	}
 	

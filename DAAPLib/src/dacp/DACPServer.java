@@ -16,8 +16,8 @@ import javax.jmdns.ServiceInfo;
 
 import reader.DACPRequestParser;
 import util.command.Command;
-import util.node.Node;
 import writer.DACPResponseGenerator;
+import api.Response;
 
 
 public class DACPServer {
@@ -103,8 +103,16 @@ public class DACPServer {
 						Command s = DACPRequestParser.parse(parseText);
 						
 						if (s != null) {
-							Node reply = s.run(dj);
-							printer.visit(reply, sock.getOutputStream());
+							
+							Response content = s.run(dj);
+							
+							if (content != null) {
+								printer.success(content, sock.getOutputStream());
+							}
+							else {
+								printer.error("204 No Content", sock.getOutputStream());
+							}
+							
 						}
 						else {
 							System.out.println("No command to execute for " + parseText);

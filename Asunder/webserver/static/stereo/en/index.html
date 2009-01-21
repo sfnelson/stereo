@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <title></title>
+    <script src="/static/sproutcore/en/detect-browser?e00e4baad5b1b00e509f7722357e0ad458cd363c" type="text/javascript"></script>
+    
+      <link href="/static/sproutcore/en/stylesheet.css?17429ba106c312c6b93a67f34627de6e548875e0" rel="stylesheet" type="text/css" />
+  <link href="/static/stereo/en/stylesheet.css?cce81612b72a9dee571376f5cdfaab9e3a88aa70" rel="stylesheet" type="text/css" />
+
+  </head>
+  <body class="sc-theme focus">  
+    <script type="text/javascript">
+    if (SC.setupBodyClassNames) SC.setupBodyClassNames() ;
+    </script>
+      
+    <!-- Main Page Body -->
+     
+<div id="workspace" class="sc-app-workspace footer sc-split-view horizontal default workspace"><div class="sidebar"><div class="sc-scroll-view source_list">      <div class="sc-collection-view sc-source-list-view id_1228792462"></div>
+</div></div> 
+  <div class="sc-split-divider-view id_1228792463" style="width: 5px;"></div>
+ 
+<div class="sc-scroll-view grid_view">    <div class="sc-collection-view sc-grid-view id_1228792464"></div>
+</div></div> 
+<div id="footer" class="sc-footer sc-square-theme footer">  <div class="left">
+    <a class="sc-button-view button regular normal id_1228792465"><span class="button-inner"><span class="label">+</span></span></a>
+    <a class="sc-button-view button regular normal id_1228792466"><span class="button-inner"><span class="label">-</span></span></a>
+  </div>
+  <div class="center">
+    <span class="sc-label-view id_1228792467"></span>
+  </div>
+  <div class="right">
+    <a title="Edit" class="sc-button-view button regular normal id_1228792468"><span class="button-inner"><span class="label">Edit</span></span></a>
+    50
+    <div class="sc-slider-view id_1228792469"><span class="outer"><span  class="inner"></span><img src="/static/sproutcore/en/blank.gif?a1fdee122b95748d81cee426d717c05b5174fe96" class="sc-handle" /></span></div>
+    320
+  </div>
+</div> 
+ 
+
+
+    <!-- Resources to be removed from DOM on page load -->
+    <div id="resources" style="display:none; visibility: hidden;">
+          </div>
+
+    <!-- Include Site Javascript -->
+      <script type="text/javascript" src="/static/prototype/en/javascript.js?40391a1b3ce0172bc401bffd2d9175fc094d8964"></script>
+  <script type="text/javascript" src="/static/sproutcore/en/javascript.js?2a7f257d6338bc1b5086b1353e4d83c4ea77a527"></script>
+  <script type="text/javascript" src="/static/stereo/en/javascript.js?805b145568e7ed61c1baaceed3525cf727ca2b03"></script>
+<script type="text/javascript">String.preferredLanguage = "en";</script>
+
+
+<!-- Render Page Views -->
+<script type="text/javascript">
+
+SC.page=SC.Page.create({workspace:SC.SplitView.extend({outlets:["sidebar","id1228792463","gridView"],sidebar:SC.View.extend({outlets:["sourceList"],sourceList:SC.ScrollView.extend({outlets:["id1228792462"],id1228792462:SC.SourceListView.extend({selectionBinding:"Photos.masterController.selection",contentBinding:"Photos.masterController.arrangedObjects",contentValueKey:"name",hasContentBranch:false,canReorderContent:true,isDropTarget:true,groupBy:['albumType'],groupVisibleKey:true,delegate:Photos.masterController,hasContentIcon:true,contentIconKey:"icon",contentValueIsEditable:true,acceptsFirstResponder:true}).outletFor(".id_1228792462?")}).outletFor(".source_list?"),isCollapsedBinding:SC.Binding.Not("Photos.masterController.albumsVisible"),minThickness:"100",maxThickness:"400"}).outletFor(".sidebar?"),id1228792463:SC.SplitDividerView.extend({}).outletFor(".id_1228792463?"),gridView:SC.ScrollView.extend({outlets:["id1228792464"],id1228792464:Photos.PhotoGridView.extend({selectionBinding:"Photos.detailController.selection",contentBinding:"Photos.detailController.arrangedObjects",contentValueKey:"url",hasContentBranch:false,canReorderContent:true,columnWidth:"160",rowHeight:"120",delegate:Photos.detailController,hasContentIcon:false,acceptsFirstResponder:true,canDeleteContent:true,exampleView:Photos.PhotoView}).outletFor(".id_1228792464?")}).outletFor(".grid_view?"),layoutDirection:"horizontal"}).outletFor("#workspace"),footer:SC.View.extend({outlets:["id1228792465","id1228792466","id1228792467","editButton","id1228792469"],id1228792465:SC.ButtonView.extend({action:"Photos.masterController.addAlbum"}).outletFor(".id_1228792465?"),id1228792466:SC.ButtonView.extend({action:"Photos.masterController.deleteAlbum"}).outletFor(".id_1228792466?"),id1228792467:SC.LabelView.extend({valueBinding:"Photos.detailController.countLabel",localize:false,escapeHTML:true}).outletFor(".id_1228792467?"),editButton:SC.ButtonView.extend({isEnabledBinding:SC.Binding.Not("Photos.photoController.hasNoContent"),isSelectedBinding:"Photos.photoController.pickerIsVisible",action:"Photos.photoController.showPicker"}).outletFor(".id_1228792468?"),id1228792469:SC.SliderView.extend({valueBinding:"Photos.detailController.photoSize",step:"10",maximum:"320",minimum:"50"}).outletFor(".id_1228792469?")}).outletFor("#footer")});
+</script>
+
+    <!-- Start SproutCore on Page Load -->
+    <script type="text/javascript">window.onload = SC.didLoad;</script>
+
+	</body>
+</html>

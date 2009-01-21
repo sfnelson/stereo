@@ -1,10 +1,11 @@
 package clinterface;
 
+import interfaces.Constants;
+
 import java.io.IOException;
 import java.io.InputStream;
 
 import music.Track;
-import daap.DAAPConstants;
 
 public class CLITrack extends Track {
 	
@@ -17,12 +18,14 @@ public class CLITrack extends Track {
 	}
 	
 	public String toString() {
-		String name = (String)get(DAAPConstants.NAME);
-		String artist = (String)get(DAAPConstants.ARTIST);
+		String name = (String)get(Constants.dmap_itemname);
+		String artist = (String)get(Constants.daap_songartist);
 		return name + " - " + artist;
 	}
 	
-	void put(Integer tag, Object value) {
-		super.put(tag, value);
-	}
+	public static Track.TrackFactory factory = new Track.TrackFactory() {
+		public CLITrack create(int id, long persistentId) {
+			return new CLITrack(id, persistentId);
+		}
+	};
 }

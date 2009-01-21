@@ -5,7 +5,7 @@ import interfaces.DJInterface;
 import java.util.Map;
 
 import util.command.Command;
-import util.node.Node;
+import api.Response;
 
 public class Stop implements Command {
 
@@ -13,11 +13,12 @@ public class Stop implements Command {
 		// no params
 	}
 
-	public Node run(DJInterface dj) {
+	public Response run(DJInterface dj) {
 		
 		dj.playbackControl().stop();
 		
-		return null;
+		return new Response(null, Response.NO_CONTENT);
+		
 	}
 
 	

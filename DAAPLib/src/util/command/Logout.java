@@ -4,8 +4,7 @@ import interfaces.DJInterface;
 
 import java.util.Map;
 
-import util.node.Node;
-import dacp.DACPTreeBuilder;
+import api.Response;
 
 public class Logout implements Command {
 
@@ -13,8 +12,10 @@ public class Logout implements Command {
 		System.out.println("logging out with argument: " + args);
 	}
 
-	public Node run(DJInterface dj) {
+	public Response run(DJInterface dj) {
+		//nothing to do until we manage connections.
 		
-		return DACPTreeBuilder.buildLogoutNode();
+		//expects 204
+		return new Response(null, Response.NO_CONTENT);
 	}
 }

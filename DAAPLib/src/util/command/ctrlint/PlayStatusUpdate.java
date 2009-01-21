@@ -1,17 +1,17 @@
 package util.command.ctrlint;
 
+import interfaces.Constants;
 import interfaces.DJInterface;
 import interfaces.PlaybackControl;
 import interfaces.PlaybackQueue;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import music.Track;
 import notification.PlaybackListener;
 import util.command.Command;
-import util.node.Node;
-import dacp.DACPTreeBuilder;
+import util.response.ctrlint.PlayStatusUpdate.Status;
+import api.Response;
 
 public class PlayStatusUpdate implements Command, PlaybackListener {
 
@@ -26,7 +26,7 @@ public class PlayStatusUpdate implements Command, PlaybackListener {
 		}
 	}
 
-	public Node run(DJInterface dj) {
+	public Response run(DJInterface dj) {
 		
 		PlaybackControl control = dj.playbackControl();
 		
@@ -45,21 +45,46 @@ public class PlayStatusUpdate implements Command, PlaybackListener {
 			control.removeListener(this);
 		}
 		
+		int database = 1;
 		Track current = dj.playbackStatus().current();
 		interfaces.collection.Collection<? extends Track> playlist = dj.playbackStatus().playlist(); 
 		int position = dj.playbackStatus().position();
-		byte state = dj.playbackStatus().state();
+		byte stateValue = dj.playbackStatus().state();
 		int revision = dj.playbackControl().revision();
 		int elapsed = dj.playbackStatus().elapsedTime();
 		
-		try {
-			return DACPTreeBuilder.buildPlayStatusUpdate(revision, state,
-				(byte)0, (byte)0, current, playlist.id(), position, elapsed);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-			return null;
+		Status state = null;
+		for (Status s: Status.values()) {
+			if (s.value() == stateValue) {
+				state = s;
+			}
 		}
 		
+		if (state == null) {
+			throw new RuntimeException("unexpected playback state " + stateValue);
+		}
+		
+		util.response.ctrlint.PlayStatusUpdate update;
+		if (state == Status.STOPPED) {
+			update = new util.response.ctrlint.PlayStatusUpdate(revision, true, true);
+		}
+		else {
+			Integer total = (Integer)current.get(Constants.dacp_songtime);
+			if (total == null) total = 0;
+			update = new util.response.ctrlint.PlayStatusUpdate.Active(
+					revision, state, true, true,
+					database, playlist.id(), position, current.id(),
+					(String)current.get(Constants.dmap_itemname),
+					(String)current.get(Constants.daap_songartist),
+					(String)current.get(Constants.daap_songalbum),
+					(String)current.get(Constants.daap_songgenre),
+					(Long)current.get(Constants.daap_songalbumid),
+					1 /* only support songs atm */,
+					total-elapsed,
+					total);
+		}
+		
+		return update;
 	}
 
 	public void trackChanged(Track t) {

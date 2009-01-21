@@ -1,8 +1,8 @@
 package util.command.databases;
 
+import interfaces.Constants;
 import interfaces.DJInterface;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -12,19 +12,18 @@ import java.util.Set;
 
 import music.Track;
 import util.command.Command;
-import util.node.Node;
 import util.queryparser.ApplyFilter;
 import util.queryparser.Filter;
 import util.queryparser.QueryParser;
-import dacp.DACPTreeBuilder;
+import api.Response;
 
 public class Browse implements Command {
 
 	private Map<String,String> args;
-	private int code;
-	private int field;
+	private Constants code;
+	private Constants field;
 
-	public Browse(int code, int field) {
+	public Browse(Constants code, Constants field) {
 		this.code = code;
 		this.field = field;
 	}
@@ -35,7 +34,7 @@ public class Browse implements Command {
 		System.out.println(args);
 	}
 
-	public Node run(DJInterface dj) {
+	public Response run(DJInterface dj) {
 
 		Iterable<? extends Track> songs = dj.library().tracks();
 
@@ -63,12 +62,7 @@ public class Browse implements Command {
 
 		System.out.println("returning " + list.size() + " elements from " + dj.library().size());
 
-		try {
-			return DACPTreeBuilder.buildBrowseResponse(code, list);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-			return null;
-		}
+		return new util.response.databases.Browse(code, list);
 	}
 
 }

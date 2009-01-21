@@ -1,129 +1,95 @@
 package clinterface;
 
-import interfaces.DJInterface;
-import interfaces.PlaybackStatus;
 import interfaces.collection.Collection;
-import music.Track;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-import util.DACPConstants;
+import api.nodes.TrackNode;
 
-import daap.DAAPConstants;
+import util.response.PlaylistSongs;
+import util.response.ctrlint.PlayStatusUpdate;
+
+import music.Track;
 
 public class CLI {
 
 	private final static int defaultDJPort = 3689;
-	private final static boolean DEBUG = false;
 
-	private Scanner    scan;
-	private DJInterface dj;
+	private DACPDJInterface dj;
 
 
-	public CLI(DJInterface controller) {
+	public CLI(DACPDJInterface controller) {
 
-		scan = new Scanner(System.in);
+		Scanner sc = new Scanner(System.in);
 		this.dj = controller;
-		run();
+		
+		run(sc);
 	}
 
-	public CLI(DJInterface controller, String args) {
-		scan = new Scanner(System.in);
+	public CLI(DACPDJInterface controller, String args, Scanner sc) {
+		
 		this.dj = controller;
-		input(args);
+		input(args, sc);
 	}
 
-	public void run() {
+	public void run(Scanner sc) {
 		System.out.print("> ");
-		while (scan.hasNextLine()) {
-			String input = scan.nextLine();
+		while (sc.hasNextLine()) {
+			String input = sc.nextLine();
 			if (input.equals("exit") || input.equals("quit")) {
-				scan.close();
+				sc.close();
 				break;
 			}
-			input(input);
+			input(input, new Scanner(input));
 			System.out.print("> ");
 		}
 	}
 
 	private class Top {
 		public void list() {
-			int id = 0;
-			Track current = dj.playbackStatus().current();
-			if (current != null) {
-				Integer idVal = (Integer)current.get(DAAPConstants.TRACK_ID);
-				if (idVal != null) id = idVal;
+			int pos = 0;
+			PlayStatusUpdate.Active status = dj.playStatusUpdate().active();
+			if (status != null) {
+				pos = status.currentPosition;
 			}
 			
-			Collection<? extends Track> p = dj.playbackStatus().playlist();
+			PlaylistSongs p = dj.playlist();
 			if (p == null) return;
 			
-			for(Track t:p){
-				Integer oid = (Integer)t.get(DAAPConstants.TRACK_ID);
-				if (oid != null && oid == id) {
-					System.out.println("* " + t);
+			for (TrackNode t: p.tracks()) {
+				--pos;
+				if (pos == 0) {
+					System.out.println("* " + t.track);
 				}
 				else {
-					System.out.println("  " + t);
+					System.out.println("  " + t.track);
 				}
 			}
 		}
 		public void play() {
 			dj.playbackControl().play();
 		}
-		public void query(String param) {
-			System.out.println(param);
-			Scanner s = new Scanner(param);
-			String type,crit;
-			type=s.hasNext()? s.next().trim(): "";
-			crit=s.hasNextLine()? s.nextLine().trim():"";
-			System.out.println("Query Type: "+type+" with the Criteria of:"+crit+"");
-			//controller.queryLibrary(type,crit);
-		}
-
 		public void status(){
-			PlaybackStatus status = dj.playbackStatus();
-			switch(status.state()) {
-			case 2: System.out.println("Stopped"); break;
-			case 3:
-				System.out.print(status.current());
-				System.out.println(" (Paused)");
-				break;
-			case 4:
-				System.out.print(status.current());
-				int elapsed = status.elapsedTime();
-				Integer time = (Integer)(status.current().get(DACPConstants.SONG_TIME));
-				if (time == null) time = 0;
-				System.out.printf(" (%d:%d of %d:%d)\n", elapsed/60000, elapsed/1000%60, time/60000, time/1000%60);
-				break;
-			default: System.out.println("Unknown status: " + status);
+			PlayStatusUpdate.Active state = dj.playStatusUpdate().active();
+			if (state != null) {
+				
+				System.out.printf("%s - %s", state.active().trackTitle, state.trackArtist);
+				
+				if (state.state == PlayStatusUpdate.Status.PAUSED) {
+					System.out.println(" (Paused)");
+				}
+				else {
+					int time = state.totalTime;
+					int elapsed = time - state.remainingTime;
+					System.out.printf(" (%d:%d of %d:%d)\n", elapsed/60000, elapsed/1000%60, time/60000, time/1000%60);
+				}
 			}
-		}
-
-		public void library(){
-			printTracks(dj.library().tracks());
-		}
-
-		public void filter(String param) {
-			Scanner s = new Scanner(param);
-			String type,crit;
-			type=s.hasNext()? s.next().trim(): "";
-			crit=s.hasNextLine()? s.nextLine().trim():"";
-			System.out.println("Filter Type: "+type+" with the Criteria of:"+crit+"");
-			//controller.createPlaylistWithFilter(type, crit);
-		}
-
-		public void append(String param) {
-			Scanner s = new Scanner(param);
-			String type,crit;
-			type=s.hasNext()? s.next().trim(): "";
-			crit=s.hasNextLine()? s.nextLine().trim():"";
-			System.out.println("Appended with a new list with Type: "+type+" with the Criteria of:"+crit+"");
-			//controller.append(type, crit);
+			else {
+				System.out.println("Stopped");
+			}
 		}
 		public void pause() { 
 			dj.playbackControl().pause();
@@ -137,26 +103,31 @@ public class CLI {
 		public void prev() {
 			dj.playbackControl().prev();
 		}
-		public void set(String command, String value) {
-			command = command.toLowerCase().trim();
-			if (command.equals("volume")) {
-				new Set().volume(value);
-			}
-			else {
-				System.out.println(command + " is not implement for set.");
-			}
+		public Set set() {
+			return new Set();
 		}
-		public void get(String command) {
-			command = command.toLowerCase().trim();
-			if (command.startsWith("volume")) {
-				new Get().volume();
-			}
-			else {
-				System.out.println(command + " is not implement for get.");
-			}
+		public Get get() {
+			return new Get();
 		}
 		public void stop(){
 			dj.playbackControl().stop();
+		}
+		public Browse browse() {
+			return new Browse();
+		}
+	}
+	
+	private class Browse {
+		public void search(String collection, String query) {
+			Collection<Track> c = dj.browse().getCollectionByName(collection);
+			if (c == null) {
+				System.out.println("Collection not found");
+				return;
+			}
+			/*Iterable<Track> result = c.search(query);
+			for (Track t: result) {
+				System.out.println(t);
+			}*/
 		}
 	}
 
@@ -178,9 +149,11 @@ public class CLI {
 		}
 	}
 
-	public void input(final String input){
-		
-		final Scanner sc = new Scanner(input);
+	public void input(final String input) {
+		input(input, new Scanner(input));
+	}
+	
+	public void input(final String input, final Scanner sc) {
 
 		if (!sc.hasNext()) return; //no command
 
@@ -203,7 +176,7 @@ public class CLI {
 								params[i] = parseArgument(sc);
 							}
 							else {
-								System.out.println("wrong parameters for command: ");
+								System.out.println("wrong parameters for command: " + m.getName());
 								return;
 							}
 						}
@@ -224,7 +197,7 @@ public class CLI {
 						o = null;
 					}
 					else {
-						System.out.println("command not found");
+						System.out.println("command not found: " + command);
 						o = null;
 					}
 				}
@@ -265,70 +238,53 @@ public class CLI {
 	}
 
 	public static void main(String[] args) {
+		
+		if (args.length < 1) {
+			usage();
+			return;
+		}
+		
+		String flat = args[0];
+		for (int i = 1; i < args.length; i++) {
+			flat += " " + args[i];
+		}
+		
 		// TODO consider getopt
 		String location = null;
-		Integer port = defaultDJPort;
-		String combinedArgs = null;
-		try {
-			if (args.length >= 1) {
-				location = args[0];
-			}
-
-			if (args.length >= 2) {
-				String portStr = args[1];
-				if (!portStr.equals("--")) {
-					try {
-						port = Integer.parseInt(portStr);
-					} catch (NumberFormatException e) {
-						System.out.println("Failed parsing port number: " + portStr);
-						throw e;
-					}
+		int port = defaultDJPort;
+		
+		Scanner sc = new Scanner(flat);
+		
+		location = sc.next();
+		
+		if (sc.hasNext()) {
+			if (args[1].equals("--port")) {
+				sc.next();
+				if (sc.hasNextInt()) {
+					port = sc.nextInt();
+				}
+				else {
+					usage();
+					return;
 				}
 			}
-
-			if (args.length >= 3) {
-				combinedArgs = "";
-				for (int i = 2; i < args.length; i++) {
-					String s = args[i];
-					combinedArgs += " " + s;
-				}
-				combinedArgs = combinedArgs.trim();
-
-				if (DEBUG) {
-					System.out.println(combinedArgs);
-				}
+			else if (args[1].equals("--help")) {
+				usage();
+				return;
 			}
-		} catch (Exception e) {
-			usage();
-			e.printStackTrace();
-			System.exit(-1);
 		}
-
-		if (location != null) {
-			if (combinedArgs != null) {
-				new CLI(new DACPDJInterface(location, port), combinedArgs);
-			} else {
-				new CLI(new DACPDJInterface(location, port));
-			}
-		} else {
-			usage();
+		
+		if (sc.hasNext()) {
+			new CLI(new DACPDJInterface(location, port), flat, sc);
+		}
+		else {
+			new CLI(new DACPDJInterface(location, port));
 		}
 	}
 
 	public static void usage() {
 		// TODO find a better version of argv[0]
-		String appName = "Controller";
-		System.out.println("Usage: " + appName + " HOST (PORT | --) [COMMANDS]");
+		String appName = "stereo";
+		System.out.println("Usage: " + appName + " <hostname> [--port <num>] [<commands>]");
 	}
-	
-	private void printTracks(Iterable<? extends Track> tracks) {
-		for (Track t: tracks) {
-			printTrack(t);
-		}
-	}
-	
-	private void printTrack(Track t) {
-		System.out.println(t);
-	}
-
 }

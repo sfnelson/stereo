@@ -1,10 +1,8 @@
 package interfaces;
 
 public interface HasMetadata {
-
-	public int id();
-	public long persistentId();
-	public Object get(int tagID);
-	public Iterable<Integer> getAllTags();
+	
+	public Object get(Constants tagID);
+	public Iterable<Constants> getAllTags();
 	
 }

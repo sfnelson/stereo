@@ -5,6 +5,9 @@ import music.Track;
 
 public interface DJInterface {
 	
+	public int id();
+	public String name();
+	
 	public PlaybackControl playbackControl();
 	public PlaybackStatus playbackStatus();
 	public Library<? extends Track> library();

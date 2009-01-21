@@ -1,5 +1,7 @@
 package daap;
 
+import interfaces.Constants;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -28,7 +30,7 @@ public class DAAPUtilities {
 	
 	private int session;
 	
-	public static DAAPEntry getProperty(DAAPEntry response, int property) throws IOException {
+	public static DAAPEntry getProperty(DAAPEntry response, Constants property) throws IOException {
 		
 		for (DAAPEntry e : response.children()) {
 			if (e.code() == property) {
@@ -49,10 +51,10 @@ public class DAAPUtilities {
 	
 	public String connect() throws IOException {
 
-		String name = (String)getProperty(SERVER_INFO_REQUEST, DAAPConstants.minm).value();
+		String name = (String)getProperty(SERVER_INFO_REQUEST, Constants.dmap_itemname).value();
 		if (name == null) throw new IOException("Database name not found");
 		
-		DAAPEntry session = getProperty(LOGIN_REQUEST, DAAPConstants.mlid);
+		DAAPEntry session = getProperty(LOGIN_REQUEST, Constants.dmap_sessionid);
 		if (session == null) throw new IOException("Unsuccessful login: no id returned");
 		
 		this.session = (Integer)session.value();
@@ -65,7 +67,7 @@ public class DAAPUtilities {
 		String request = UPDATE_REQUEST + "?session-id=" + session;
 		if (revision > 0) request += "&revision-id=" + revision;
 		
-		DAAPEntry nr = getProperty(request, DAAPConstants.musr);
+		DAAPEntry nr = getProperty(request, Constants.dmap_serverrevision);
 		if (nr == null) throw new IOException("Unsuccessful update: no revision returned");
 		
 		return (Integer)nr.value();
@@ -75,7 +77,7 @@ public class DAAPUtilities {
 
 		String request = DATABASE_REQUEST + "?session-id=" + session + "&revision-id=" + revision;
 		
-		DAAPEntry response = getProperty(request, DAAPConstants.mlcl);
+		DAAPEntry response = getProperty(request, Constants.dmap_listing);
 		if (response == null) throw new IOException("Unsuccessful database request: no databases returned");
 		
 		List<DAAPEntry> dbs = new ArrayList<DAAPEntry>();
@@ -93,7 +95,7 @@ public class DAAPUtilities {
 			+ "&session-id=" + session
 			+ "&revision-id=" + revision;
 
-		DAAPEntry response = getProperty(request, DAAPConstants.mlcl);
+		DAAPEntry response = getProperty(request, Constants.dmap_listing);
 		if (response == null) throw new IOException("Unsuccessful database request: no tracks returned");
 		
 		List<DAAPEntry> tracks = new ArrayList<DAAPEntry>();
@@ -112,7 +114,7 @@ public class DAAPUtilities {
 		return songRequest(request);
 	}
 	
-	private DAAPEntry getProperty(String request, int property) throws IOException {
+	private DAAPEntry getProperty(String request, Constants property) throws IOException {
 		
 		DAAPEntry response = request(request);
 

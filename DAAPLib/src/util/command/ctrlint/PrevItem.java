@@ -5,7 +5,7 @@ import interfaces.DJInterface;
 import java.util.Map;
 
 import util.command.Command;
-import util.node.Node;
+import api.Response;
 
 public class PrevItem implements Command {
 
@@ -13,11 +13,11 @@ public class PrevItem implements Command {
 		// no args
 	}
 
-	public Node run(DJInterface dj) {
+	public Response run(DJInterface dj) {
 		
 		dj.playbackControl().prev();
 		
-		return null;
+		return new Response(null, Response.NO_CONTENT);
 	}
 
 }
