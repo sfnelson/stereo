@@ -124,7 +124,7 @@ public enum Constants {
 	dmcp_getpropertyresponse					( "cmgt", 12 ), //guess
 	dmcp_ik										( "cmik", 1 ), //unknown (1) is...?
 	dmcp_sp										( "cmsp", 1 ), //unknown (1) speakers? supports...?
-	dmcp_status									( "cmst", 5 ),
+	dmcp_status									( "cmst", 12 ),
 	dmcp_sv										( "cmsv", 1 ), //unknown (1)
 	dmcp_mediarevision							( "cmsr", 5 ),
 	dmcp_mediakind								( "cmmk", 5 ),

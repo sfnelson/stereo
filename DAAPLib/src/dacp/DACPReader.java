@@ -58,37 +58,37 @@ public class DACPReader implements Reader {
 	}
 	
 	public boolean nextBoolean(Constants code) {
-		if (!hasNextBoolean(code)) throw new NoSuchElementException();
+		if (!hasNextBoolean(code)) throw new NoSuchElementException(code.longName);
 		read(code, 1);
 		return readBoolean(stream);
 	}
 
 	public byte nextByte(Constants code) {
-		if (!hasNextByte(code)) throw new NoSuchElementException();
+		if (!hasNextByte(code)) throw new NoSuchElementException(code.longName);
 		read(code, 1);
 		return readByte(stream);
 	}
 
 	public byte[] nextBytes(Constants code) {
-		if (!hasNextBytes(code)) throw new NoSuchElementException();
+		if (!hasNextBytes(code)) throw new NoSuchElementException(code.longName);
 		read(code, length);
 		return readBytes(stream, length);
 	}
 
 	public int nextInteger(Constants code) {
-		if (!hasNextInteger(code)) throw new NoSuchElementException();
+		if (!hasNextInteger(code)) throw new NoSuchElementException(code.longName);
 		read(code, 4);
 		return readInteger(stream);
 	}
 
 	public long nextLong(Constants code) {
-		if (!hasNextLong(code)) throw new NoSuchElementException();
+		if (!hasNextLong(code)) throw new NoSuchElementException(code.longName);
 		read(code, 8);
 		return readLong(stream);
 	}
 
 	public int[] nextLongLong(Constants code) {
-		if (!hasNextLongLong(code)) throw new NoSuchElementException();
+		if (!hasNextLongLong(code)) throw new NoSuchElementException(code.longName);
 		read(code, 4*4);
 		return new int[] {
 				readInteger(stream),
@@ -99,25 +99,25 @@ public class DACPReader implements Reader {
 	}
 	
 	public int nextShort(Constants code) {
-		if (!hasNextShort(code)) throw new NoSuchElementException();
+		if (!hasNextShort(code)) throw new NoSuchElementException(code.longName);
 		read(code, 2);
 		return readShort(stream);
 	}
 
 	public String nextString(Constants code) {
-		if (!hasNextString(code)) throw new NoSuchElementException();
+		if (!hasNextString(code)) throw new NoSuchElementException(code.longName);
 		read(code, length);
 		return readString(stream, length);
 	}
 
 	public byte[] nextVersion(Constants code) {
-		if (!hasNextVersion(code)) throw new NoSuchElementException();
+		if (!hasNextVersion(code)) throw new NoSuchElementException(code.longName);
 		read(code, 4);
 		return readBytes(stream, 4);
 	}
 
 	public Reader nextComposite(Constants code) {
-		if (!hasNextComposite(code)) throw new NoSuchElementException();
+		if (!hasNextComposite(code)) throw new NoSuchElementException(code.longName);
 		read(code, length);
 		return new DACPReader(stream, length);
 	}

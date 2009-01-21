@@ -69,7 +69,7 @@ public class PlayStatusUpdate implements Command, PlaybackListener {
 			update = new util.response.ctrlint.PlayStatusUpdate(revision, true, true);
 		}
 		else {
-			Integer total = (Integer)current.get(Constants.dacp_songtime);
+			Integer total = (Integer)current.get(Constants.daap_songtime);
 			if (total == null) total = 0;
 			update = new util.response.ctrlint.PlayStatusUpdate.Active(
 					revision, state, true, true,

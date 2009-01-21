@@ -179,6 +179,7 @@ DAAPLib/test/util/response/PlaylistSongsTest.java -text svneol=unset#text/plain
 DAAPLib/test/util/response/ServerInfoTest.java -text svneol=unset#text/plain
 DAAPLib/test/util/response/UpdateTest.java -text svneol=unset#text/plain
 DAAPLib/test/util/response/ctrlint/GetPropertyTest.java -text svneol=unset#text/plain
+DAAPLib/test/util/response/ctrlint/PlayStatusUpdateTest.java -text svneol=unset#text/plain
 DAAPLib/test/util/response/databases/BrowseTest.java -text svneol=unset#text/plain
 DAAPLib/test/util/response/databases/NewPlaylistTest.java -text svneol=unset#text/plain
 MemphisDJ/.classpath -text

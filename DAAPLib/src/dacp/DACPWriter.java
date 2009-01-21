@@ -67,12 +67,17 @@ public class DACPWriter implements Writer {
 
 	public void appendString(Constants code, String value) {
 		byte[] bytes;
-		try {
-			bytes = value.getBytes("UTF-8");
+		if (value != null) {
+			try {
+				bytes = value.getBytes("UTF-8");
+			}
+			catch (UnsupportedEncodingException ex) {
+				bytes = value.getBytes();
+				System.err.println("UTF-8 not supported: DACPWriter.java");
+			}
 		}
-		catch (UnsupportedEncodingException ex) {
-			bytes = value.getBytes();
-			System.err.println("UTF-8 not supported: DACPWriter.java");
+		else {
+			bytes = new byte[0]; 
 		}
 		write(code.code, bytes.length, bytes);
 	}
@@ -133,7 +138,7 @@ public class DACPWriter implements Writer {
 			writeNum(length, 4);
 			writeNum((int)(value>>32), 4);
 			writeNum((int)(value&0xFFFFFFFF), 4);
-			
+
 			nodes++;
 		}
 		catch (IOException ex) {
