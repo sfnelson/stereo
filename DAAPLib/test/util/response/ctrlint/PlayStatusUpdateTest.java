@@ -43,7 +43,6 @@ public class PlayStatusUpdateTest {
 	
 	@Test
 	public void testPlayStatusUpdateActive() {
-		PlayStatusUpdate.Active input = this.input.active();
 		PlayStatusUpdate.Active output = this.output.active();
 		
 		assertEquals(1, output.currentDatabase);

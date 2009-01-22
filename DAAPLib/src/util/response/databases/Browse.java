@@ -67,7 +67,7 @@ public class Browse extends Response implements Iterable<String> {
 	public void write(Writer writer) {
 		super.write(writer);
 		
-		writer.appendInteger(Constants.dmap_updatetype, 0);
+		writer.appendByte(Constants.dmap_updatetype, (byte)0);
 		writer.appendInteger(Constants.dmap_specifiedtotalcount, size());
 		writer.appendInteger(Constants.dmap_returnedcount, size());
 		writer.appendNode(elements);

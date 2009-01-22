@@ -157,7 +157,7 @@ public class DACPReader implements Reader {
 	private boolean available(Constants code, int amount) {
 		if (code != this.code) return false;
 		if (read) return false;
-		if (consumed-length >= available) return false;
+		if (consumed-length > available) return false;
 		if (amount != length) return false;
 		
 		switch (code.type) {

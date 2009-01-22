@@ -58,6 +58,6 @@ public class PlaylistSongs extends Response {
 	public void write(Writer writer) {
 		super.write(writer);
 		
-		writer.appendList(Constants.dmap_listing, 0, tracks);
+		writer.appendList(Constants.dmap_listing, (byte)0, tracks);
 	}
 }

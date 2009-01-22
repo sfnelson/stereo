@@ -76,6 +76,6 @@ public class Groups<Type extends Node> extends Response implements Iterable<Type
 	public void write(Writer writer) {
 		super.write(writer);
 		
-		writer.appendList(Constants.dmap_listing, 0, nodes);
+		writer.appendList(Constants.dmap_listing, (byte)0, nodes);
 	}
 }

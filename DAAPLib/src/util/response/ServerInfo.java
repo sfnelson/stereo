@@ -98,7 +98,7 @@ public class ServerInfo extends Response implements HasMetadata {
 				case Constants.INTEGER: writer.appendInteger(c, (Integer)v); break;
 				case Constants.SIGNED_INTEGER: writer.appendInteger(c, (Integer)v); break;
 				case Constants.LONG: writer.appendLong(c, (Long)v); break;
-				case Constants.DATE: writer.appendInteger(c, (Integer)v); break;
+				case Constants.DATE: writer.appendDate(c, (Integer)v); break;
 				case Constants.VERSION: writer.appendVersion(c, (byte[])v); break;
 				case Constants.STRING: writer.appendString(c, (String)v); break;
 				default:

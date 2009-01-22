@@ -56,7 +56,7 @@ public class Playlists extends Response {
 	public void write(Writer writer) {
 		super.write(writer);
 
-		writer.appendList(Constants.dmap_listing, 0, playlists);
+		writer.appendList(Constants.dmap_listing, (byte)0, playlists);
 	}
 
 }

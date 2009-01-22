@@ -71,7 +71,7 @@ public class CtrlInt extends Response {
 				}
 			});
 		}
-		writer.appendList(Constants.dmap_listing, 0, nodes);
+		writer.appendList(Constants.dmap_listing, (byte)0, nodes);
 	}
 	
 	public Iterable<Integer> ids() {

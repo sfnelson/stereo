@@ -140,7 +140,7 @@ public enum Constants {
 	dmap_contentcodestype						( "mcty",  3),
 	dmap_dictionary								( "mdcl",  12),
 	dmap_editdictionary							( "medc",  12),
-	dmap_editstatus								( "meds",  12),
+	dmap_editstatus								( "meds",  5),
 	dmap_itemid									( "miid",  5),
 	dmap_itemkind								( "mikd",  1),
 	dmap_itemcount								( "mimc",  5),
@@ -180,14 +180,18 @@ public enum Constants {
 	dmap_updatetype								( "muty",  1);
 	
 	public static final int BYTE = 1;
+	public static final int SIGNED_BYTE = 2;
 	public static final int SHORT = 3;
+	public static final int SIGNED_SHORT = 4;
 	public static final int INTEGER = 5;
 	public static final int SIGNED_INTEGER = 6;
 	public static final int LONG = 7;
+	public static final int SIGNED_LONG = 8;
 	public static final int STRING = 9;
 	public static final int DATE = 10;
 	public static final int VERSION = 11;
-	public static final int COMPOSTE = 12;
+	public static final int COMPOSITE = 12;
+	public static final int LONG_LONG = 0;
 
 	public final int code;
 	public final String shortName;

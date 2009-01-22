@@ -15,8 +15,6 @@ import music.Track;
 import org.junit.Before;
 import org.junit.Test;
 
-import test.StreamPrinter;
-
 import api.Reader;
 import api.Writer;
 import api.nodes.TrackNode;
@@ -39,7 +37,7 @@ public class PlaylistSongsTest {
 		w.appendNode(input);
 
 		ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
-		StreamPrinter.print(in);
+		//StreamPrinter.print(in);
 		Reader r = new DACPReader(in, in.available());
 
 		output = PlaylistSongs.read(r.nextComposite(r.iterator().next()), new test.Track.TrackFactory());

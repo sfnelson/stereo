@@ -97,6 +97,7 @@ DAAPLib/src/reader/DACPResponseParser.java -text
 DAAPLib/src/util/DACPPacket.java -text
 DAAPLib/src/util/DACPStatusPacket.java -text
 DAAPLib/src/util/command/Command.java -text
+DAAPLib/src/util/command/ContentCodes.java -text svneol=unset#text/plain
 DAAPLib/src/util/command/ControlPromptUpdate.java -text
 DAAPLib/src/util/command/CtrlInt.java -text
 DAAPLib/src/util/command/Databases.java -text
@@ -147,6 +148,7 @@ DAAPLib/src/util/queryparser/Filter.java -text
 DAAPLib/src/util/queryparser/Or.java -text
 DAAPLib/src/util/queryparser/QueryParser.java -text
 DAAPLib/src/util/queryparser/Token.java -text
+DAAPLib/src/util/response/ContentCodes.java -text svneol=unset#text/plain
 DAAPLib/src/util/response/ControlPromptUpdate.java -text svneol=unset#text/plain
 DAAPLib/src/util/response/CtrlInt.java -text svneol=unset#text/plain
 DAAPLib/src/util/response/Databases.java -text svneol=unset#text/plain
@@ -170,6 +172,7 @@ DAAPLib/test/test/DACPResponseParser.java -text svneol=unset#text/plain
 DAAPLib/test/test/Playlist.java -text svneol=unset#text/plain
 DAAPLib/test/test/StreamPrinter.java -text svneol=unset#text/plain
 DAAPLib/test/test/Track.java -text svneol=unset#text/plain
+DAAPLib/test/util/response/ContentCodesTest.java -text svneol=unset#text/plain
 DAAPLib/test/util/response/ControlPromptUpdateTest.java -text svneol=unset#text/plain
 DAAPLib/test/util/response/CtrlIntTest.java -text svneol=unset#text/plain
 DAAPLib/test/util/response/DatabasePlaylistsTest.java -text svneol=unset#text/plain

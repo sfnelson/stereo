@@ -22,30 +22,42 @@ public class DACPWriter implements Writer {
 	}
 
 	public void appendBoolean(Constants code, boolean value) {
+		check(code, new int[] {Constants.BYTE, Constants.SIGNED_BYTE});
 		write(code.code, 1, value?1:0);
 	}
 
 	public void appendByte(Constants code, byte value) {
+		check(code, new int[] {Constants.BYTE, Constants.SIGNED_BYTE});
 		write(code.code, 1, value);
+	}
+	
+	public void appendShort(Constants code, short value) {
+		check(code, new int[] {Constants.SHORT, Constants.SIGNED_SHORT});
+		write(code.code, 2, value);
 	}
 
 	public void appendBytes(Constants code, byte[] value) {
+		check(code, new int[] {});
 		write(code.code, value.length, value);
 	}
 
 	public void appendInteger(Constants code, int value) {
+		check(code, new int[] {Constants.INTEGER, Constants.SIGNED_INTEGER});
 		write(code.code, 4, value);
 	}
 
 	public void appendLong(Constants code, long value) {
+		check(code, new int[] {Constants.LONG, Constants.SIGNED_LONG});
 		write(code.code, 8, value);
 	}
 
 	public void appendLongLong(Constants code, int[] value) {
+		check(code, new int[] {Constants.LONG_LONG});
 		write(code.code, 16, value);
 	}
 
 	public void appendNode(Node node) {
+		check(node.type(), new int[] { Constants.COMPOSITE });
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		Writer w = new DACPWriter(stream);
 		node.write(w);
@@ -61,11 +73,8 @@ public class DACPWriter implements Writer {
 		}
 	}
 
-	public void appendShort(Constants code, short value) {
-		write(code.code, 2, value);
-	}
-
 	public void appendString(Constants code, String value) {
+		check(code, new int[] { Constants.STRING, Constants.COMPOSITE });
 		byte[] bytes;
 		if (value != null) {
 			try {
@@ -83,11 +92,19 @@ public class DACPWriter implements Writer {
 	}
 
 	public void appendVersion(Constants code, byte[] value) {
+		check(code, new int[] { Constants.VERSION });
 		write(code.code, value.length, value);
 	}
+	
+	public void appendDate(Constants code, int value) {
+		check(code, new int[] { Constants.DATE });
+		write(code.code, 4, value);
+	}
 
-	public void appendList(final Constants code, final int type, final List<? extends Node> list) {
-		appendInteger(Constants.dmap_updatetype, type);
+	public void appendList(final Constants code, final byte type, final List<? extends Node> list) {
+		check(code, new int[] { Constants.COMPOSITE });
+		
+		appendByte(Constants.dmap_updatetype, type);
 		appendInteger(Constants.dmap_specifiedtotalcount, list.size());
 		appendInteger(Constants.dmap_returnedcount, list.size());
 
@@ -101,6 +118,13 @@ public class DACPWriter implements Writer {
 				}
 			}
 		});
+	}
+	
+	private void check(Constants code, int[] types) {
+		for (int t: types) {
+			if (code.type == t) return;
+		}
+		throw new RuntimeException(code.longName + " appended as incorrect type, expected " + code.type);
 	}
 
 	private void write(int code, int length, int value) {

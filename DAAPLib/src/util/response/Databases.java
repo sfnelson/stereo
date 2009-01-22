@@ -51,7 +51,7 @@ public class Databases extends Response {
 	
 	public void write(Writer writer) {
 		
-		writer.appendList(Constants.dmap_listing, 0, databases);
+		writer.appendList(Constants.dmap_listing, (byte)0, databases);
 		
 	}
 	
