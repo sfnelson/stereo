@@ -1,6 +1,5 @@
 package music;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.Scanner;
 
@@ -23,7 +22,7 @@ public class VolumeControl implements interfaces.VolumeControl {
 			if (sc.hasNextInt()) {
 				this.volume = sc.nextInt();
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			System.err.println("set volume failed");
 			e.printStackTrace();
 		}
@@ -42,7 +41,7 @@ public class VolumeControl implements interfaces.VolumeControl {
 			for (Scanner sc = new Scanner(p.getErrorStream()); sc.hasNextLine();) {
 				System.out.println(sc.nextLine());
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			System.err.println("set volume failed");
 			e.printStackTrace();
 		}
