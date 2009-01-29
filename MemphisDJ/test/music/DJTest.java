@@ -25,14 +25,16 @@ public class DJTest {
 
 	@Test
 	public void testSetVolume() {
-		fail("Not yet implemented");
+		for (int i = 0; i <= 100; i+=50) {
+			a.volume().setVolume(i);
+			assertEquals(i, a.volume().getVolume());
+		}
 	}
 
 	@Test
 	public void testGetVolume() {
-
-		a.volume().setVolume(20);
-		assertTrue(a.volume().getVolume()==20);
+		int i = a.volume().getVolume();
+		assertTrue(i>=0 && i<=100);
 	}
 
 	@Test
