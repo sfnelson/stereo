@@ -1,7 +1,13 @@
 package music;
 
-import java.net.URL;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Scanner;
+
+import javax.net.SocketFactory;
+
 
 public class VolumeControl implements interfaces.VolumeControl {
 
@@ -9,6 +15,18 @@ public class VolumeControl implements interfaces.VolumeControl {
 	
 	public int getVolume() {
 		
+		try {
+			Socket sock = SocketFactory.getDefault().createSocket("localhost", 50123);
+			new PrintWriter(sock.getOutputStream()).append("get\n").flush();
+			this.volume = new Scanner(sock.getInputStream()).nextInt();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		/*
 		URL url = DJ.class.getResource("getvolume.sh");
 
 		try {
@@ -25,13 +43,26 @@ public class VolumeControl implements interfaces.VolumeControl {
 		} catch (Exception e) {
 			System.err.println("set volume failed");
 			e.printStackTrace();
-		}
+		}*/
 		
 		return this.volume;
 	}
 
 	public void setVolume(int volume) {
 		this.volume = volume;
+		
+		try {
+			Socket sock = SocketFactory.getDefault().createSocket("localhost", 50123);
+			new PrintWriter(sock.getOutputStream()).append(this.volume + "\n").flush();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		/*
 		URL url = DJ.class.getResource("setvolume.sh");
 
 		try {
@@ -45,6 +76,7 @@ public class VolumeControl implements interfaces.VolumeControl {
 			System.err.println("set volume failed");
 			e.printStackTrace();
 		}
+		*/
 	}
 
 }
