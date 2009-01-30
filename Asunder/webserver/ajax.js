@@ -2,6 +2,9 @@
 
 var ajax = {
 	request: function (string, callback) {
+		if (window.netscape) {
+			window.netscape.security.PrivilegeManager.enablePrivilege('UniversalBrowserRead');
+		}
 		var request = new XMLHttpRequest();
 		if (callback) {
 			request.onreadystatechange = function() {
