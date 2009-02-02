@@ -159,8 +159,6 @@ function Item() {
 	};
 	this.clicked = function (e) {
 		if (this.container) {
-			sysout(this);
-			sysout(this.container);
 			this.container.select(this);
 		}
 	};

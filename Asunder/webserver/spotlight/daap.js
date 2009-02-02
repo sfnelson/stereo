@@ -344,7 +344,11 @@ function BrowseItem(tree, index, type) {
 	
 	this.init();
 	this.node.className += " -browse-item";
-	this.appendChild("&rarr;", "hover enqueue");
+	
+	var arrow = document.createElement("SPAN");
+	arrow.innerHTML = "&#9654;";
+	arrow.className = "enqueue";
+	this.appendChild(arrow, "hover");
 	this.appendChild(this.value);
 	
 	this.clicked = function (e) {

@@ -7,14 +7,17 @@
 	<title>Stereo</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 	<link rel="stylesheet" type="text/css" href="style.css" />
-	<script type="text/javascript" charset="utf-8" src="/ajax.js"></script>
-	<script type="text/javascript" charset="utf-8" src="/bignum.js"></script>
-	<script type="text/javascript" charset="utf-8" src="views.js"></script>
-	<script type="text/javascript" charset="utf-8" src="daap.js"></script>
-	<script type="text/javascript" charset="utf-8" src="dacp.js"></script>
+	<script type="text/javascript" src="/ajax.js"></script>
+	<script type="text/javascript" src="/bignum.js"></script>
+	<script type="text/javascript" src="views.js"></script>
+	<script type="text/javascript" src="daap.js"></script>
+	<script type="text/javascript" src="dacp.js"></script>
 </head>
 <body>
-	<div id="playing"></div>
+	<div class="sidebar">
+		<div id="playing"></div>
+		<div id="playlists"></div>
+	</div>
 	<div id="search">
 		<form name="search-form" onsubmit="dacp.search(); return false;">
 			<label target="search">Search</label>

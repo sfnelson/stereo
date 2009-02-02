@@ -20,29 +20,31 @@ function DACP (host, container) {
 	
 	this.response = function (response) {
 		
-		if (response.length == 0) return;
-		
-		var tree = new DACPNode(response);
-		var node = 0;
-		switch (tree.name(0)) {
-		case constants.dmap.contentcodesresponse.code:
-			node = this.contentCodes(tree);
-			break;
-		case constants.daap.databaseplaylists.code:
-			node = new DatabasePlaylists(tree);
-			break;
-		case constants.daap.databasebrowse.code:
-			node = new BrowseResponse(tree);
-			break;
-		case constants.daap.playlistsongs.code:
-			node = new PlaylistSongs(tree);
-			break;
-		default:
-			alert(tree.name(0) + " not found");
-		}
-		
-		if (node && node.items.length > 0) {
-			this.container.appendChild(node.wrapper);
+		if (response.length > 0) {
+
+			var tree = new DACPNode(response);
+			var node = 0;
+			switch (tree.name(0)) {
+			case constants.dmap.contentcodesresponse.code:
+				node = this.contentCodes(tree);
+				break;
+			case constants.daap.databaseplaylists.code:
+				node = new DatabasePlaylists(tree);
+				break;
+			case constants.daap.databasebrowse.code:
+				node = new BrowseResponse(tree);
+				break;
+			case constants.daap.playlistsongs.code:
+				node = new PlaylistSongs(tree);
+				break;
+			default:
+				alert(tree.name(0) + " not found");
+			}
+
+			if (node && node.items.length > 0) {
+				this.container.appendChild(node.wrapper);
+			}
+
 		}
 		
 		this.current = 0;
@@ -92,11 +94,24 @@ function DACP (host, container) {
 			this.container.removeChild(this.container.firstChild);
 		}
 		
-		if (query.indexOf(":") != -1) {
+		if (query.length == 0) {
+			dacp.request("/databases/1/browse/artists");
+		}
+		else if (query.indexOf(":") != -1) {
 			query = "daap.song"+query;
-			dacp.request("/databases/1/browse/artists?filter='"+query+"'");
-			dacp.request("/databases/1/browse/albums?filter='"+query+"'");
-			dacp.request("/databases/1/containers/1/items?query='"+query+"'");
+			switch (query) {
+			case "daap.songartist:":
+				dacp.request("/databases/1/browse/artists");
+				break;
+			case "daap.songalbum:":
+				dacp.request("/databases/1/browse/albums");
+				break;
+			default:
+				dacp.request("/databases/1/browse/artists?filter='"+query+"'");
+				dacp.request("/databases/1/browse/albums?filter='"+query+"'");
+				dacp.request("/databases/1/containers/1/items?query='"+query+"'");
+				break;
+			}
 		}
 		else {
 			dacp.request("/databases/1/browse/artists?filter='daap.songartist:*"+query+"*'");
