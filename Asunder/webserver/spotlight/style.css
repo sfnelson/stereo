@@ -1,0 +1,149 @@
+html,body {
+	margin: 0;
+	margin-left: -1px;
+	padding: 0;
+	font-family: "Lucida Grande", sans-serif;
+}
+
+.-stereo-container {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+}
+
+.-stereo-container-inner {
+	padding-bottom: 2ex;
+}
+
+.collapsed .-stereo-container-inner {
+	display: none;
+}
+
+.-stereo-track div {
+	display: none;
+}
+
+.-stereo-track.selected div {
+	display: block;
+}
+
+.-stereo-track .-stereo-track-title {
+	display: block;
+}
+
+#playing {
+	padding-left: 1em;
+	width: 20em;
+	height: 100%;
+	overflow: auto;
+	position: fixed;
+	border-right: solid 0.5em #0E37E7;
+}
+
+#browse {
+	margin-left: 21em;
+}
+
+#browse .-stereo-container-title {
+	float: left;
+	padding: 1ex 0 0 1em;
+}
+
+#browse .-stereo-container {
+	clear: both;
+}
+
+#browse .-stereo-container-inner {
+	margin-left: -8em;
+	padding: 0.5ex 0;
+	margin-left: 8em;
+	border-left: solid 1px #aaa;
+}
+
+#browse .-stereo-container-item {
+	margin-left: -8em;
+	padding-left: 8em;
+}
+
+#browse .-stereo-container-item div {
+	margin-left: -1px;
+	padding: 0.5ex 0;
+	padding-left: 1em;
+	border-left: solid thin #aaa;
+}
+
+#browse .-stereo-container-item:hover {
+	background-color: #0E37E7;
+	color: white;
+}
+
+#browse .-stereo-container-item:hover div {
+	border-color: white;
+}
+
+#browse .-stereo-container-item .hover {
+	display: none;
+}
+
+#browse .-stereo-container-item:hover .hover {
+	display: block;
+	float: right;
+	border: none;
+	font-weight: bold;
+	text-align: center;
+	-webkit-border-radius: 1.1ex;
+	-moz-border-radius: 1.1ex;
+	width: 2em;
+	height: 1.2em;
+	line-height: 1em;
+	padding: 0;
+	margin: 0.5ex 1em 0.5ex 0;
+	background-color: white;
+	color: #0E37E7;
+}
+
+#search {
+	top: 0;
+	right: 0;
+	margin-left: 21em;
+	padding-top: 0.5ex;
+	width: auto;
+	background-color: #0E37E7;
+	overflow: auto;
+	text-align: right;
+	height: 4ex;
+}
+
+#search label {
+	color: white;
+}
+
+#search input {
+	font-size: 1em;
+}
+
+#search .search-field {
+	margin-right: 0.5em;
+	padding: 0.5ex 1.5ex;
+	border: none;
+	outline: none;
+	-webkit-border-radius: 1.5ex;
+	-moz-border-radius: 1.5ex;
+	border-radius: 1.5ex;
+}
+
+#search .search-reset {
+	position: absolute;
+	background-color: #bababa;
+	border: none;
+	font-weight: bold;
+	-webkit-border-radius: 1ex;
+	-moz-border-radius: 1ex;
+	width: 1.2em;
+	height: 1.2em;
+	line-height: 1em;
+	padding: 0;
+	color: white;
+	margin-left: -2.25em;
+	margin-top: 0.75ex;
+}

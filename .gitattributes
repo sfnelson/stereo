@@ -30,6 +30,11 @@ Asunder/webserver/bignum.js -text
 Asunder/webserver/dacp.js -text
 Asunder/webserver/favicon.ico -text
 Asunder/webserver/index.xhtml -text
+Asunder/webserver/spotlight/daap.js -text svneol=unset#text/plain
+Asunder/webserver/spotlight/dacp.js -text svneol=unset#text/plain
+Asunder/webserver/spotlight/index.html -text svneol=unset#text/plain
+Asunder/webserver/spotlight/style.css -text svneol=unset#text/plain
+Asunder/webserver/spotlight/views.js -text svneol=unset#text/plain
 Asunder/webserver/static/prototype/en/javascript.js -text
 Asunder/webserver/static/sproutcore/en/blank.gif -text
 Asunder/webserver/static/sproutcore/en/detect-browser -text
