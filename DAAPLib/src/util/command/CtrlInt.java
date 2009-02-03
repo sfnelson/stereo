@@ -4,6 +4,7 @@ import interfaces.DJInterface;
 
 import java.util.Map;
 
+import util.command.ctrlint.ControlPromptUpdate;
 import util.command.ctrlint.Cue;
 import util.command.ctrlint.GetProperty;
 import util.command.ctrlint.GetSpeakers;

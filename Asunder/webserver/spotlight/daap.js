@@ -219,20 +219,27 @@ function DACPContainer(tree, index) {
 			this.items = tree.intVal(node);
 			break;
 		}
-	}
+	};
 	
 	this.init();
 	this.node.className += " -database-playlist";
-	
-	var pl = new View();
-	pl.init(this.name);
-	pl.collapse();
-	this.appendChild(pl.wrapper);
-	//this.appendChild(this.name, "-database-playlist-name");
+	this.appendChild(this.name, "-database-playlist-name");
 	//this.appendChild(this.items, "-database-playlist-items");
 	//this.appendChild(this.id, "-database-playlist-id");
 }
 DACPContainer.prototype = new Item;
+DACPContainer.prototype.selected = function () {
+	Item.prototype.selected.call(this);
+	dacp.playlist = this.id;
+	dacp.search();
+}
+DACPContainer.prototype.deselected = function () {
+	Item.prototype.deselected.call(this);
+	if (dacp.playlist == this.id) {
+		dacp.playlist = 1;
+		dacp.search();
+	}
+}
  
 function DACPPlaylist(tree, index) {
  

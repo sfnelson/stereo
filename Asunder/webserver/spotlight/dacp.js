@@ -1,20 +1,34 @@
-function DACP (host, container) {
+function DACP (host, container, contentCodes) {
 	
 	var dis = this;
 	
 	this.host = host;
 	this.container = container;
+	this.playlist = 1;
 	
 	this.current = 0;
 	var requests = new Queue();
 	
-	this.request = function (request) {
-		if (this.current) {
-			requests.offer(request);
+	this.request = function (db, pl, request) {
+		sysout(db + " " + pl + " " + request);
+		
+		var req = 0;
+		if (!pl) {
+			req = db;
+		}
+		else if (!request) {
+			req = "/databases/" + db + request;
 		}
 		else {
-			this.current = request;
-			ajax.request(this.host + request, function (text) { dis.response(text); });
+			req = "/databases/" + db + "/containers/" + pl + request;
+		}
+		
+		if (this.current) {
+			requests.offer(req);
+		}
+		else {
+			this.current = req;
+			ajax.request(this.host + req, function (text) { dis.response(text); });
 		}
 	};
 	
@@ -37,11 +51,19 @@ function DACP (host, container) {
 			case constants.daap.playlistsongs.code:
 				node = new PlaylistSongs(tree);
 				break;
+			case constants.dmap.editdictionary.code:
+				this.request("/databases/1/containers");
+				break;
 			default:
 				alert(tree.name(0) + " not found");
 			}
 
 			if (node && node.items.length > 0) {
+				
+				while (this.container.firstChild) {
+					this.container.removeChild(this.container.firstChild);
+				}
+				
 				this.container.appendChild(node.wrapper);
 			}
 
@@ -88,35 +110,36 @@ function DACP (host, container) {
 	
 	this.search = function () {
 		
+		var db = 1;
+		var pl = this.playlist;
+		
+		sysout(this.playlist);
+		
 		var query = document.getElementById("search-field").value;
 		
-		while (this.container.firstChild) {
-			this.container.removeChild(this.container.firstChild);
-		}
-		
 		if (query.length == 0) {
-			dacp.request("/databases/1/browse/artists");
+			dacp.request(db, pl,"/browse/artists");
 		}
 		else if (query.indexOf(":") != -1) {
 			query = "daap.song"+query;
 			switch (query) {
 			case "daap.songartist:":
-				dacp.request("/databases/1/browse/artists");
+				dacp.request(db, pl, "/browse/artists");
 				break;
 			case "daap.songalbum:":
-				dacp.request("/databases/1/browse/albums");
+				dacp.request(db, pl, "/browse/albums");
 				break;
 			default:
-				dacp.request("/databases/1/browse/artists?filter='"+query+"'");
-				dacp.request("/databases/1/browse/albums?filter='"+query+"'");
-				dacp.request("/databases/1/containers/1/items?query='"+query+"'");
+				dacp.request(db, pl, "/browse/artists?filter='"+query+"'");
+				dacp.request(db, pl, "/browse/albums?filter='"+query+"'");
+				dacp.request(db, pl, "/items?query='"+query+"'");
 				break;
 			}
 		}
 		else {
-			dacp.request("/databases/1/browse/artists?filter='daap.songartist:*"+query+"*'");
-			dacp.request("/databases/1/browse/albums?filter='daap.songalbum:*"+query+"*'");
-			dacp.request("/databases/1/containers/1/items?query='dmap.itemname:*"+query+"*'");
+			dacp.request(db, pl, "/browse/artists?filter='daap.songartist:*"+query+"*'");
+			dacp.request(db, pl, "/browse/albums?filter='daap.songalbum:*"+query+"*'");
+			dacp.request(db, pl, "/items?query='dmap.itemname:*"+query+"*'");
 		}
 	};
 	
@@ -148,9 +171,11 @@ function DACP (host, container) {
 	
 	this.enqueue = function (query) {
 		this.request("/ctrl-int/1/cue?query='"+query+"'");
-	}
+	};
 	
-	this.request("/content-codes");
+	if (!contentCodes) {
+		this.request("/content-codes");
+	}
 }
 
 function DatabasePlaylists(tree) {
@@ -168,10 +193,32 @@ function DatabasePlaylists(tree) {
 		this.put(new DACPContainer(tree, children[i]));
 	}
 
-	this.wrapper.className += " -stereo-database-containers"
+	this.wrapper.className += " -stereo-database-containers";
 	this.show();
+	
+	var dis = this;
+	
+	var edit = document.createElement("FORM");
+	edit.name = "playlists-form";
+	edit.onsubmit = function () {
+		dis.add();
+		return false;
+	};
+	edit.className = "-stereo-databases-containers-editbar";
+	
+	var add = document.createElement("INPUT");
+	add.className = "-stereo-databases-containers-add-button";
+	add.value = "+";
+	add.type = "submit";
+	edit.appendChild(add);
+	
+	this.wrapper.appendChild(edit);
 }
 DatabasePlaylists.prototype = new View;
+DatabasePlaylists.prototype.add = function () {
+	var name = prompt("Collection Name:", "");
+	playlists.request("/databases/1/edit?action=add&edit-params='dmap.itemname:"+name+"'");
+};
 
 function BrowseResponse(tree) {
 

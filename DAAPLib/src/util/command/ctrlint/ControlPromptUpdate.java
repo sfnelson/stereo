@@ -1,8 +1,10 @@
-package util.command;
+package util.command.ctrlint;
 
 import interfaces.DJInterface;
 
 import java.util.Map;
+
+import util.command.Command;
 
 import api.Response;
 
@@ -18,7 +20,8 @@ public class ControlPromptUpdate implements Command {
 	}
 
 	public Response run(DJInterface dj) {
-		return new util.response.ControlPromptUpdate(promptId);
+		return null;
+		//return new util.response.ControlPromptUpdate(promptId);
 	}
 	
 }

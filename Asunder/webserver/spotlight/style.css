@@ -31,13 +31,31 @@ html,body {
 	display: block;
 }
 
-#playing {
-	padding-left: 1em;
-	width: 20em;
+#playlists {
+	position: absolute;
+	width: 21em;
 	height: 100%;
-	overflow: auto;
-	position: fixed;
 	border-right: solid 0.5em #0E37E7;
+	overflow: auto;
+}
+
+#playlists .-stereo-databases-containers-editbar {
+	margin-bottom: 0;
+	padding: 1em 0;
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+	text-align: center;
+	background-color: #0E37E7;
+}
+
+.-stereo-database-containers .-database-playlist-name {
+	padding: 1em;
+}
+
+.-stereo-database-containers .selected .-database-playlist-name {
+	background-color: #0E37E7;
+	color: white;
 }
 
 #browse {

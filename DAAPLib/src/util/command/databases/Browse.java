@@ -2,6 +2,7 @@ package util.command.databases;
 
 import interfaces.Constants;
 import interfaces.DJInterface;
+import interfaces.collection.Collection;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,10 +21,12 @@ import api.Response;
 public class Browse implements Command {
 
 	private Map<String,String> args;
+	private int container;
 	private Constants code;
 	private Constants field;
 
-	public Browse(Constants code, Constants field) {
+	public Browse(int container, Constants code, Constants field) {
+		this.container = container;
 		this.code = code;
 		this.field = field;
 	}
@@ -35,10 +38,21 @@ public class Browse implements Command {
 	}
 
 	public Response run(DJInterface dj) {
+		
+		Iterable<? extends Track> songs = null;
+		
+		for (Collection<? extends Track> p: dj.library().collections()) {
+			if (p.id() == container) {
+				songs = p;
+				break;
+			}
+		}
+		
+		if (songs == null) {
+			songs = dj.library();
+		}
 
-		Iterable<? extends Track> songs = dj.library().tracks();
-
-		System.out.println("library has " + dj.library().size() + " elements");
+		System.out.println("collection has " + dj.library().size() + " elements");
 
 		if (args != null && args.containsKey("filter")) {
 			Filter f = QueryParser.parse(args.get("filter"));

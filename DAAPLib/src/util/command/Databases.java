@@ -45,15 +45,15 @@ public class Databases extends PathNode implements Command {
 	}
 	
 	public Command artists() {
-		return new Browse(Constants.daap_browseartistlisting, Constants.daap_songartist);
+		return new Browse(1, Constants.daap_browseartistlisting, Constants.daap_songartist);
 	}
 	
 	public Command albums() {
-		return new Browse(Constants.daap_browsealbumlisting, Constants.daap_songalbum);
+		return new Browse(1, Constants.daap_browsealbumlisting, Constants.daap_songalbum);
 	}
 	
 	public Command genres() {
-		return new Browse(Constants.daap_browsegenrelisting, Constants.daap_songgenre);
+		return new Browse(1, Constants.daap_browsegenrelisting, Constants.daap_songgenre);
 	}
 
 }

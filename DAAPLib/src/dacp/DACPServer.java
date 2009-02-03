@@ -118,12 +118,11 @@ public class DACPServer {
 							System.out.println("No command to execute for " + parseText);
 						}
 					}
-					catch (IllegalArgumentException ex) {
+					catch (Exception ex) {
 						ex.printStackTrace();
 
 						printer.error("204 No Content", sock.getOutputStream());
 					}
-
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

@@ -1,5 +1,6 @@
 package util.command.databases;
 
+import interfaces.Constants;
 import interfaces.DJInterface;
 
 import java.util.Map;
@@ -11,6 +12,16 @@ import api.Response;
 
 public class Containers extends PathNode implements Command {
 
+	private final int container;
+	
+	private Containers(int container) {
+		this.container = container;
+	}
+	
+	public Containers() {
+		this.container = 1;
+	}
+	
 	public void init(Map<String, String> args) {
 		//no args used
 	}
@@ -22,6 +33,22 @@ public class Containers extends PathNode implements Command {
 		
 	}
 	
+	public Command browse(int container) {
+		return new Containers(container);
+	}
+	
+	public Command artists() {
+		return new Browse(container, Constants.daap_browseartistlisting, Constants.daap_songartist);
+	}
+	
+	public Command albums() {
+		return new Browse(container, Constants.daap_browsealbumlisting, Constants.daap_songalbum);
+	}
+	
+	public Command genres() {
+		return new Browse(container, Constants.daap_browsegenrelisting, Constants.daap_songgenre);
+	}
+	
 	public Command items(int container) {
 		return new Items(container);
 	}
@@ -29,5 +56,4 @@ public class Containers extends PathNode implements Command {
 	public Command edit(int container) {
 		return new ContainerEdit(container);
 	}
-
 }

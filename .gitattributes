@@ -103,7 +103,6 @@ DAAPLib/src/util/DACPPacket.java -text
 DAAPLib/src/util/DACPStatusPacket.java -text
 DAAPLib/src/util/command/Command.java -text
 DAAPLib/src/util/command/ContentCodes.java -text svneol=unset#text/plain
-DAAPLib/src/util/command/ControlPromptUpdate.java -text
 DAAPLib/src/util/command/CtrlInt.java -text
 DAAPLib/src/util/command/Databases.java -text
 DAAPLib/src/util/command/HTMLClient.java -text
@@ -114,6 +113,7 @@ DAAPLib/src/util/command/PathNode.java -text
 DAAPLib/src/util/command/RequestNode.java -text
 DAAPLib/src/util/command/ServerInfo.java -text
 DAAPLib/src/util/command/Update.java -text
+DAAPLib/src/util/command/ctrlint/ControlPromptUpdate.java -text
 DAAPLib/src/util/command/ctrlint/Cue.java -text
 DAAPLib/src/util/command/ctrlint/GetProperty.java -text
 DAAPLib/src/util/command/ctrlint/GetSpeakers.java -text svneol=unset#text/plain

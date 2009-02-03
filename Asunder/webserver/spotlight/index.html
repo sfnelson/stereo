@@ -14,10 +14,7 @@
 	<script type="text/javascript" src="dacp.js"></script>
 </head>
 <body>
-	<div class="sidebar">
-		<div id="playing"></div>
-		<div id="playlists"></div>
-	</div>
+	<div id="playlists"></div>
 	<div id="search">
 		<form name="search-form" onsubmit="dacp.search(); return false;">
 			<label target="search">Search</label>
@@ -32,7 +29,7 @@
 		var host = "";
 
 		var dacp = new DACP(host, document.getElementById("browse"));
-		var playlists = new DACP(host, document.getElementById("playing"));
+		var playlists = new DACP(host, document.getElementById("playlists"));
 		playlists.request("/databases/1/containers");
 
 		//]]>

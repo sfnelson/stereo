@@ -77,6 +77,20 @@ public class QueryParser {
 	private static final Parser<Filter> parser = query(TOKEN).from(TOKENIZER, nodelim);
 	
 	public static Filter parse(String source) {
+		/*String decoded = "";
+		char[] chars = source.toCharArray();
+		for (int i = 0; i < chars.length; i++) {
+			if (chars[i] == '%') {
+				int a = chars[++i];
+				int b = chars[++i];
+				if (a >= 'A') a = a-'A';
+				else a = a-'0';
+				if (b >= 'A') b = b-'A';
+				else b = b-'0';
+				decoded += (char)(16*a+b);
+			}
+			decoded += chars[i];
+		}*/
 		source = source.replace("+", "%2B");
 		try {
 			source = URLDecoder.decode(source, "UTF-8");
