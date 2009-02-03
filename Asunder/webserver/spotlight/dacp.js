@@ -10,8 +10,7 @@ function DACP (host, container, contentCodes) {
 	var requests = new Queue();
 	
 	this.request = function (db, pl, request) {
-		sysout(db + " " + pl + " " + request);
-		
+
 		var req = 0;
 		if (!pl) {
 			req = db;
@@ -114,8 +113,8 @@ function DACP (host, container, contentCodes) {
 		
 		var db = 1;
 		var pl = this.playlist;
-		
-		sysout(this.playlist);
+
+		this.clear();
 		
 		var query = document.getElementById("search-field").value;
 		
@@ -144,7 +143,6 @@ function DACP (host, container, contentCodes) {
 			dacp.request(db, pl, "/items?query='dmap.itemname:*"+query+"*'");
 		}
 		
-		this.clear();
 	};
 	
 	this.setSearch = function (query) {
@@ -175,6 +173,11 @@ function DACP (host, container, contentCodes) {
 	
 	this.enqueue = function (query) {
 		this.request("/ctrl-int/1/cue?query='"+query+"'");
+	};
+	
+	this.play = function (query) {
+		this.request("/ctrl-int/1/cue?command=clear");
+		this.request("/ctrl-int/1/cue?command=play&query='"+query+"'");
 	};
 	
 	if (!contentCodes) {

@@ -237,7 +237,6 @@ DACPContainer.prototype.deselected = function () {
 	Item.prototype.deselected.call(this);
 	if (dacp.playlist == this.id) {
 		dacp.playlist = 1;
-		dacp.search();
 	}
 }
  
@@ -337,10 +336,36 @@ function DACPTrack(tree, index) {
 	this.init();
 	this.node.className += " -stereo-track";
 	
+	var title = document.createElement("DIV");
+	title.appendChild(document.createTextNode(this.title));
+	
 	this.appendChild(this.artist, "-stereo-track-artist");
-	this.appendChild(this.title, "-stereo-track-title");
+	this.appendChild(title, "-stereo-track-title");
 	this.appendChild(this.album, "-stereo-track-album");
 	this.appendChild(this.genre, "-stereo-track-genre");
+	
+	var arrow = document.createElement("SPAN");
+	//arrow.innerHTML = "&#9654;";
+	arrow.innerHTML = "enqueue";
+	arrow.className = "enqueue hover";
+	title.appendChild(arrow);
+	
+	var play = document.createElement("SPAN");
+	play.innerHTML = "play";
+	play.className = "play hover";
+	title.appendChild(play);
+	
+	this.clicked = function (e) {
+		if (e.target.className && e.target.className.indexOf("play") != -1) {
+			dacp.play(constants.dmap.itemid.name + ":" + this.id);
+		}
+		else if (e.target.className && e.target.className.indexOf("enqueue") != -1) {
+			dacp.enqueue(constants.dmap.itemid.name + ":" + this.id);
+		}
+		else {
+			DACPTrack.prototype.clicked.call(this);
+		}
+	};
 }
 DACPTrack.prototype = new Item;
 
@@ -352,14 +377,22 @@ function BrowseItem(tree, index, type) {
 	this.init();
 	this.node.className += " -browse-item";
 	
-	var arrow = document.createElement("SPAN");
-	arrow.innerHTML = "&#9654;";
-	arrow.className = "enqueue";
-	this.appendChild(arrow, "hover");
+	var arrow = document.createElement("DIV");
+	//arrow.innerHTML = "&#9654;";
+	arrow.innerHTML = "enqueue";
+	this.appendChild(arrow, "enqueue hover");
+	
+	var play = document.createElement("DIV");
+	play.innerHTML = "play";
+	this.appendChild(play, "play hover");
+	
 	this.appendChild(this.value);
 	
 	this.clicked = function (e) {
-		if (e.target.className && e.target.className.indexOf("enqueue") != -1) {
+		if (e.target.className && e.target.className.indexOf("play") != -1) {
+			dacp.play(this.type.name + ":" + this.value);
+		}
+		else if (e.target.className && e.target.className.indexOf("enqueue") != -1) {
 			dacp.enqueue(this.type.name + ":" + this.value);
 		}
 		else {

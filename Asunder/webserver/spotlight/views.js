@@ -118,7 +118,7 @@ function Item() {}
 Item.prototype = {
 	init:	function () {
 				this.node = document.createElement("DIV");
-				this.node.className = "-stereo-container-item";
+				this.node.className += " -stereo-container-item";
 				this.container = 0;
 				
 				var dis = this;
@@ -136,15 +136,19 @@ Item.prototype = {
 			},
 			
 	appendChild:function (inner, cls) {
-				var node = document.createElement("DIV");
-				node.className = cls;
+				if (!cls) cls = "";
+				
 				if ('string' == typeof(inner)) {
+					var node = document.createElement("DIV");
+					node.className = cls;
 					node.appendChild(document.createTextNode(inner));
+					this.node.appendChild(node);
 				}
 				else {
-					node.appendChild(inner);
+					inner.className = cls;
+					this.node.appendChild(inner);
 				}
-				this.node.appendChild(node);
+				
 			},
 			
 	selected:function () {
