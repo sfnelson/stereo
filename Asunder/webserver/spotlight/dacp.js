@@ -60,10 +60,6 @@ function DACP (host, container, contentCodes) {
 
 			if (node && node.items.length > 0) {
 				
-				while (this.container.firstChild) {
-					this.container.removeChild(this.container.firstChild);
-				}
-				
 				this.container.appendChild(node.wrapper);
 			}
 
@@ -72,6 +68,12 @@ function DACP (host, container, contentCodes) {
 		this.current = 0;
 		if (requests.size() > 0) {
 			this.request(requests.poll());
+		}
+	};
+	
+	this.clear = function () {
+		while (this.container.firstChild) {
+			this.container.removeChild(this.container.firstChild);
 		}
 	};
 	
@@ -141,6 +143,8 @@ function DACP (host, container, contentCodes) {
 			dacp.request(db, pl, "/browse/albums?filter='daap.songalbum:*"+query+"*'");
 			dacp.request(db, pl, "/items?query='dmap.itemname:*"+query+"*'");
 		}
+		
+		this.clear();
 	};
 	
 	this.setSearch = function (query) {
@@ -217,6 +221,7 @@ function DatabasePlaylists(tree) {
 DatabasePlaylists.prototype = new View;
 DatabasePlaylists.prototype.add = function () {
 	var name = prompt("Collection Name:", "");
+	playlists.clear();
 	playlists.request("/databases/1/edit?action=add&edit-params='dmap.itemname:"+name+"'");
 };
 
