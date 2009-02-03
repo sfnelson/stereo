@@ -6,24 +6,6 @@ Asunder/.settings/org.eclipse.wst.jsdt.ui.superType.container -text
 Asunder/.settings/org.eclipse.wst.jsdt.ui.superType.name -text
 Asunder/.settings/org.eclipse.wst.validation.prefs -text
 Asunder/build.xml -text
-Asunder/stereo/README -text
-Asunder/stereo/clients/stereo/controllers/collection.js -text
-Asunder/stereo/clients/stereo/core.js -text
-Asunder/stereo/clients/stereo/english.lproj/body.css -text
-Asunder/stereo/clients/stereo/english.lproj/body.rhtml -text
-Asunder/stereo/clients/stereo/english.lproj/strings.js -text
-Asunder/stereo/clients/stereo/fixtures/album.js -text
-Asunder/stereo/clients/stereo/fixtures/collection.js -text
-Asunder/stereo/clients/stereo/fixtures/track.js -text
-Asunder/stereo/clients/stereo/main.js -text
-Asunder/stereo/clients/stereo/models/album.js -text
-Asunder/stereo/clients/stereo/models/collection.js -text
-Asunder/stereo/clients/stereo/models/track.js -text
-Asunder/stereo/clients/stereo/tests/controllers/collection.rhtml -text
-Asunder/stereo/clients/stereo/tests/models/album.rhtml -text
-Asunder/stereo/clients/stereo/tests/models/collection.rhtml -text
-Asunder/stereo/clients/stereo/tests/models/track.rhtml -text
-Asunder/stereo/sc-config -text
 Asunder/webserver/FileLoader.java -text
 Asunder/webserver/ajax.js -text
 Asunder/webserver/bignum.js -text
@@ -35,32 +17,6 @@ Asunder/webserver/spotlight/dacp.js -text svneol=unset#text/plain
 Asunder/webserver/spotlight/index.html -text svneol=unset#text/plain
 Asunder/webserver/spotlight/style.css -text svneol=unset#text/plain
 Asunder/webserver/spotlight/views.js -text svneol=unset#text/plain
-Asunder/webserver/static/prototype/en/javascript.js -text
-Asunder/webserver/static/sproutcore/en/blank.gif -text
-Asunder/webserver/static/sproutcore/en/detect-browser -text
-Asunder/webserver/static/sproutcore/en/images/indicator.gif -text
-Asunder/webserver/static/sproutcore/en/images/sc-theme-sprite.png -text
-Asunder/webserver/static/sproutcore/en/images/sc-theme-ysprite.png -text
-Asunder/webserver/static/sproutcore/en/images/shared-icons.png -text
-Asunder/webserver/static/sproutcore/en/images/sproutcore-logo.png -text
-Asunder/webserver/static/sproutcore/en/images/sticky-note.png -text
-Asunder/webserver/static/sproutcore/en/javascript.js -text
-Asunder/webserver/static/sproutcore/en/panels/background-fat.jpg -text
-Asunder/webserver/static/sproutcore/en/panels/background-thin.jpg -text
-Asunder/webserver/static/sproutcore/en/panels/bottom-edge.png -text
-Asunder/webserver/static/sproutcore/en/panels/bottom-left-corner.png -text
-Asunder/webserver/static/sproutcore/en/panels/bottom-right-corner.png -text
-Asunder/webserver/static/sproutcore/en/panels/left-edge.png -text
-Asunder/webserver/static/sproutcore/en/panels/overlay.png -text
-Asunder/webserver/static/sproutcore/en/panels/right-edge.png -text
-Asunder/webserver/static/sproutcore/en/panels/top-edge.png -text
-Asunder/webserver/static/sproutcore/en/panels/top-left-corner.png -text
-Asunder/webserver/static/sproutcore/en/panels/top-right-corner.png -text
-Asunder/webserver/static/sproutcore/en/stylesheet.css -text
-Asunder/webserver/static/stereo/en/index.html -text svneol=unset#text/plain
-Asunder/webserver/static/stereo/en/javascript.js -text
-Asunder/webserver/static/stereo/en/stylesheet.css -text
-Asunder/webserver/static/stereo/index.html -text svneol=unset#text/plain
 Asunder/webserver/style.css -text
 Asunder/webserver/svgloader.js -text
 CLI/.classpath -text
