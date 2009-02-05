@@ -12,8 +12,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 public class LibraryTrack implements Track {
 	
 	private final int id;
@@ -45,11 +43,15 @@ public class LibraryTrack implements Track {
 	}
 
 	public void put(Constants tag, Object value) {
-		throw new NotImplementedException();
+		for (Track t: backingTracks) {
+			t.put(tag, value);
+		}
 	}
 
 	public void setAlbum(Album album) {
-		throw new NotImplementedException();
+		for (Track t: backingTracks) {
+			t.setAlbum(album);
+		}
 	}
 
 	public Object get(Constants tag) {
