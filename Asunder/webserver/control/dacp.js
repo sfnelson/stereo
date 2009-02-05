@@ -7,13 +7,13 @@ function DACP (host, container, contentCodes) {
 	var requests = new Queue();
 	
 	this.request = function (request) {
-
+		
 		if (this.current) {
 			requests.offer(request);
 		}
 		else {
 			this.current = request;
-			ajax.request(this.host + request, function (text) { dis.response(text); });
+			ajax.request(request, function (text) { dis.response(text); });
 		}
 	};
 	
@@ -28,7 +28,8 @@ function DACP (host, container, contentCodes) {
 				node = this.contentCodes(tree);
 				break;
 			case constants.dmcp.status.code:
-				this.playstatusupdate(tree);
+				node = new PlayStatusUpdate(tree);
+				this.playstatusupdate(node);
 				break;
 			default:
 				alert(tree.name(0) + " not found");
@@ -154,119 +155,35 @@ function DACP (host, container, contentCodes) {
 	}
 }
 
-function DatabasePlaylists(tree) {
-	this.init();
-	
-	var list = tree.findNode(0, constants.dmap.listing.code);
-	if (list == -1) {
-		alert("invalid database containers response");
-		return;
-	}
-	
-	var children = tree.children(list);
-	
-	for (var i in children) {
-		this.put(new DACPContainer(tree, children[i]));
-	}
+function PlayStatusUpdate(tree) {
 
-	this.wrapper.className += " -stereo-database-containers";
-	this.show();
+	var kids = tree.children(0);
 	
-	var dis = this;
-	
-	var edit = document.createElement("FORM");
-	edit.name = "playlists-form";
-	edit.onsubmit = function () {
-		dis.add();
-		return false;
-	};
-	edit.className = "-stereo-databases-containers-editbar";
-	
-	var add = document.createElement("INPUT");
-	add.className = "-stereo-databases-containers-add-button";
-	add.value = "+";
-	add.type = "submit";
-	edit.appendChild(add);
-	
-	this.wrapper.appendChild(edit);
-}
-DatabasePlaylists.prototype = new View;
-DatabasePlaylists.prototype.add = function () {
-	var name = prompt("Collection Name:", "");
-	playlists.clear();
-	playlists.request("/databases/1/edit?action=add&edit-params='dmap.itemname:"+name+"'");
-};
-
-function BrowseResponse(tree) {
-
-	var list = -1;
-	
-	var children = tree.children(0);
-	for (var i in children) {
-		var child = children[i];
-		switch (tree.name(child)) {
-		case constants.daap.browseartistlisting.code:
-			this.name = "Artists"; list = child;
-			this.type = constants.daap.songartist;
+	for (child in kids) {
+		var node = kids[child];
+		switch (tree.name(node)) {
+		case "caps":
+			this.status = tree.byteVal(node);
 			break;
-		case constants.daap.browsealbumlisting.code:
-			this.name = "Albums"; list = child;
-			this.type = constants.daap.songalbum;
+		case "cmsr":
+			this.revision = tree.intVal(node);
 			break;
-		case constants.daap.browsegenrelisting.code:
-			this.name = "Genres"; list = child;
-			this.type = constants.daap.songgenre;
+		case "cann":
+			this.title = tree.stringVal(node);
 			break;
-		case constants.daap.browsecomposerlisting.code:
-			this.name = "Composers"; list = child;
-			this.type = constants.daap.songcomposer;
+		case "cana":
+			this.artist = tree.stringVal(node);
 			break;
-		default:
-			continue;
+		case "canl":
+			this.album = tree.stringVal(node);
+			break;
+		case "cang":
+			this.genre = tree.stringVal(node);
+			break;
+		case "canp":
+			this.container = tree.longlongVal(node)[1];
+			this.id = tree.longlongVal(node)[3];
+			break;
 		}
 	}
-	
-	if (list == -1) {
-		alert("invalid database browse response");
-		this.init();
-		return;
-	}
-	
-	this.init(this.name);
-	
-	var children = tree.children(list);
-	
-	for (var i in children) {
-		this.put(new BrowseItem(tree, children[i], this.type));
-	}
-
-	this.wrapper.className += " database-browse"
-	this.show();
-	
-	var type = this.type;
-	this.activate = function () {
-		dacp.setSearchCategory(type);
-	};
 }
-BrowseResponse.prototype = new View;
-
-function PlaylistSongs(tree) {
-	this.init("Songs");
-	
-	var list = tree.findNode(0, constants.dmap.listing.code);
-	if (list == -1) {
-		alert("invalid playlist songs response");
-		return;
-	}
-	
-	var children = tree.children(list);
-	
-	for (var i in children) {
-		this.put(new DACPTrack(tree, children[i]));
-	}
-
-	this.wrapper.className += " playlist-songs"
-	this.show();
-	
-}
-PlaylistSongs.prototype = new View;

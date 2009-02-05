@@ -8,7 +8,7 @@ html,body {
 	height: 100%;
 	background-color: black;
 	font-family: "Lucida Grande", Verdana, sans-serif;
-	font-size: 40pt;
+	font-size: 32pt;
 	text-align: center;
 }
 img {
@@ -36,19 +36,47 @@ google.load("jquery", "1");
 </script>
 <script type="text/javascript">
 $(document).ready(function () {
-	$("#title").html("Title");
+
+	var dacp = new DACP("");
+
+	var revision = 0;
+
+	dacp.playstatusupdate = function (update) {
+
+		if (revision && update.revision == revision) {
+			return;
+		}
+
+		revision = update.revision;
+		$("#albumart").attr("src", "/ctrl-int/1/nowplayingartwork?revision-number="+update.revision);
+		
+		if (update.title) {
+			$("#title").html(update.title);
+		}
+	
+		if (update.artist) {
+			$("#artist").html(update.artist);
+		}
+
+		dacp.request("/ctrl-int/1/playstatusupdate?revision-number="+update.revision);
+	};
+
+	dacp.request("/ctrl-int/1/playstatusupdate");
+
 });
+
 </script>
 <script type="text/javascript" src="/ajax.js"></script>
-<script type="text/javascript" src="daap.js"></script>
+<script type="text/javascript" src="/spotlight/views.js"></script>
+<script type="text/javascript" src="/spotlight/daap.js"></script>
 <script type="text/javascript" src="dacp.js"></script>
+
 </head>
 <body>
-<img id="albumart" src="/ctrl-int/1/nowplayingartwork" />
+<img id="albumart" />
 <div id="current">
 	<div id="title"></div>
 	<div id="artist"></div>
-</div>
 </div>
 </body>
 </html>
