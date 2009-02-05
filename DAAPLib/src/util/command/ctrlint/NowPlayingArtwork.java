@@ -16,7 +16,9 @@ public class NowPlayingArtwork implements Command {
 
 	public Response run(DJInterface dj) {
 
-		return new Image(dj.playbackStatus().getAlbumArt());
+		byte[] image = dj.playbackStatus().getAlbumArt();
+		if (image == null) return null;
+		return new Image(image);
 	}
 
 }

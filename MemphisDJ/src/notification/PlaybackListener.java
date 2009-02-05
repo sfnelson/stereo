@@ -1,7 +1,7 @@
 package notification;
 
-import music.Track;
 import interfaces.PlaybackQueue;
+import interfaces.Track;
 
 public interface PlaybackListener extends Listener {
 

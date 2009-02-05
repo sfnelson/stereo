@@ -1,12 +1,12 @@
 package util.command.ctrlint;
 
 import interfaces.DJInterface;
+import interfaces.Track;
 import interfaces.collection.Collection;
 
 import java.math.BigInteger;
 import java.util.Map;
 
-import music.Track;
 import util.command.Command;
 import util.queryparser.QueryParser;
 import util.queryparser.Token;

@@ -1,23 +1,18 @@
-package music;
-
-
-import interfaces.Album;
-import interfaces.Constants;
-import interfaces.HasMetadata;
+package interfaces;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class Track implements HasMetadata {
+public abstract class AbstractTrack implements Track {
 	
 	private final int id;
 	private final long persistentId;
 	private Album album;
 	private final Map<Constants, Object> tags = new HashMap<Constants, Object>();
 	
-	public Track(int id, long persistentId) {
+	public AbstractTrack(int id, long persistentId) {
 		this.id = id;
 		this.persistentId = persistentId; 
 		this.tags.put(Constants.dmap_itemid, id);
@@ -33,8 +28,8 @@ public abstract class Track implements HasMetadata {
 	}
 	
 	public boolean equals(Object o) {
-		if (o instanceof Track) {
-			return ((Track)o).persistentId == this.persistentId;
+		if (o instanceof AbstractTrack) {
+			return ((AbstractTrack)o).persistentId == this.persistentId;
 		}
 		return false;
 	}
@@ -73,6 +68,6 @@ public abstract class Track implements HasMetadata {
 	public abstract InputStream getStream() throws IOException;
 	
 	public interface TrackFactory {
-		public Track create(int id, long persistentId);
+		public AbstractTrack create(int id, long persistentId);
 	}
 }

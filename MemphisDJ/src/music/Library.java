@@ -1,6 +1,7 @@
 package music;
 
 import interfaces.Album;
+import interfaces.Track;
 import interfaces.collection.AbstractSetCollection;
 import interfaces.collection.Collection;
 import interfaces.collection.Source;
@@ -14,7 +15,7 @@ import notification.AbstractEventGenerator;
 import notification.LibraryListener;
 
 public class Library extends AbstractSetCollection<LibraryTrack>
-		implements Source.Listener, interfaces.Library<LibraryTrack> {
+		implements Source.Listener, interfaces.Library<LibraryTrack>, Source<LibraryTrack> {
 
 	private final Set<Source<? extends Track>> sources = new HashSet<Source<? extends Track>>();
 	private final Set<Collection<? extends Track>> collections = new HashSet<Collection<? extends Track>>();

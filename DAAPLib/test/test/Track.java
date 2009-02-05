@@ -3,7 +3,7 @@ package test;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class Track extends music.Track {
+public class Track extends interfaces.AbstractTrack {
 
 	public Track(int id, long pid) {
 		super(id, pid);
@@ -13,7 +13,7 @@ public class Track extends music.Track {
 		return null;
 	}
 	
-	public static class TrackFactory implements music.Track.TrackFactory {
+	public static class TrackFactory implements interfaces.Track.TrackFactory {
 
 		public Track create(int id, long persistentId) {
 			return new test.Track(id, persistentId);

@@ -1,5 +1,6 @@
 package daap;
 
+import interfaces.AbstractTrack;
 import interfaces.Album;
 import interfaces.Constants;
 
@@ -9,9 +10,8 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
-import music.Track;
 
-public class DAAPTrack extends Track {
+public class DAAPTrack extends AbstractTrack {
 	
 	private DAAPClient publisher;
 	

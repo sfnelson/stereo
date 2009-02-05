@@ -1,6 +1,7 @@
 package daap;
 
 import interfaces.Library;
+import interfaces.Track;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -11,7 +12,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
-import music.Track;
 
 public class DAAPLackey {
 

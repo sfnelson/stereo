@@ -4,7 +4,6 @@ import interfaces.collection.Collection;
 
 import java.util.List;
 
-import music.Track;
 import notification.EventGenerator;
 import notification.PlaybackListener;
 

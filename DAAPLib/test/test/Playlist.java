@@ -1,9 +1,9 @@
 package test;
 
+import interfaces.Track;
 import interfaces.collection.AbstractSetCollection;
 import interfaces.collection.Collection;
 import interfaces.collection.EditableCollection;
-import music.Track;
 
 public class Playlist extends AbstractSetCollection<Track> implements EditableCollection<Track> {
 

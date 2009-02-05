@@ -1,7 +1,7 @@
 package interfaces.collection;
 
 import interfaces.HasMetadata;
-import music.Track;
+import interfaces.Track;
 
 public interface Collection<T extends Track>
 	extends HasMetadata, Source<T>, Iterable<T> {

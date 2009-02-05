@@ -1,9 +1,10 @@
 package interfaces.collection;
 
 
+import interfaces.Track;
+
 import java.util.Set;
 
-import music.Track;
 import notification.EventGenerator;
 
 /**

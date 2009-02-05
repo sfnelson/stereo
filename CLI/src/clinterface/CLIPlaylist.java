@@ -1,5 +1,6 @@
 package clinterface;
 
+import interfaces.Track;
 import interfaces.collection.AbstractCollection;
 import interfaces.collection.Collection;
 import interfaces.collection.EditableCollection;
@@ -8,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import music.Track;
 import api.nodes.PlaylistNode.PlaylistFactory;
 
 public class CLIPlaylist extends AbstractCollection<CLITrack> implements EditableCollection<CLITrack> {

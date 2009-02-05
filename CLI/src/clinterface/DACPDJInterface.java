@@ -2,7 +2,9 @@ package clinterface;
 
 import interfaces.Constants;
 import interfaces.PlaybackControl;
+import interfaces.Track;
 import interfaces.VolumeControl;
+import interfaces.Track.TrackFactory;
 import interfaces.collection.Collection;
 
 import java.io.IOException;
@@ -10,8 +12,6 @@ import java.net.UnknownHostException;
 import java.util.Iterator;
 import java.util.List;
 
-import music.Track;
-import music.Track.TrackFactory;
 import notification.PlaybackListener;
 import reader.DACPResponseParser;
 import util.response.PlaylistSongs;

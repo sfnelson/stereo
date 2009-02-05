@@ -2,6 +2,7 @@ package music;
 
 import interfaces.Album;
 import interfaces.Constants;
+import interfaces.Track;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,19 +12,44 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class LibraryTrack extends Track {
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
+public class LibraryTrack implements Track {
 	
+	private final int id;
+	private final long persistentId;
 	private final Set<Track> backingTracks = new HashSet<Track>(2);
 	
 	private LibraryTrack(int id, long persistantId, Album album) {
-		super(id, persistantId);
+		this.id = id;
+		this.persistentId = persistantId;
 		this.setAlbum(album);
 	}
 	
 	public int id() {
 		Track current = current();
-		if (current == null) return super.id();
+		if (current == null) return id;
 		return current.id();
+	}
+	
+	public Album getAlbum() {
+		Track current = current();
+		if (current == null) return null;
+		return current.getAlbum();
+	}
+
+	public long persistentId() {
+		Track current = current();
+		if (current == null) return persistentId;
+		return current.persistentId();
+	}
+
+	public void put(Constants tag, Object value) {
+		throw new NotImplementedException();
+	}
+
+	public void setAlbum(Album album) {
+		throw new NotImplementedException();
 	}
 
 	public Object get(Constants tag) {
@@ -82,4 +108,5 @@ public class LibraryTrack extends Track {
 			return track;
 		}
 	}
+
 }

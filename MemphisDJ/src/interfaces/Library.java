@@ -3,7 +3,6 @@ package interfaces;
 import notification.LibraryListener;
 import interfaces.collection.Collection;
 import interfaces.collection.Source;
-import music.Track;
 
 public interface Library<T extends Track> extends Collection<T> {
 

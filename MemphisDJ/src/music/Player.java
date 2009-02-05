@@ -1,22 +1,26 @@
 package music;
 
+import interfaces.Constants;
+import interfaces.Track;
 
 import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
 
 import notification.AbstractEventGenerator;
 import notification.PlayerListener;
-import de.vdheide.mp3.ID3v2;
-import de.vdheide.mp3.ID3v2DecompressionException;
-import de.vdheide.mp3.ID3v2Frame;
-import de.vdheide.mp3.ID3v2IllegalVersionException;
-import de.vdheide.mp3.ID3v2NoSuchFrameException;
-import de.vdheide.mp3.ID3v2WrongCRCException;
-import de.vdheide.mp3.NoID3v2TagException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
 //TODO: find a way to pause playback which doesn't involve deprecated methods
 
@@ -90,7 +94,7 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 	public synchronized byte[] getAlbumArt() {
 		if (thread != null) {
 			System.out.println("retrieving album art for " + thread.track);
-			return thread.image;
+			return thread.image();
 		}
 		else {
 			return null;
@@ -131,23 +135,23 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 		private volatile boolean stopped = false;
 		private final Track track;
 		//private final BufferedInputStream in;
-		private byte[] image;
+		private byte[] imageArray;
 
 		public TrackThread(final Track track) {
 
 			this.track = track;
 
 			getAlbumArt(track);
-			
+
 			try {
 				InputStream stream = track.getStream();
-				
+
 				if (stream == null) {
 					player = null;
 					return;
 				}
 				player = new AudioPlayer(new BufferedInputStream(stream));
-				
+
 			} catch (IOException e) {
 				System.err.println("Unable to get track stream, failing");
 				e.printStackTrace();
@@ -160,11 +164,58 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 				return;
 			}
 		}
-		
-		private void getAlbumArt(Track track) {
-			
+
+		public byte[] image() {
+			synchronized (track) {
+				return imageArray;
+			}
+		}
+
+		private void getAlbumArt(final Track track) {
+
+			new Thread() {
+				public void run() {
+					synchronized (track) {
+						String req = "http://albumartexchange.com/search.php?q="
+							+ track.get(Constants.daap_songartist) + " "
+							+ track.get(Constants.daap_songalbum);
+
+
+						DocumentBuilder builder;
+						try {
+							System.out.println(req);
+							builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+							Document document = builder.parse(req);
+							Node node = (Node)XPathFactory.newInstance().newXPath().compile("/search-results/image-info[1]/image-direct").evaluate(document, XPathConstants.NODE);
+							if (node != null) {
+								HttpURLConnection connection = (HttpURLConnection)new URL(node.getTextContent()).openConnection();
+								if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+									ByteArrayOutputStream stream = new ByteArrayOutputStream();
+									int b = connection.getInputStream().read();
+									while (b!= -1) {
+										stream.write(b);
+										b = connection.getInputStream().read();
+									}
+									stream.close();
+									connection.disconnect();
+									imageArray = stream.toByteArray();
+									System.out.println("read albumart successfully");
+								}
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}.start();
+
+		}
+
+		/*
+		private void getAlbumArtOld(Track track) {
+
 			try {
-			Thread.sleep(500); //TODO Tag reader doesn't block to read the whole tag
+				Thread.sleep(500); //TODO Tag reader doesn't block to read the whole tag
 			}
 			catch (InterruptedException ex) {}
 
@@ -205,8 +256,8 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 					if (b == 0) break;
 				}
 
-				image = new byte[bytes.length - read];
-				ba.read(image);
+				imageArray = new byte[bytes.length - read];
+				ba.read(imageArray);
 
 			} catch (ID3v2IllegalVersionException e1) {
 				// TODO Auto-generated catch block
@@ -229,6 +280,7 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 				System.out.println("no album art available");
 			}
 		}
+		*/
 
 		public int elapsed() {
 			if (player != null) {

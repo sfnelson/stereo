@@ -1,13 +1,14 @@
 package clinterface;
 
+import interfaces.AbstractTrack;
 import interfaces.Constants;
+import interfaces.Track;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import music.Track;
 
-public class CLITrack extends Track {
+public class CLITrack extends AbstractTrack {
 	
 	public CLITrack(int id, long persistent) {
 		super(id, persistent);

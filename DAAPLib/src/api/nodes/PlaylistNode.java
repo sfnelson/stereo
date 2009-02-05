@@ -1,9 +1,9 @@
 package api.nodes;
 
 import interfaces.Constants;
+import interfaces.Track;
 import interfaces.collection.Collection;
 import interfaces.collection.EditableCollection;
-import music.Track;
 import api.Node;
 import api.Reader;
 import api.Writer;

@@ -1,11 +1,11 @@
 package util.command.ctrlint;
 
 import interfaces.DJInterface;
+import interfaces.Track;
 import interfaces.collection.Collection;
 
 import java.util.Map;
 
-import music.Track;
 import util.command.Command;
 import util.response.PlaylistSongs;
 import api.Response;

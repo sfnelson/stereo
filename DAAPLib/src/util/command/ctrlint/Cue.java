@@ -1,11 +1,11 @@
 package util.command.ctrlint;
 
 import interfaces.DJInterface;
+import interfaces.Track;
 
 import java.util.List;
 import java.util.Map;
 
-import music.Track;
 import util.command.Command;
 import util.queryparser.ApplyFilter;
 import util.queryparser.Filter;

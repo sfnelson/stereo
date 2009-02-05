@@ -1,13 +1,13 @@
 package util.command.databases;
 
 import interfaces.DJInterface;
+import interfaces.Track;
 import interfaces.collection.Collection;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import music.Track;
 import util.command.Command;
 import util.queryparser.ApplyFilter;
 import util.queryparser.Filter;

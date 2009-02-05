@@ -1,5 +1,6 @@
 package clinterface;
 
+import interfaces.Track;
 import interfaces.collection.Collection;
 
 import java.lang.reflect.InvocationTargetException;
@@ -12,7 +13,6 @@ import api.nodes.TrackNode;
 import util.response.PlaylistSongs;
 import util.response.ctrlint.PlayStatusUpdate;
 
-import music.Track;
 
 public class CLI {
 

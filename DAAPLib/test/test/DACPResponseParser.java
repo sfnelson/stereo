@@ -1,6 +1,6 @@
 package test;
 
-import music.Track.TrackFactory;
+import interfaces.Track.TrackFactory;
 import api.nodes.AlbumNode.AlbumFactory;
 import api.nodes.PlaylistNode.PlaylistFactory;
 

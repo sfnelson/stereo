@@ -3,6 +3,7 @@ package music;
 import interfaces.PlaybackControl;
 import interfaces.PlaybackQueue;
 import interfaces.Player;
+import interfaces.Track;
 import interfaces.collection.Collection;
 
 import java.util.List;

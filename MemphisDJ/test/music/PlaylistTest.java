@@ -2,6 +2,8 @@ package music;
 
 import static org.junit.Assert.assertTrue;
 
+import interfaces.Track;
+
 import java.util.List;
 
 import org.junit.Before;

@@ -1,5 +1,6 @@
 package music;
 
+import interfaces.Track;
 import interfaces.collection.AbstractCollection;
 import interfaces.collection.Collection;
 import interfaces.collection.Source;

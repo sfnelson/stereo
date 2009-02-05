@@ -1,12 +1,13 @@
 package interfaces.collection;
 
+import interfaces.Track;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import music.Track;
 
 public abstract class AbstractSetCollection<T extends Track> extends AbstractCollection<T> {
 

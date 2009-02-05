@@ -4,13 +4,14 @@ package util.response;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import interfaces.Track;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import music.Track;
 
 import org.junit.Before;
 import org.junit.Test;

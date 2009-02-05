@@ -3,6 +3,7 @@ package music;
 import interfaces.DJInterface;
 import interfaces.PlaybackControl;
 import interfaces.PlaybackStatus;
+import interfaces.Track;
 import interfaces.VolumeControl;
 import interfaces.collection.Collection;
 
@@ -31,8 +32,8 @@ public class DJ implements DJInterface, PlaybackStatus {
 		collections = new HashSet<Collection<? extends Track>>();
 		
 		library = new Library("All Songs");
-		
 		queue = new PlaybackQueue(library);
+		library.addCollection(queue.playlist());
 		
 		player = new Player();
 		control = new PlaybackController(player, queue);

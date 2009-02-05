@@ -1,12 +1,12 @@
 package util.response.databases;
 
 import interfaces.Constants;
+import interfaces.Track;
 import interfaces.collection.Collection;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import music.Track;
 import api.Reader;
 import api.Response;
 import api.Writer;

@@ -2,6 +2,9 @@ package music;
 
 import static org.junit.Assert.*;
 
+import interfaces.AbstractTrack;
+import interfaces.Track;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -44,7 +47,7 @@ public class LibraryTest {
 		assertTrue(l.size() == 0);
 	}
 	
-	private class TestTrack extends Track {
+	private class TestTrack extends AbstractTrack {
 		
 		public TestTrack(int id) {
 			super(id, id);

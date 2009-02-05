@@ -2,11 +2,11 @@ package util.command.databases;
 
 import interfaces.Constants;
 import interfaces.DJInterface;
+import interfaces.Track;
 import interfaces.collection.Collection;
 
 import java.util.Map;
 
-import music.Track;
 import music.UserCollection;
 import util.command.Command;
 import util.queryparser.QueryParser;
@@ -20,7 +20,6 @@ import api.Response;
  * : /databases/1/edit?action=remove?&edit-params='dmap.itemid:[playlist id]' -> 204 No Content
  * both followed by a reply to update
  * 
- * : /databases/1/containers/[id]/edit?action=add&edit-params='dmap.itemid:[id]' -> need to decode response
  */
 
 public class Edit implements Command {
@@ -60,21 +59,17 @@ public class Edit implements Command {
 						dj.library().removeCollection(c);
 					}
 				}
-			}
-			else if (params.property == Constants.dmap_containeritemid) {
 				
+				return new Response(null, Response.NO_CONTENT);
 			}
 			else {
 				throw new RuntimeException("unknown property: " + params.property);
 			}
 		}
-		else if (action.equals("move")) {
-			if (params.name.equals("edit-param.move-pair")) {
-				//String pair = params.value;
-			}
+		else {
+			throw new RuntimeException("unknown action: " + action);
 		}
 		
-		return new Response(null, Response.NO_CONTENT);
 	}
 
 }

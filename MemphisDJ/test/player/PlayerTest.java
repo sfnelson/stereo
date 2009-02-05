@@ -1,12 +1,13 @@
 package player;
 
+import interfaces.AbstractTrack;
+
 import java.io.IOException;
 import java.io.InputStream;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 import music.Player;
-import music.Track;
 
 public class PlayerTest {
 
@@ -14,25 +15,9 @@ public class PlayerTest {
 
 		String in1 = "music.mp3";
 		String in2 = "music.ogg";
-		
-		//new AudioPlayer(in1).play();
-		
+				
 		testSkip(in1, in2);
-//		try{
-//			DAAPClient client = new DAAPClient(hostname, port);
-//			testCompletePlay(client.getTrackList().get(1).getStream());
-//		}catch(IOException e){
-//			e.printStackTrace();
-//		}
-		
-//		testPlayer(PlayerTest.class.getResourceAsStream("music.mp3"));
-//
-//		try{
-//			DaapClient client = new DaapClient(hostname, port);
-//			testPlayer(client.getTrackList().get(34).getStream());
-//		}catch(IOException e){
-//			e.printStackTrace();
-//		}
+
 	}
 	
 
@@ -85,7 +70,7 @@ public class PlayerTest {
 		
 	}
 	
-	private static class FakeTrack extends Track {
+	private static class FakeTrack extends AbstractTrack {
 
 		private String file;
 		

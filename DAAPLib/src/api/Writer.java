@@ -18,5 +18,5 @@ public interface Writer {
 	public void appendString(Constants code, String value);
 	public void appendBytes(Constants code, byte[] value);
 	public void appendList(Constants code, byte type, List<? extends Node> value);
-
+	
 }

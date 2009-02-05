@@ -1,7 +1,6 @@
 package interfaces;
 
 import interfaces.collection.Collection;
-import music.Track;
 
 
 public interface PlaybackStatus {

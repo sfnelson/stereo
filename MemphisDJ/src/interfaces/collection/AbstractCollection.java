@@ -2,11 +2,11 @@ package interfaces.collection;
 
 
 import interfaces.Constants;
+import interfaces.Track;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import music.Track;
 import notification.AbstractEventGenerator;
 
 public abstract class AbstractCollection<T extends Track> extends AbstractEventGenerator<Source.Listener> implements Collection<T> {

@@ -1,9 +1,10 @@
 package notification;
 
 
+import interfaces.Track;
+
 import java.util.Set;
 
-import music.Track;
 
 
 public interface TrackSourceListener extends Listener {

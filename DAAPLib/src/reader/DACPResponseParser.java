@@ -1,6 +1,7 @@
 package reader;
 
 import interfaces.Constants;
+import interfaces.Track.TrackFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,7 +10,6 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
-import music.Track.TrackFactory;
 import util.response.ControlPromptUpdate;
 import util.response.CtrlInt;
 import util.response.Databases;

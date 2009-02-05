@@ -12,7 +12,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class DAAPClient extends AbstractSetCollection<DAAPTrack> {
+public class DAAPClient extends AbstractSetCollection<DAAPTrack>
+		implements Source<DAAPTrack> {
 	
 	public static List<DAAPClient> create(String hostname, int port, int id) throws IOException {
 		

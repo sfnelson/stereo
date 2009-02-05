@@ -1,6 +1,6 @@
 package interfaces.collection;
 
-import music.Track;
+import interfaces.Track;
 
 public interface EditableCollection<T extends Track> extends Collection<T> {
 

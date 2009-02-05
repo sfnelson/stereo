@@ -4,10 +4,10 @@ import interfaces.Constants;
 import interfaces.DJInterface;
 import interfaces.PlaybackControl;
 import interfaces.PlaybackQueue;
+import interfaces.Track;
 
 import java.util.Map;
 
-import music.Track;
 import notification.PlaybackListener;
 import util.command.Command;
 import util.response.ctrlint.PlayStatusUpdate.Status;

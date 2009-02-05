@@ -7,6 +7,7 @@ import java.io.PrintStream;
 import java.text.DateFormat;
 import java.util.Date;
 
+import util.command.Image;
 import util.node.PageNode;
 import api.Response;
 import api.Writer;
@@ -30,6 +31,16 @@ public class DACPResponseGenerator {
 			out.print("Date: "+DateFormat.getDateInstance().format(new Date())+"\r\n");
 
 			data = page.text();
+		}
+		else if (content instanceof Image) {
+			
+			byte[] image = ((Image)content).image();
+			
+			out.print("Content-Type: image/jpg\r\n");
+			out.print("Content-Length: "+image.length+"\r\n");
+			out.print("Date: "+DateFormat.getDateInstance().format(new Date())+"\r\n");
+			
+			data = image;
 		}
 		else if (content.type() != null) {
 

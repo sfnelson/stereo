@@ -5,7 +5,6 @@ import interfaces.collection.Source;
 
 import java.util.List;
 
-import music.Track;
 import notification.EventGenerator;
 import notification.QueueListener;
 

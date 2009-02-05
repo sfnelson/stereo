@@ -9,12 +9,16 @@ Asunder/build.xml -text
 Asunder/webserver/FileLoader.java -text
 Asunder/webserver/ajax.js -text
 Asunder/webserver/bignum.js -text
+Asunder/webserver/control/daap.js -text svneol=unset#text/plain
+Asunder/webserver/control/dacp.js -text svneol=unset#text/plain
+Asunder/webserver/control/index.html -text svneol=unset#text/plain
 Asunder/webserver/dacp.js -text
 Asunder/webserver/favicon.ico -text
 Asunder/webserver/index.xhtml -text
 Asunder/webserver/spotlight/daap.js -text svneol=unset#text/plain
 Asunder/webserver/spotlight/dacp.js -text svneol=unset#text/plain
 Asunder/webserver/spotlight/index.html -text svneol=unset#text/plain
+Asunder/webserver/spotlight/jquery-1.3.1.min.js -text svneol=unset#text/plain
 Asunder/webserver/spotlight/style.css -text svneol=unset#text/plain
 Asunder/webserver/spotlight/views.js -text svneol=unset#text/plain
 Asunder/webserver/style.css -text
@@ -158,6 +162,7 @@ MemphisDJ/Sample/sample/TypedEntry.java -text
 MemphisDJ/build.xml -text
 MemphisDJ/ivy.xml -text
 MemphisDJ/src/interfaces/AbstractAlbum.java -text
+MemphisDJ/src/interfaces/AbstractTrack.java -text svneol=unset#text/plain
 MemphisDJ/src/interfaces/Album.java -text
 MemphisDJ/src/interfaces/Constants.java -text
 MemphisDJ/src/interfaces/DJInterface.java -text
@@ -167,6 +172,7 @@ MemphisDJ/src/interfaces/PlaybackControl.java -text
 MemphisDJ/src/interfaces/PlaybackQueue.java -text
 MemphisDJ/src/interfaces/PlaybackStatus.java -text
 MemphisDJ/src/interfaces/Player.java -text
+MemphisDJ/src/interfaces/Track.java -text
 MemphisDJ/src/interfaces/VolumeControl.java -text
 MemphisDJ/src/interfaces/collection/AbstractCollection.java -text
 MemphisDJ/src/interfaces/collection/AbstractSetCollection.java -text
@@ -180,7 +186,6 @@ MemphisDJ/src/music/LibraryTrack.java -text
 MemphisDJ/src/music/PlaybackController.java -text
 MemphisDJ/src/music/PlaybackQueue.java -text
 MemphisDJ/src/music/Player.java -text
-MemphisDJ/src/music/Track.java -text
 MemphisDJ/src/music/UserCollection.java -text
 MemphisDJ/src/music/VolumeControl.java -text
 MemphisDJ/src/music/getvolume.sh -text
