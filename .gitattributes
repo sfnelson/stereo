@@ -62,6 +62,7 @@ DAAPLib/src/reader/DACPResponseParser.java -text
 DAAPLib/src/util/DACPPacket.java -text
 DAAPLib/src/util/DACPStatusPacket.java -text
 DAAPLib/src/util/command/Command.java -text
+DAAPLib/src/util/command/Connect.java -text svneol=unset#text/plain
 DAAPLib/src/util/command/ContentCodes.java -text svneol=unset#text/plain
 DAAPLib/src/util/command/CtrlInt.java -text
 DAAPLib/src/util/command/Databases.java -text

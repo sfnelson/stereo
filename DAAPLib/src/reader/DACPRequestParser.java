@@ -8,6 +8,7 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import util.command.Command;
+import util.command.Connect;
 import util.command.ContentCodes;
 import util.command.CtrlInt;
 import util.command.Databases;
@@ -34,6 +35,9 @@ public class DACPRequestParser {
 		}
 		public PathNode ctrlInt() {
 			return new CtrlInt();
+		}
+		public RequestNode connect() {
+			return new Connect();
 		}
 		public RequestNode contentCodes() {
 			return new ContentCodes();
