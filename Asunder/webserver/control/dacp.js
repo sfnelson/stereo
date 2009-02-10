@@ -19,8 +19,12 @@ function DACP (host, container, contentCodes) {
 	
 	this.response = function (response) {
 		
+		this.current = 0;
+		if (requests.size() > 0) {
+			this.request(requests.poll());
+		}
+		
 		if (response.length > 0) {
-
 			var tree = new DACPNode(response);
 			var node = 0;
 			switch (tree.name(0)) {
@@ -34,11 +38,6 @@ function DACP (host, container, contentCodes) {
 			default:
 				alert(tree.name(0) + " not found");
 			}
-		}
-		
-		this.current = 0;
-		if (requests.size() > 0) {
-			this.request(requests.poll());
 		}
 	};
 	
