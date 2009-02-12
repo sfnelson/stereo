@@ -1,11 +1,9 @@
 package music;
 
 import interfaces.Track;
-import interfaces.collection.AbstractCollection;
 import interfaces.collection.Collection;
 import interfaces.collection.Source;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -25,11 +23,11 @@ class PlaybackQueue extends AbstractEventGenerator<QueueListener>
 	
 	private volatile Track current;
 	private volatile int position;
-	private LinkedList<Track> queued;
+	private ShufflePlaylist<Track> queued;
 	private LinkedList<Track> recent;
 	
 	public PlaybackQueue(Source<? extends Track> source) {
-		queued = new LinkedList<Track>();
+		queued = new ShufflePlaylist<Track>();
 		recent = new LinkedList<Track>();
 		
 		this.source = source;
@@ -48,11 +46,11 @@ class PlaybackQueue extends AbstractEventGenerator<QueueListener>
 		}
 		
 		while (queued.size() < QUEUED && source.hasNext()) {
-			queued.addLast(source.next());
+			queued.append(source.next());
 		}
 		
-		if (!queued.isEmpty()) {
-			current = queued.removeFirst();
+		if (queued.hasNext()) {
+			current = queued.next();
 			position++;
 			notifyQueueChanged();
 		}
@@ -68,7 +66,7 @@ class PlaybackQueue extends AbstractEventGenerator<QueueListener>
 		if (!recent.isEmpty()) {
 			
 			if (current != null) {
-				queued.addFirst(current);
+				queued.insertFirst(current);
 				position--;
 			}
 			
@@ -87,29 +85,34 @@ class PlaybackQueue extends AbstractEventGenerator<QueueListener>
 	}
 	
 	public synchronized void enqueue(List<? extends Track> tracks) {
-		queued.addAll(tracks);
+		queued.appendAll(tracks);
 		
 		notifyQueueChanged();
 	}
 	
 	public synchronized boolean hasSongs() {
-		return !queued.isEmpty();
+		return queued.hasNext();
 	}
 	
 	public synchronized void added(Iterable<? extends Track> tracks) {
 		
 		System.out.println("songs added: updating queue");
 		
-		boolean empty = queued.isEmpty() && current == null;
+		boolean empty = !queued.hasNext() && current == null;
 		
+		boolean changed = false;
 		while (queued.size() < QUEUED && source.hasNext()) {
-			queued.addLast(source.next());
-			System.out.println("added " + queued.getLast());
+			Track t = source.next();
+			queued.append(t);
+			changed = true;
+			System.out.println("added " + t);
 		}
 		
-		if (!queued.isEmpty() && empty) {
-			if (empty) notifyTracksAvailable();
-			else notifyQueueChanged();
+		if (empty && queued.hasNext()) {
+			notifyTracksAvailable();
+		}
+		else if (changed) {
+			notifyQueueChanged();
 		}
 	}
 	
@@ -127,9 +130,9 @@ class PlaybackQueue extends AbstractEventGenerator<QueueListener>
 			current = null;
 			changed = true;
 		}
-		for (Iterator<Track> it = queued.iterator(); it.hasNext();) {
-			if (tracks.contains(it.next())) {
-				it.remove();
+		for (Track t: queued.tracks()) {
+			if (tracks.contains(t)) {
+				queued.remove(t);
 				changed = true;
 			}
 		}
@@ -164,13 +167,7 @@ class PlaybackQueue extends AbstractEventGenerator<QueueListener>
 
 	public synchronized Collection<? extends Track> playlist() {
 		
-		//TODO create collection
-		List<Track> tracks = new ArrayList<Track>();
-		tracks.addAll(recent);
-		if (current != null) tracks.add(current);
-		tracks.addAll(queued);
-		
-		return new PlaybackQueueCollection(tracks);
+		return queued.collection();
 	}
 	
 	public synchronized void setSource(Source<? extends Track> source) {
@@ -211,64 +208,6 @@ class PlaybackQueue extends AbstractEventGenerator<QueueListener>
 		for (QueueListener l: super.listeners()) {
 			l.queueChanged();
 		}
-	}
-	
-	private class PlaybackQueueCollection extends AbstractCollection<Track> {
-
-		private final List<Track> tracks;
-		private final Iterator<Track> trackIt;
-		
-		public PlaybackQueueCollection(List<Track> tracks) {
-			super(Collection.QUEUE_ID, Collection.QUEUE_PERSISTENT_ID);
-			this.tracks = tracks;
-			this.trackIt = tracks.iterator();
-		}
-		
-		public boolean hasNext() {
-			return trackIt.hasNext();
-		}
-
-		public Track next() {
-			return trackIt.next();
-		}
-		
-		public int editStatus() {
-			return GENERATED;
-		}
-
-		public Iterable<? extends Track> tracks() {
-			return tracks;
-		}
-
-		public Iterator<Track> iterator() {
-			return tracks.iterator();
-		}
-		
-		public int id() {
-			return source.id();
-		}
-
-		public long persistentId() {
-			return source.persistentId();
-		}
-
-		public boolean isRoot() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		public String name() {
-			return source.name();
-		}
-
-		public Collection<Track> parent() {
-			return null;
-		}
-
-		public int size() {
-			return tracks.size();
-		}
-		
 	}
 
 }

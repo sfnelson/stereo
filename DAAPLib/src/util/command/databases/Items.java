@@ -3,6 +3,7 @@ package util.command.databases;
 import interfaces.DJInterface;
 import interfaces.Track;
 import interfaces.collection.Collection;
+import interfaces.collection.Source;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,31 +30,31 @@ public class Items implements Command {
 
 	public Response run(DJInterface dj) {
 
-		Collection<? extends Track> playlist = null;
+		Source<? extends Track> source = null;
 		
 		for (Collection<? extends Track> p: dj.library().collections()) {
 			if (p.id() == container) {
-				playlist = p;
+				source = p.source();
 				break;
 			}
 		}
 		
-		if (playlist == null) {
+		if (source == null) {
 			System.err.println("requested playlist not found!");
 		}
 		
-		System.out.println("playlist has " + playlist.size() + " elements");
+		System.out.println("playlist has " + source.size() + " elements");
 		
 		List<? extends Track> pl;
 		
 		if (args != null && args.containsKey("query")) {
 			Filter f = QueryParser.parse(args.get("query"));
 			System.out.println(f);
-			pl = ApplyFilter.filter(f, playlist);
+			pl = ApplyFilter.filter(f, source.tracks());
 		}
 		else {
 			List<Track> l = new ArrayList<Track>();
-			for (Track t: playlist) {
+			for (Track t: source.tracks()) {
 				l.add(t);
 			}
 			pl = l;
@@ -69,7 +70,7 @@ public class Items implements Command {
 			}
 		});*/
 		
-		System.out.println("returning " + playlist.size() + " elements");
+		System.out.println("returning " + source.size() + " elements");
 		
 		return new util.response.PlaylistSongs(pl);
 	}

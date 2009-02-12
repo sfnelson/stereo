@@ -4,7 +4,7 @@ import interfaces.HasMetadata;
 import interfaces.Track;
 
 public interface Collection<T extends Track>
-	extends HasMetadata, Source<T>, Iterable<T> {
+	extends HasMetadata {
 	
 	public static final int LIBRARY_ID = 1;
 	public static final long LIBRARY_PERSISTENT_ID = 1;
@@ -19,10 +19,21 @@ public interface Collection<T extends Track>
 	public static final int GENERATED = 0x60;
 	public static final int EDITABLE = 0x67;
 	
+	public int id();
+	public long persistentId();
 	public String name();
 	public boolean isRoot();
 	public Collection<? extends T> parent();
 	public int size();
 	public int editStatus();
+	
+	/**
+	 * The backing source for this collection.
+	 * 
+	 * May be null.
+	 * 
+	 * @return backing source
+	 */
+	public Source<T> source();
 	
 }

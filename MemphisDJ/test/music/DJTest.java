@@ -39,7 +39,7 @@ public class DJTest {
 
 	@Test
 	public void testTracksAdded() {
-		assertTrue(a.playlist().hasNext());
+		assertTrue(a.playlist().source().hasNext());
 	}
 
 	@Test

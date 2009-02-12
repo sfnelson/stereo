@@ -43,13 +43,13 @@ public class Browse implements Command {
 		
 		for (Collection<? extends Track> p: dj.library().collections()) {
 			if (p.id() == container) {
-				songs = p;
+				songs = p.source().tracks();
 				break;
 			}
 		}
 		
 		if (songs == null) {
-			songs = dj.library();
+			songs = dj.library().tracks();
 		}
 
 		System.out.println("collection has " + dj.library().size() + " elements");

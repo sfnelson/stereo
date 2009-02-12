@@ -18,25 +18,11 @@ import notification.EventGenerator;
 public interface Source<T extends Track> extends EventGenerator<Source.Listener> {
 
 	/**
-	 * Returns the name of this source.
+	 * Returns the collection containing the metadata for this source. May be null.
 	 * 
-	 * @return the name of this source
+	 * @return the metadata collection for this source
 	 */
-	public String name();
-	
-	/**
-	 * Returns the id (internal) of this source.
-	 * 
-	 * @return a unique collection id
-	 */
-	public int id();
-	
-	/**
-	 * Returns the persistent id of this source.
-	 * 
-	 * @return a unique, persistent id for the source
-	 */
-	public long persistentId();
+	public Collection<T> collection();
 	
 	/**
 	 * Returns the next song in this source. It is up to the implementor
@@ -47,6 +33,13 @@ public interface Source<T extends Track> extends EventGenerator<Source.Listener>
 	 * @return the next track, whatever that means
 	 */
 	public T next();
+	
+	/**
+	 * Returns the number of available tracks.
+	 * 
+	 * @return the number of available tracks
+	 */
+	public int size();
 	
 	/**
 	 * Returns true if there is a next track. @See(Source.next()).
@@ -60,7 +53,7 @@ public interface Source<T extends Track> extends EventGenerator<Source.Listener>
 	 * 
 	 * @return iterable collection of tracks provided by this source
 	 */
-	public Iterable<? extends Track> tracks();
+	public Iterable<T> tracks();
 	
 	/**
 	 * This interface allows clients of a source to register with it to

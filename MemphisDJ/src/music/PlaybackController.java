@@ -4,7 +4,7 @@ import interfaces.PlaybackControl;
 import interfaces.PlaybackQueue;
 import interfaces.Player;
 import interfaces.Track;
-import interfaces.collection.Collection;
+import interfaces.collection.Source;
 
 import java.util.List;
 
@@ -86,8 +86,8 @@ public class PlaybackController implements PlaybackControl, PlayerListener, Queu
 		}
 	}
 	
-	public void setCollection(Collection<? extends Track> collection) {
-		queue.setSource(collection);
+	public void setSource(Source<? extends Track> source) {
+		queue.setSource(source);
 		
 		player.setTrack(queue.current());
 	}

@@ -1,6 +1,6 @@
 package interfaces;
 
-import interfaces.collection.Collection;
+import interfaces.collection.Source;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public interface PlaybackControl extends EventGenerator<PlaybackListener> {
 
 	public void clear();
 	public void enqueue(List<? extends Track> tracks);
-	public void setCollection(Collection<? extends Track> collection);
+	public void setSource(Source<? extends Track> source);
 	
 	public int revision();
 	

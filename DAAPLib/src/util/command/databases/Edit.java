@@ -40,7 +40,7 @@ public class Edit implements Command {
 			if (params.property == Constants.dmap_itemname) {
 				int id = dj.library().nextCollectionId();
 				System.out.printf("creating new collection: %s (%d)\n", params.value, id);
-				Collection<? extends Track> c = new UserCollection(params.value, id, params.value.hashCode(), dj.library());
+				Collection<? extends Track> c = new UserCollection(params.value, id, params.value.hashCode(), dj.library()).collection();
 				dj.library().addCollection(c);
 				
 				return new util.response.databases.NewPlaylist(id);

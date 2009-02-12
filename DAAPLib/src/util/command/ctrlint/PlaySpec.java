@@ -29,7 +29,7 @@ public class PlaySpec implements Command {
 		for (Collection<? extends Track> c: dj.library().collections()) {
 			if (c.persistentId() == playlist) {
 				System.out.println("playlist set: " + c.name());
-				dj.playbackControl().setCollection(c);
+				dj.playbackControl().setSource(c.source());
 			}
 		}
 		

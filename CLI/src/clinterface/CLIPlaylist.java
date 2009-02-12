@@ -2,18 +2,15 @@ package clinterface;
 
 import interfaces.Track;
 import interfaces.collection.AbstractCollection;
+import interfaces.collection.AbstractSetSource;
 import interfaces.collection.Collection;
 import interfaces.collection.EditableCollection;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
+import interfaces.collection.Source;
 import api.nodes.PlaylistNode.PlaylistFactory;
 
 public class CLIPlaylist extends AbstractCollection<CLITrack> implements EditableCollection<CLITrack> {
 
-	private final List<CLITrack> tracks = new ArrayList<CLITrack>();
+	private final Source<CLITrack> source;
 	
 	private String name = null;
 	private boolean root = false;
@@ -23,6 +20,8 @@ public class CLIPlaylist extends AbstractCollection<CLITrack> implements Editabl
 	
 	public CLIPlaylist(int id, long persistent) {
 		super(id, persistent);
+		
+		source = new CLISource(this);
 	}
 	
 	public String name() {
@@ -51,8 +50,8 @@ public class CLIPlaylist extends AbstractCollection<CLITrack> implements Editabl
 	}
 	
 	public int size() {
-		if (tracks.size() == 0) return size; 
-		else return tracks.size();
+		if (source.size() == 0) return size; 
+		else return source.size();
 	}
 
 	public boolean hasNext() {
@@ -61,18 +60,6 @@ public class CLIPlaylist extends AbstractCollection<CLITrack> implements Editabl
 
 	public CLITrack next() {
 		throw new RuntimeException("should not be called on cli");
-	}
-	
-	public void add(CLITrack track) {
-		tracks.add(track);
-	}
-
-	public Iterable<? extends Track> tracks() {
-		return tracks;
-	}
-
-	public Iterator<CLITrack> iterator() {
-		return tracks.iterator();
 	}
 
 	public int editStatus() {
@@ -102,6 +89,23 @@ public class CLIPlaylist extends AbstractCollection<CLITrack> implements Editabl
 	private static class CLIPlaylistFactory implements PlaylistFactory {
 		public EditableCollection<? extends Track> create(int id, long pid) {
 			return new CLIPlaylist(id, pid);
+		}
+	}
+	
+	public Source<CLITrack> source() {
+		return source;
+	}
+	
+	private class CLISource extends AbstractSetSource<CLITrack> {
+		
+		private CLIPlaylist collection;
+		
+		public CLISource(CLIPlaylist collection) {
+			this.collection = collection;
+		}
+
+		public Collection<CLITrack> collection() {
+			return collection;
 		}
 	}
 }

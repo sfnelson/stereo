@@ -7,9 +7,7 @@ import interfaces.Track;
 import java.util.HashMap;
 import java.util.Map;
 
-import notification.AbstractEventGenerator;
-
-public abstract class AbstractCollection<T extends Track> extends AbstractEventGenerator<Source.Listener> implements Collection<T> {
+public abstract class AbstractCollection<T extends Track> implements Collection<T> {
 
 	private Map<Constants, Object> tags = new HashMap<Constants, Object>();
 	private final int id;

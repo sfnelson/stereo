@@ -53,11 +53,11 @@ public class DAAPLackey {
 	private synchronized void add(DAAPClient client) {
 		clients.add(client);
 		library.addSource(client);
-		library.addCollection(client);
+		library.addCollection(client.collection());
 	}
 	
 	private synchronized void remove(DAAPClient client) {
-		library.removeCollection(client);
+		library.removeCollection(client.collection());
 		library.removeSource(client);
 		clients.remove(client);
 	}
@@ -77,7 +77,7 @@ public class DAAPLackey {
 						client.update();
 					}
 					catch (IOException ex) {
-						System.err.println("Unable to update client, closing (" + client.name() + ")");
+						System.err.println("Unable to update client, closing (" + client.collection().name() + ")");
 						ex.printStackTrace();
 						
 						client.close();

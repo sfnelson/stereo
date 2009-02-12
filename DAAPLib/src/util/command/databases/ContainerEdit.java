@@ -32,16 +32,16 @@ public class ContainerEdit implements Command {
 
 	public Response run(DJInterface dj) {
 
-		UserCollection collection = null;
+		UserCollection source = null;
 		for (Collection<? extends Track> c: dj.library().collections()) {
 			if (c.id() == id) {
-				collection = (UserCollection)c;
+				source = (UserCollection)c;
 			}
 		}
-		if (collection == null) {
+		if (source == null) {
 			throw new RuntimeException("collection not found (" + id + ")");
 		}
-		if (collection.editStatus() != Collection.EDITABLE) {
+		if (source.collection().editStatus() != Collection.EDITABLE) {
 			throw new RuntimeException("collection is not editable (" + id + ")");
 		}
 
@@ -60,11 +60,11 @@ public class ContainerEdit implements Command {
 
 			System.out.println("found " + filtered.size() + " to add");
 
-			collection.add(filtered);
+			source.add(filtered);
 		}
 		else if (action.equals("remove")) {
 			//action=remove&edit-params='dmap.containeritemid:17667'
-			Iterable<? extends Track> songs = collection.tracks();
+			Iterable<? extends Track> songs = source.tracks();
 			List<? extends Track> filtered = null;
 
 			if (params != null) {
@@ -75,7 +75,7 @@ public class ContainerEdit implements Command {
 
 			System.out.println("found " + filtered.size() + " to remove");
 
-			collection.remove(filtered);
+			source.remove(filtered);
 		}
 		else if (action.equals("move")) {
 			//action=move&edit-params='edit-param.move-pair:17978,17980'

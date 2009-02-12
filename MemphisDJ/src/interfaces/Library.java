@@ -1,10 +1,10 @@
 package interfaces;
 
-import notification.LibraryListener;
 import interfaces.collection.Collection;
 import interfaces.collection.Source;
+import notification.LibraryListener;
 
-public interface Library<T extends Track> extends Collection<T> {
+public interface Library<T extends Track> extends Source<T> {
 
 	public boolean addSource(Source<? extends Track> source);
 	public boolean removeSource(Source<? extends Track> source);

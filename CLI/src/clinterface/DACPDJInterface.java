@@ -6,6 +6,7 @@ import interfaces.Track;
 import interfaces.VolumeControl;
 import interfaces.Track.TrackFactory;
 import interfaces.collection.Collection;
+import interfaces.collection.Source;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -132,8 +133,8 @@ public class DACPDJInterface {
 		public void registerListener(PlaybackListener listener) {}
 		public void removeListener(PlaybackListener listener) {}
 
-		public void setCollection(Collection<? extends Track> collection) {
-			request("/ctrl-int/1/playspec?playlist-spec='dmap.persistentid:"+collection.persistentId()+"'");
+		public void setSource(Source<? extends Track> source) {
+			request("/ctrl-int/1/playspec?playlist-spec='dmap.persistentid:"+source.collection().persistentId()+"'");
 		}
 		
 	};

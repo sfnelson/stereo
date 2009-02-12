@@ -1,5 +1,12 @@
 package music;
 
+import interfaces.Album;
+import interfaces.Constants;
+import interfaces.Track;
+import interfaces.collection.Collection;
+import interfaces.collection.ConcreteCollection;
+import interfaces.collection.Source;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -8,45 +15,37 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import interfaces.Album;
-import interfaces.Constants;
-import interfaces.Track;
-import interfaces.collection.AbstractCollection;
-import interfaces.collection.Collection;
-import interfaces.collection.Source;
+import notification.AbstractEventGenerator;
 
-public class UserCollection extends AbstractCollection<Track> implements Source.Listener {
+public class UserCollection extends AbstractEventGenerator<Source.Listener>
+		implements Source<Track>, Source.Listener {
 	
-	private final String name;
+	private final Set<CollectionTrack> songs = new HashSet<CollectionTrack>();
+	private final Set<CollectionTrack> available = new HashSet<CollectionTrack>();
+	private final Collection<Track> collection;
+	
 	private int collectionId;
-	private Set<CollectionTrack> songs = new HashSet<CollectionTrack>();
-	private Set<CollectionTrack> available = new HashSet<CollectionTrack>();
 
 	public UserCollection(String name, int id, long persistent, Source<? extends Track> source) {
-		super(id, persistent);
-		this.name = name;
+		
+		UserCollection dis = this;
+		collection = new ConcreteCollection<Track>(id, persistent, name, Collection.EDITABLE, false, null, 0, dis) {
+			public int size() {
+				return songs.size();
+			}
+		};
+		
 		this.collectionId = id;
+
 		source.registerListener(this);
 	}
-
-	public boolean isRoot() {
-		return false;
-	}
-
-	public String name() {
-		return name;
-	}
-
-	public Collection<Track> parent() {
-		return null;
-	}
-
-	public synchronized int size() {
-		return songs.size();
+	
+	public Collection<Track> collection() {
+		return collection;
 	}
 	
-	public int editStatus() {
-		return EDITABLE;
+	public synchronized int size() {
+		return songs.size();
 	}
 
 	public synchronized Iterator<Track> iterator() {
@@ -93,7 +92,7 @@ public class UserCollection extends AbstractCollection<Track> implements Source.
 		return null;
 	}
 	
-	public synchronized Iterable<? extends Track> tracks() {
+	public synchronized Iterable<Track> tracks() {
 		return new ArrayList<Track>(available);
 	}
 	

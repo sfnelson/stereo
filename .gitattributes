@@ -176,9 +176,11 @@ MemphisDJ/src/interfaces/Player.java -text
 MemphisDJ/src/interfaces/Track.java -text
 MemphisDJ/src/interfaces/VolumeControl.java -text
 MemphisDJ/src/interfaces/collection/AbstractCollection.java -text
-MemphisDJ/src/interfaces/collection/AbstractSetCollection.java -text
+MemphisDJ/src/interfaces/collection/AbstractSetSource.java -text
 MemphisDJ/src/interfaces/collection/Collection.java -text
+MemphisDJ/src/interfaces/collection/ConcreteCollection.java -text svneol=unset#text/plain
 MemphisDJ/src/interfaces/collection/EditableCollection.java -text svneol=unset#text/plain
+MemphisDJ/src/interfaces/collection/EditableSource.java -text svneol=unset#text/plain
 MemphisDJ/src/interfaces/collection/Source.java -text
 MemphisDJ/src/music/AudioPlayer.java -text
 MemphisDJ/src/music/DJ.java -text
@@ -187,6 +189,7 @@ MemphisDJ/src/music/LibraryTrack.java -text
 MemphisDJ/src/music/PlaybackController.java -text
 MemphisDJ/src/music/PlaybackQueue.java -text
 MemphisDJ/src/music/Player.java -text
+MemphisDJ/src/music/ShufflePlaylist.java -text svneol=unset#text/plain
 MemphisDJ/src/music/UserCollection.java -text
 MemphisDJ/src/music/VolumeControl.java -text
 MemphisDJ/src/music/getvolume.sh -text
@@ -202,6 +205,7 @@ MemphisDJ/src/notification/TrackSourceListener.java -text
 MemphisDJ/test/music/DJTest.java -text
 MemphisDJ/test/music/LibraryTest.java -text
 MemphisDJ/test/music/PlaylistTest.java -text
+MemphisDJ/test/music/ShufflePlaylistTest.java -text svneol=unset#text/plain
 MemphisDJ/test/player/PlayerTest.java -text
 MemphisDJ/test/player/music.mp3 -text
 MemphisDJ/test/player/music.ogg -text

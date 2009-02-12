@@ -2,7 +2,8 @@ package music;
 
 import interfaces.Album;
 import interfaces.Track;
-import interfaces.collection.AbstractSetCollection;
+import interfaces.collection.AbstractCollection;
+import interfaces.collection.AbstractSetSource;
 import interfaces.collection.Collection;
 import interfaces.collection.Source;
 
@@ -14,29 +15,54 @@ import java.util.Set;
 import notification.AbstractEventGenerator;
 import notification.LibraryListener;
 
-public class Library extends AbstractSetCollection<LibraryTrack>
-		implements Source.Listener, interfaces.Library<LibraryTrack>, Source<LibraryTrack> {
+public class Library extends AbstractSetSource<LibraryTrack>
+		implements Source.Listener, interfaces.Library<LibraryTrack> {
 
 	private final Set<Source<? extends Track>> sources = new HashSet<Source<? extends Track>>();
 	private final Set<Collection<? extends Track>> collections = new HashSet<Collection<? extends Track>>();
-	private final String name;
 	
-	private volatile int nextCollection = FIRST_AVAILABLE_ID;
+	private volatile int nextCollection = Collection.FIRST_AVAILABLE_ID;
 	
 	public Library(String name) {
-		super(Collection.LIBRARY_ID, Collection.LIBRARY_PERSISTENT_ID);
+		super();
 		this.name = name;
+		this.lib = this;
 		
-		addCollection(this); //library is a collection in the library
+		addCollection(this.collection()); //library is a collection in the library
 		monitor.nextVersion();
 	}
 	
-	public String name() {
-		return name;
-	}
+	private final String name;
+	private final Library lib;
+	private final Collection<LibraryTrack> collection = new AbstractCollection<LibraryTrack>(Collection.LIBRARY_ID, Collection.LIBRARY_PERSISTENT_ID) {
+
+		public int editStatus() {
+			return Collection.NOT_EDITABLE;
+		}
+
+		public boolean isRoot() {
+			return true;
+		}
+
+		public String name() {
+			return name;
+		}
+
+		public Collection<? extends LibraryTrack> parent() {
+			return null;
+		}
+
+		public int size() {
+			return lib.size();
+		}
+
+		public Source<LibraryTrack> source() {
+			return lib;
+		}
+	};
 	
-	public int editStatus() {
-		return NOT_EDITABLE;
+	public Collection<LibraryTrack> collection() {
+		return collection;
 	}
 	
 	public boolean addSource(Source<? extends Track> source) {
@@ -119,14 +145,6 @@ public class Library extends AbstractSetCollection<LibraryTrack>
 			monitor.nextVersion();
 		}
 		return removed;
-	}
-
-	public boolean isRoot() {
-		return true;
-	}
-
-	public Collection<LibraryTrack> parent() {
-		return null;
 	}
 
 	public Iterable<? extends Album> albums() {

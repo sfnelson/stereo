@@ -18,8 +18,8 @@ public class Playlist implements Command {
 
 	public Response run(DJInterface dj) {
 		Collection<? extends Track> coll = dj.playbackStatus().playlist();
-		
-		return new PlaylistSongs(coll);
+
+		return new PlaylistSongs(coll.source().tracks());
 		
 	}
 

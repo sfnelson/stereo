@@ -8,12 +8,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import notification.AbstractEventGenerator;
 
-public abstract class AbstractSetCollection<T extends Track> extends AbstractCollection<T> {
 
-	public AbstractSetCollection(int id, long persistentId) {
-		super(id, persistentId);
-	}
+public abstract class AbstractSetSource<T extends Track>
+		extends AbstractEventGenerator<Source.Listener>
+		implements Source<T> {
 
 	public void add(Iterable<T> tracks) {
 		

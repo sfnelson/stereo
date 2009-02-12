@@ -19,10 +19,10 @@ public class DAAPTrack extends AbstractTrack {
 	
 	public static DAAPTrack create(DAAPEntry entry, DAAPClient parent) {
 		
-		Map<Integer, DAAPTrack> map = dbToIntToTrack.get(parent.id());
+		Map<Integer, DAAPTrack> map = dbToIntToTrack.get(parent.collection().id());
 		if (map == null) {
 			map = new HashMap<Integer, DAAPTrack>();
-			dbToIntToTrack.put(parent.id(), map);
+			dbToIntToTrack.put(parent.collection().id(), map);
 		}
 		
 		int id = 0;

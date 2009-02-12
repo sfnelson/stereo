@@ -1,7 +1,8 @@
 package daap;
 
-import interfaces.collection.AbstractSetCollection;
+import interfaces.collection.AbstractSetSource;
 import interfaces.collection.Collection;
+import interfaces.collection.ConcreteCollection;
 import interfaces.collection.Source;
 
 import java.io.IOException;
@@ -12,7 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class DAAPClient extends AbstractSetCollection<DAAPTrack>
+public class DAAPClient extends AbstractSetSource<DAAPTrack>
 		implements Source<DAAPTrack> {
 	
 	public static List<DAAPClient> create(String hostname, int port, int id) throws IOException {
@@ -65,29 +66,32 @@ public class DAAPClient extends AbstractSetCollection<DAAPTrack>
 	}
 	
 	private final DAAPUtilities connection;
-	
 	private final int dbid;
-	private final String name;
+	private final Collection<DAAPTrack> collection;
 	
 	private int revision;
 
 	public DAAPClient(int id, long per, int rev, int dbid, String name, DAAPUtilities connection) {
-		super(id, per);
-		
+
 		this.revision = rev;
 		this.dbid = dbid;
-		this.name = name;
 		this.connection = connection;
+		
+		collection = new ConcreteCollection<DAAPTrack>(id, per, name, Collection.GENERATED, false, null, 0, this) {
+			public int size() {
+				return _size();
+			}
+		};
 		
 		updateTracks();
 	}
 	
-	public String name() {
-		return name;
+	private int _size() {
+		return size();
 	}
 	
-	public int editStatus() {
-		return GENERATED;
+	public Collection<DAAPTrack> collection() {
+		return collection;
 	}
 	
 	public void update() throws IOException {
@@ -159,13 +163,5 @@ public class DAAPClient extends AbstractSetCollection<DAAPTrack>
 	public InputStream getStream(DAAPTrack track) throws IOException {
 		int song = track.id();
 		return connection.song(dbid, song);
-	}
-
-	public boolean isRoot() {
-		return false;
-	}
-
-	public Collection<DAAPTrack> parent() {
-		return null;
 	}
 }

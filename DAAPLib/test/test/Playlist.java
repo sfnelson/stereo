@@ -1,13 +1,13 @@
 package test;
 
 import interfaces.Track;
-import interfaces.collection.AbstractSetCollection;
+import interfaces.collection.AbstractCollection;
 import interfaces.collection.Collection;
 import interfaces.collection.EditableCollection;
+import interfaces.collection.Source;
 
-public class Playlist extends AbstractSetCollection<Track> implements EditableCollection<Track> {
-
-
+public class Playlist extends AbstractCollection<Track> implements EditableCollection<Track> {
+	
 	public static class PlaylistFactory implements api.nodes.PlaylistNode.PlaylistFactory {
 		public EditableCollection<? extends Track> create(int id, long pid) {
 			return new Playlist(id, pid);
@@ -72,6 +72,11 @@ public class Playlist extends AbstractSetCollection<Track> implements EditableCo
 
 	public void setSize(int size) {
 		this.size = size;
+	}
+
+	public Source<Track> source() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
