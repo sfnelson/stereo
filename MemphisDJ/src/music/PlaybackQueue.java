@@ -1,12 +1,13 @@
 package music;
 
 import interfaces.Track;
+import interfaces.collection.AbstractCollection;
 import interfaces.collection.Collection;
 import interfaces.collection.Source;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -24,11 +25,11 @@ class PlaybackQueue extends AbstractEventGenerator<QueueListener>
 	private volatile Track current;
 	private volatile int position;
 	private ShufflePlaylist<Track> queued;
-	private LinkedList<Track> recent;
+	private ShufflePlaylist<Track> recent;
 	
 	public PlaybackQueue(Source<? extends Track> source) {
 		queued = new ShufflePlaylist<Track>();
-		recent = new LinkedList<Track>();
+		recent = new ShufflePlaylist<Track>();
 		
 		this.source = source;
 		source.registerListener(this);
@@ -39,10 +40,8 @@ class PlaybackQueue extends AbstractEventGenerator<QueueListener>
 		System.out.println("queue: next");
 		
 		if (current != null) {
-			recent.addLast(current);
-			while (recent.size() > RECENT) {
-				recent.removeFirst();
-			}
+			recent.insertFirst(current);
+			recent.trim(RECENT);
 		}
 		
 		while (queued.size() < QUEUED && source.hasNext()) {
@@ -63,14 +62,14 @@ class PlaybackQueue extends AbstractEventGenerator<QueueListener>
 		
 		System.out.println("queue: prev");
 		
-		if (!recent.isEmpty()) {
+		if (!recent.hasNext()) {
 			
 			if (current != null) {
 				queued.insertFirst(current);
 				position--;
 			}
 			
-			current = recent.removeLast();
+			current = recent.next();
 		
 			notifyQueueChanged();
 		}
@@ -120,9 +119,9 @@ class PlaybackQueue extends AbstractEventGenerator<QueueListener>
 		
 		boolean changed = false;
 		
-		for (Iterator<Track> it = recent.iterator(); it.hasNext();) {
-			if (tracks.contains(it.next())) {
-				it.remove();
+		for (Track t: recent.tracks()) {
+			if (tracks.contains(t)) {
+				recent.remove(t);
 				changed = true;
 			}
 		}
@@ -164,10 +163,15 @@ class PlaybackQueue extends AbstractEventGenerator<QueueListener>
 	public synchronized int position() {
 		return position;
 	}
+	
+	public Collection<? extends Track> queue() {
+		return queued.collection();
+	}
 
 	public synchronized Collection<? extends Track> playlist() {
 		
-		return queued.collection();
+		return new QueueSource(recent.tracks(), current, queued.tracks()).collection();
+		
 	}
 	
 	public synchronized void setSource(Source<? extends Track> source) {
@@ -210,4 +214,66 @@ class PlaybackQueue extends AbstractEventGenerator<QueueListener>
 		}
 	}
 
+	private class QueueSource extends AbstractCollection<Track> implements Source<Track> {
+		
+		private ArrayList<Track> tracks;
+		private Iterator<Track> it;
+		
+		public QueueSource(Iterable<Track> recent, Track current, Iterable<Track> queued) {
+			super(0, 0);
+			tracks = new ArrayList<Track>();
+			for (Track t: recent) {
+				tracks.add(0, t);
+			}
+			tracks.add(current);
+			for (Track t: queued) {
+				tracks.add(t);
+			}
+			it = tracks.iterator();
+		}
+
+		public Collection<Track> collection() {
+			return this;
+		}
+
+		public boolean hasNext() {
+			return it.hasNext();
+		}
+
+		public Track next() {
+			return it.next();
+		}
+
+		public int size() {
+			return tracks.size();
+		}
+
+		public Iterable<Track> tracks() {
+			return tracks;
+		}
+
+		public void registerListener(Listener listener) {}
+		public void removeListener(Listener listener) {}
+
+		public int editStatus() {
+			return Collection.GENERATED;
+		}
+
+		public boolean isRoot() {
+			return false;
+		}
+
+		public String name() {
+			return null;
+		}
+
+		public Collection<? extends Track> parent() {
+			return null;
+		}
+
+		public Source<Track> source() {
+			return this;
+		}
+		
+	}
 }

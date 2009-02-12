@@ -108,6 +108,12 @@ public class ShufflePlaylist<T extends Track>
 		}
 	}
 	
+	public void trim(int size) {
+		if (getList().size() <= size) return;
+		LinkedList<T> list = new LinkedList<T>(getList().subList(0, size));
+		setList(list);
+	}
+	
 	// Collection stuff
 	
 	private final ShufflePlaylist<T> shuffle = this;
