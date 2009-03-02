@@ -87,8 +87,7 @@ public class ContainerEdit implements Command {
 			//action=move&edit-params='edit-param.move-pair:17978,17980'
 			if (params.startsWith("'edit-param.move-pair:")) {
 				Scanner sc = new Scanner(params.substring(22, params.length()-1));
-				sc.useDelimiter("[,:']");
-				sc.next();
+				sc.useDelimiter("[,']");
 				int target = sc.nextInt();
 				int marker = sc.nextInt();
 				
