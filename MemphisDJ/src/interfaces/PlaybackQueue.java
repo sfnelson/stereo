@@ -21,5 +21,6 @@ public interface PlaybackQueue extends EventGenerator<QueueListener> {
 	public void setSource(Source<? extends Track> source);
 	
 	public Collection<? extends Track> queue();
+	public Collection<? extends Track> shuffle();
 	public Collection<? extends Track> playlist();
 }

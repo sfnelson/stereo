@@ -2,6 +2,7 @@ package music;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
@@ -22,6 +23,8 @@ public class VolumeControl implements interfaces.VolumeControl {
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (ConnectException e) {
+			System.err.println("warning: volume not available");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

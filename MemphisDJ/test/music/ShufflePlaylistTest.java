@@ -14,7 +14,7 @@ import org.junit.Test;
 
 public class ShufflePlaylistTest {
 
-	private ShufflePlaylist<Track> list;
+	private ShufflePlaylist list;
 	private Track a = new TestTrack("A");
 	private Track b = new TestTrack("B");
 	private Track c = new TestTrack("C");
@@ -23,7 +23,7 @@ public class ShufflePlaylistTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		list = new ShufflePlaylist<Track>();
+		list = new ShufflePlaylist(1, 1, "test");
 		list.append(a);
 		list.append(b);
 		list.append(c);
@@ -32,7 +32,7 @@ public class ShufflePlaylistTest {
 	@Test
 	public void testHasNext() {
 		assertTrue(list.hasNext());
-		list = new ShufflePlaylist<Track>();
+		list = new ShufflePlaylist(1, 1, "test");
 		assertFalse(list.hasNext());
 	}
 

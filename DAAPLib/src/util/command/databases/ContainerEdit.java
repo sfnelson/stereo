@@ -1,13 +1,15 @@
 package util.command.databases;
 
+import interfaces.Constants;
 import interfaces.DJInterface;
 import interfaces.Track;
 import interfaces.collection.Collection;
+import interfaces.collection.EditableSource;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
-import music.UserCollection;
 import util.command.Command;
 import util.queryparser.ApplyFilter;
 import util.queryparser.Filter;
@@ -30,20 +32,24 @@ public class ContainerEdit implements Command {
 		this.args = args;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Response run(DJInterface dj) {
 
-		UserCollection source = null;
+		Collection<? extends Track> collection = null;
 		for (Collection<? extends Track> c: dj.library().collections()) {
 			if (c.id() == id) {
-				source = (UserCollection)c;
+				collection = c;
+				break;
 			}
 		}
-		if (source == null) {
+		if (collection == null) {
 			throw new RuntimeException("collection not found (" + id + ")");
 		}
-		if (source.collection().editStatus() != Collection.EDITABLE) {
+		if (collection.editStatus() != Collection.EDITABLE) {
 			throw new RuntimeException("collection is not editable (" + id + ")");
 		}
+		
+		EditableSource<Track> source = (EditableSource<Track>)collection.source();
 
 		String action = args.get("action");
 		String params = args.get("edit-params");
@@ -60,7 +66,7 @@ public class ContainerEdit implements Command {
 
 			System.out.println("found " + filtered.size() + " to add");
 
-			source.add(filtered);
+			source.appendAll(filtered);
 		}
 		else if (action.equals("remove")) {
 			//action=remove&edit-params='dmap.containeritemid:17667'
@@ -75,10 +81,36 @@ public class ContainerEdit implements Command {
 
 			System.out.println("found " + filtered.size() + " to remove");
 
-			source.remove(filtered);
+			source.removeAll(filtered);
 		}
 		else if (action.equals("move")) {
 			//action=move&edit-params='edit-param.move-pair:17978,17980'
+			if (params.startsWith("'edit-param.move-pair:")) {
+				Scanner sc = new Scanner(params.substring(22, params.length()-1));
+				sc.useDelimiter("[,:']");
+				sc.next();
+				int target = sc.nextInt();
+				int marker = sc.nextInt();
+				
+				Track t = null;
+				Track m = null;
+				
+				for (Track i: source.tracks()) {
+					Integer id = (Integer)i.get(Constants.dmap_containeritemid);
+					if (id == null);
+					else if (id.intValue() == target) {
+						t = i;
+					}
+					else if (id.intValue() == marker) {
+						m = i;
+					}
+				}
+				
+				if (t != null) {
+					System.out.println("moving " + t + " to " + m);
+					source.move(t, m);
+				}
+			}
 			
 			throw new RuntimeException("action: move is not yet implemented");
 		}

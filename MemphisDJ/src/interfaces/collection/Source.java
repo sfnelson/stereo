@@ -3,6 +3,7 @@ package interfaces.collection;
 
 import interfaces.Track;
 
+import java.util.List;
 import java.util.Set;
 
 import notification.EventGenerator;
@@ -49,11 +50,11 @@ public interface Source<T extends Track> extends EventGenerator<Source.Listener>
 	public boolean hasNext();
 	
 	/**
-	 * Returns an iterable collection of the tracks this source provides.
+	 * Returns a list of the tracks this source provides.
 	 * 
-	 * @return iterable collection of tracks provided by this source
+	 * @return list of tracks provided by this source
 	 */
-	public Iterable<T> tracks();
+	public List<T> tracks();
 	
 	/**
 	 * This interface allows clients of a source to register with it to

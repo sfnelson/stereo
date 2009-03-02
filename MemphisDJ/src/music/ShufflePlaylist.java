@@ -7,35 +7,71 @@ import interfaces.collection.EditableSource;
 import interfaces.collection.Source;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import notification.AbstractEventGenerator;
 
-public class ShufflePlaylist<T extends Track>
+public class ShufflePlaylist
 			extends AbstractEventGenerator<Source.Listener>
-			implements Source<T>, EditableSource<T> {
-
-	private volatile LinkedList<T> _list = new LinkedList<T>();
+			implements Source<Track>, EditableSource<Track> {
 	
-	private LinkedList<T> getList() {
+	private int collectionItemId;
+	
+	public ShufflePlaylist(final int id, final long pid, final String name) {
+		
+		collectionItemId = id+1;
+		
+		collection = new AbstractCollection<Track>(id, pid) {
+
+				public int editStatus() {
+					return Collection.EDITABLE;
+				}
+
+				public boolean isRoot() {
+					return false;
+				}
+
+				public String name() {
+					return name;
+				}
+
+				public Collection<? extends Track> parent() {
+					return null;
+				}
+
+				public int size() {
+					return shuffle.size();
+				}
+
+				public Source<Track> source() {
+					return shuffle;
+				}
+				
+			};
+	}
+	
+	private volatile LinkedList<Track> _list = new LinkedList<Track>();
+	
+	private LinkedList<Track> getList() {
 		return _list;
 	}
-	private void setList(LinkedList<T> list) {
+	
+	private void setList(LinkedList<Track> list) {
 		this._list = list;
 	}
-	
 
 	public void clear() {
-		setList(new LinkedList<T>());
+		setList(new LinkedList<Track>());
 	}
 	
 	public boolean hasNext() {
 		return !getList().isEmpty();
 	}
 
-	public T next() {
-		LinkedList<T> old = getList();
-		T next = old.peek();
-		LinkedList<T> list = new LinkedList<T>(old.subList(1, old.size()));
+	public Track next() {
+		LinkedList<Track> old = getList();
+		Track next = old.peek();
+		LinkedList<Track> list = new LinkedList<Track>(old.subList(1, old.size()));
 		setList(list);
 		return next;
 	}
@@ -44,37 +80,39 @@ public class ShufflePlaylist<T extends Track>
 		return getList().size();
 	}
 
-	public Iterable<T> tracks() {
+	public List<Track> tracks() {
 		return getList();
 	}
 
-	public void append(T t) {
+	public void append(Track t) {
 		if (t != null) {
-			LinkedList<T> n = new LinkedList<T>(getList());
-			n.addLast(t);
+			LinkedList<Track> n = new LinkedList<Track>(getList());
+			n.addLast(new CollectionTrack(t, collectionItemId++));
 			setList(n);
  		}
 	}
 	
-	public void appendAll(java.util.Collection<? extends T> ts) {
+	public void appendAll(java.util.Collection<? extends Track> ts) {
 		if (ts != null) {
-			LinkedList<T> n = new LinkedList<T>(getList());
-			n.addAll(ts);
+			LinkedList<Track> n = new LinkedList<Track>(getList());
+			for (Track t: ts) {
+				n.add(new CollectionTrack(t, collectionItemId++));
+			}
 			setList(n);
  		}
 	}
 
-	public void insertFirst(T t) {
+	public void insertFirst(Track t) {
 		if (t != null) {
-			LinkedList<T> n = new LinkedList<T>(getList());
+			LinkedList<Track> n = new LinkedList<Track>(getList());
 			n.addFirst(t);
 			setList(n);
 		}
 	}
 
-	public void move(T track, T marker) {
+	public void move(Track track, Track marker) {
 		if (track != null) {
-			LinkedList<T> n = new LinkedList<T>(getList());
+			LinkedList<Track> n = new LinkedList<Track>(getList());
 			if (marker == null) {
 				n.remove(track);
 				n.addLast(track);
@@ -83,7 +121,7 @@ public class ShufflePlaylist<T extends Track>
 			else {
 				n.remove(track);
 				int i = 0;
-				for (T t: n) {
+				for (Track t: n) {
 					if (t.equals(marker)) {
 						n.subList(0, i).add(track);
 						break;
@@ -99,53 +137,33 @@ public class ShufflePlaylist<T extends Track>
 		}
 	}
 
-	public void remove(T t) {
-		LinkedList<T> list = getList();
+	public void remove(Track t) {
+		LinkedList<Track> list = getList();
 		if (t != null && list.contains(t)) {
-			list = new LinkedList<T>(list);
+			list = new LinkedList<Track>(list);
 			list.remove(t);
 			setList(list);
 		}
 	}
 	
+	public void removeAll(java.util.Collection<? extends Track> coll) {
+		for (Track t: coll) {
+			remove(t);
+		}
+	}
+	
 	public void trim(int size) {
 		if (getList().size() <= size) return;
-		LinkedList<T> list = new LinkedList<T>(getList().subList(0, size));
+		LinkedList<Track> list = new LinkedList<Track>(getList().subList(0, size));
 		setList(list);
 	}
 	
 	// Collection stuff
 	
-	private final ShufflePlaylist<T> shuffle = this;
-	private final Collection<T> collection = new AbstractCollection<T>((int)Collection.QUEUE_PERSISTENT_ID, Collection.QUEUE_PERSISTENT_ID) {
+	private final ShufflePlaylist shuffle = this;
+	private final Collection<Track> collection;
 
-		public int editStatus() {
-			return Collection.GENERATED;
-		}
-
-		public boolean isRoot() {
-			return false;
-		}
-
-		public String name() {
-			return "Shuffle";
-		}
-
-		public Collection<? extends T> parent() {
-			return null;
-		}
-
-		public int size() {
-			return shuffle.size();
-		}
-
-		public Source<T> source() {
-			return shuffle;
-		}
-		
-	};
-
-	public final Collection<T> collection() {
+	public final Collection<Track> collection() {
 		return collection;
 	}
 }

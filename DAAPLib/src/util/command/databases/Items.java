@@ -41,6 +41,7 @@ public class Items implements Command {
 		
 		if (source == null) {
 			System.err.println("requested playlist not found!");
+			return null;
 		}
 		
 		System.out.println("playlist has " + source.size() + " elements");

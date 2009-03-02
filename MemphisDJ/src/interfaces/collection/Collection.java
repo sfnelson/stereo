@@ -12,8 +12,8 @@ public interface Collection<T extends Track>
 	public static final int QUEUE_ID = 4;
 	public static final long QUEUE_PERSISTENT_ID = 4;
 	
-	public static final int FIRST_AVAILABLE_ID = 7;
-	public static final long FIRST_AVAILABLE_PERSISTENT_ID = 7;
+	public static final int FIRST_AVAILABLE_ID = 16;
+	public static final long FIRST_AVAILABLE_PERSISTENT_ID = 16;
 	
 	public static final int NOT_EDITABLE = 0;
 	public static final int GENERATED = 0x60;

@@ -183,6 +183,7 @@ MemphisDJ/src/interfaces/collection/EditableCollection.java -text svneol=unset#t
 MemphisDJ/src/interfaces/collection/EditableSource.java -text svneol=unset#text/plain
 MemphisDJ/src/interfaces/collection/Source.java -text
 MemphisDJ/src/music/AudioPlayer.java -text
+MemphisDJ/src/music/CollectionTrack.java -text svneol=unset#text/plain
 MemphisDJ/src/music/DJ.java -text
 MemphisDJ/src/music/Library.java -text
 MemphisDJ/src/music/LibraryTrack.java -text

@@ -55,7 +55,7 @@ public abstract class AbstractSetSource<T extends Track>
 		return store.random();
 	}
 
-	public Iterable<T> tracks() {
+	public List<T> tracks() {
 		return store.tracks();
 	}
 
