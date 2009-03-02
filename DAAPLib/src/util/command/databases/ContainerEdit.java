@@ -110,8 +110,6 @@ public class ContainerEdit implements Command {
 					source.move(t, m);
 				}
 			}
-			
-			throw new RuntimeException("action: move is not yet implemented");
 		}
 		else {
 			throw new RuntimeException("unknown action: " + action);
