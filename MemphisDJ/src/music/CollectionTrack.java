@@ -11,10 +11,12 @@ import java.util.ArrayList;
 public class CollectionTrack implements Track {
 
 	private final Track track;
+	private final int container;
 	private final int containerItemId;
 	
-	public CollectionTrack(Track track, int containerItemId) {
+	public CollectionTrack(Track track, int container, int containerItemId) {
 		this.track = track;
+		this.container = container;
 		this.containerItemId = containerItemId;
 	}
 	
@@ -31,10 +33,12 @@ public class CollectionTrack implements Track {
 	}
 
 	public Object get(Constants tag) {
-		if (tag == Constants.dmap_containeritemid) {
+		switch (tag) {
+		case dmap_containeritemid:
 			return containerItemId;
-		}
-		else {
+		case dmap_parentcontainerid:
+			return container;
+		default:
 			return track.get(tag);
 		}
 	}
@@ -49,6 +53,7 @@ public class CollectionTrack implements Track {
 			tags.add(c);
 		}
 		tags.add(Constants.dmap_containeritemid);
+		tags.add(Constants.dmap_parentcontainerid);
 		return tags;
 	}
 
@@ -72,4 +77,7 @@ public class CollectionTrack implements Track {
 		track.setAlbum(album);
 	}
 	
+	public String toString() {
+		return track.toString();
+	}
 }

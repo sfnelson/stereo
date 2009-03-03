@@ -109,6 +109,9 @@ public class ContainerEdit implements Command {
 					System.out.println("moving " + t + " to " + m);
 					source.move(t, m);
 				}
+				else {
+					System.err.println("could not find " + target);
+				}
 			}
 		}
 		else {

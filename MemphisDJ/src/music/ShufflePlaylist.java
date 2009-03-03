@@ -15,10 +15,14 @@ public class ShufflePlaylist
 			extends AbstractEventGenerator<Source.Listener>
 			implements Source<Track>, EditableSource<Track> {
 	
+	private final PlaybackQueue queue;
+	private final int containerId;
 	private int collectionItemId;
 	
-	public ShufflePlaylist(final int id, final long pid, final String name) {
+	public ShufflePlaylist(PlaybackQueue queue, final int id, final long pid, final String name) {
 		
+		this.queue = queue;
+		this.containerId = id;
 		collectionItemId = id+1;
 		
 		collection = new AbstractCollection<Track>(id, pid) {
@@ -58,6 +62,7 @@ public class ShufflePlaylist
 	
 	private void setList(LinkedList<Track> list) {
 		this._list = list;
+		queue.notifyQueueChanged();
 	}
 
 	public void clear() {
@@ -87,7 +92,7 @@ public class ShufflePlaylist
 	public void append(Track t) {
 		if (t != null) {
 			LinkedList<Track> n = new LinkedList<Track>(getList());
-			n.addLast(new CollectionTrack(t, collectionItemId++));
+			n.addLast(new CollectionTrack(t, containerId, collectionItemId++));
 			setList(n);
  		}
 	}
@@ -96,7 +101,7 @@ public class ShufflePlaylist
 		if (ts != null) {
 			LinkedList<Track> n = new LinkedList<Track>(getList());
 			for (Track t: ts) {
-				n.add(new CollectionTrack(t, collectionItemId++));
+				n.add(new CollectionTrack(t, containerId, this.collectionItemId++));
 			}
 			setList(n);
  		}

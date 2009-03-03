@@ -52,7 +52,7 @@ public class UserCollection extends AbstractEventGenerator<Source.Listener>
 		List<Track> added = new ArrayList<Track>();
 		for (Track t: tracks) {
 			if (!songs.contains(t)) {
-				CollectionTrack ct = new CollectionTrack(t, ++collectionId);
+				CollectionTrack ct = new CollectionTrack(t, this.collection.id(), ++collectionId);
 				added.add(ct);
 				songs.add(ct);
 			}
@@ -98,7 +98,7 @@ public class UserCollection extends AbstractEventGenerator<Source.Listener>
 		synchronized (this) {
 			for (Track t: tracks) {
 				if (songs.contains(t) && !available.contains(t)) {
-					CollectionTrack ct = new CollectionTrack(t, ++collectionId);
+					CollectionTrack ct = new CollectionTrack(t, this.collection.id(), ++collectionId);
 					added.add(ct);
 					available.add(ct);
 				}

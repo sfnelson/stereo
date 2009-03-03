@@ -4,10 +4,13 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import interfaces.AbstractTrack;
 import interfaces.Constants;
 import interfaces.Track;
+import interfaces.collection.Collection;
+import interfaces.collection.Source;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +26,47 @@ public class ShufflePlaylistTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		list = new ShufflePlaylist(1, 1, "test");
+		PlaybackQueue queue = new PlaybackQueue(new Source<Track>() {
+
+			public Collection<Track> collection() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			public boolean hasNext() {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			public Track next() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			public int size() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+
+			public List<Track> tracks() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			public void registerListener(
+					interfaces.collection.Source.Listener listener) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			public void removeListener(
+					interfaces.collection.Source.Listener listener) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		list = new ShufflePlaylist(queue, 1, 1, "test");
 		list.append(a);
 		list.append(b);
 		list.append(c);
@@ -32,7 +75,7 @@ public class ShufflePlaylistTest {
 	@Test
 	public void testHasNext() {
 		assertTrue(list.hasNext());
-		list = new ShufflePlaylist(1, 1, "test");
+		list.clear();
 		assertFalse(list.hasNext());
 	}
 
@@ -120,6 +163,14 @@ public class ShufflePlaylistTest {
 		@Override
 		public InputStream getStream() throws IOException {
 			return null;
+		}
+		
+		public boolean equals(Object o) {
+			if (o == this) return true;
+			
+			if (o instanceof Track) return ((Track)o).id() == id();
+			
+			return false;
 		}
 		
 	}

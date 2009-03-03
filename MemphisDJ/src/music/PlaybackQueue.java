@@ -30,17 +30,29 @@ class PlaybackQueue extends AbstractEventGenerator<QueueListener>
 	private ShufflePlaylist recent;
 	
 	public PlaybackQueue(Source<? extends Track> source) {
-		shuffle = new ShufflePlaylist(Collection.QUEUE_ID, Collection.QUEUE_PERSISTENT_ID, "Shuffle");
-		queued = new ShufflePlaylist(Collection.QUEUE_ID+3, Collection.QUEUE_PERSISTENT_ID+3, "Queued");
-		recent = new ShufflePlaylist(Collection.QUEUE_ID+6, Collection.QUEUE_PERSISTENT_ID+6, "Recent");
+		shuffle = new ShufflePlaylist(this, Collection.QUEUE_ID, Collection.QUEUE_PERSISTENT_ID, "Shuffle");
+		queued = new ShufflePlaylist(this, Collection.QUEUE_ID+3, Collection.QUEUE_PERSISTENT_ID+3, "Queued");
+		recent = new ShufflePlaylist(this, Collection.QUEUE_ID+6, Collection.QUEUE_PERSISTENT_ID+6, "Recent");
 		
 		this.source = source;
 		source.registerListener(this);
 	}
 	
+	private volatile boolean expectingChange = false;
+	private volatile boolean changed = false;
+	private void expectingChange(boolean expectingChange) {
+		this.expectingChange = expectingChange;
+		if (expectingChange == false && changed) {
+			changed = false;
+			notifyQueueChanged();
+		}
+	}
+	
 	public synchronized void next() {
 		
 		System.out.println("queue: next");
+		
+		expectingChange(true);
 		
 		if (current != null) {
 			recent.insertFirst(current);
@@ -54,21 +66,23 @@ class PlaybackQueue extends AbstractEventGenerator<QueueListener>
 		if (queued.hasNext()) {
 			current = queued.next();
 			position++;
-			notifyQueueChanged();
 		}
 		else if (shuffle.hasNext()) {
 			current = shuffle.next();
 			position++;
-			notifyQueueChanged();
 		}
 		else {
 			notifyQueueEmpty();
 		}
+		
+		expectingChange(false);
 	}
 	
 	public synchronized void prev() {
 		
 		System.out.println("queue: prev");
+		
+		expectingChange(true);
 		
 		if (!recent.hasNext()) {
 			
@@ -78,23 +92,32 @@ class PlaybackQueue extends AbstractEventGenerator<QueueListener>
 			}
 			
 			current = recent.next();
-		
-			notifyQueueChanged();
 		}
+		
+		expectingChange(false);
 	}
 	
 	public synchronized void clear() {
+		
+		expectingChange(true);
+		
 		queued.clear();
+		shuffle.clear();
+		
+		expectingChange(false);
 		
 		System.out.println("queue cleared");
-		
-		notifyQueueChanged();
 	}
 	
 	public synchronized void enqueue(List<? extends Track> tracks) {
+		
+		expectingChange(true);
+		
 		queued.appendAll(tracks);
 		
-		notifyQueueChanged();
+		expectingChange(false);
+		
+		System.out.println("enqueued songs");
 	}
 	
 	public synchronized boolean hasSongs() {
@@ -105,27 +128,28 @@ class PlaybackQueue extends AbstractEventGenerator<QueueListener>
 		
 		System.out.println("songs added: updating queue");
 		
+		expectingChange(true);
+		
 		boolean empty = !shuffle.hasNext() && current == null;
 		
-		boolean changed = false;
 		while (shuffle.size() < QUEUED && source.hasNext()) {
 			Track t = source.next();
 			shuffle.append(t);
-			changed = true;
 			System.out.println("added " + t);
 		}
 		
 		if (empty && shuffle.hasNext()) {
 			notifyTracksAvailable();
 		}
-		else if (changed) {
-			notifyQueueChanged();
-		}
+		
+		expectingChange(false);
 	}
 	
 	public synchronized void removed(Set<? extends Track> tracks) {
 		
 		boolean changed = false;
+		
+		expectingChange(true);
 		
 		for (Track t: recent.tracks()) {
 			if (tracks.contains(t)) {
@@ -150,6 +174,8 @@ class PlaybackQueue extends AbstractEventGenerator<QueueListener>
 			}
 		}
 		
+		expectingChange(false);
+		
 		if (!changed) return;
 		
 		if (current == null) {
@@ -158,9 +184,6 @@ class PlaybackQueue extends AbstractEventGenerator<QueueListener>
 		
 		if (current == null) {
 			notifyQueueEmpty();
-		}
-		else {
-			notifyQueueChanged();
 		}
 	}
 	
@@ -225,6 +248,12 @@ class PlaybackQueue extends AbstractEventGenerator<QueueListener>
 	}
 	
 	protected void notifyQueueChanged() {
+		
+		if (expectingChange) {
+			changed = true;
+			return;
+		}
+		
 		System.out.println("queue changed");
 		for (QueueListener l: super.listeners()) {
 			l.queueChanged();
