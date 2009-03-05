@@ -32,10 +32,20 @@ public class PlayStatusUpdate extends Response {
 	//required
 	public final int revision;
 	public final Status state;
+	
+	/**
+	 * false: no shuffle, true: shuffle
+	 */
 	public final boolean shuffle;
-	public final boolean repeat;
+	
+	/**
+	 * 0: no repeat
+	 * 1: repeat song
+	 * 2: repeat (playlist)
+	 */
+	public final int repeat;
 
-	public PlayStatusUpdate(int revision, boolean shuffle, boolean repeat) {
+	public PlayStatusUpdate(int revision, boolean shuffle, int repeat) {
 		super(Constants.dmcp_status, Response.OK);
 		this.revision = revision;
 		this.state = Status.STOPPED;
@@ -43,7 +53,7 @@ public class PlayStatusUpdate extends Response {
 		this.repeat = repeat;
 	}
 
-	protected PlayStatusUpdate(int revision, Status state, boolean shuffle, boolean repeat) {
+	protected PlayStatusUpdate(int revision, Status state, boolean shuffle, int repeat) {
 		super(Constants.dmcp_status, Response.OK);
 		this.revision = revision;
 		this.state = state;
@@ -56,7 +66,7 @@ public class PlayStatusUpdate extends Response {
 		int revision = 0;
 		Status state = Status.STOPPED;
 		boolean shuffle = false;
-		boolean repeat = false;
+		int repeat = 0;
 		int currentDatabase = 0;
 		int currentPlaylist = 0;
 		int currentPlaylistTrack = 0;
@@ -83,7 +93,7 @@ public class PlayStatusUpdate extends Response {
 				shuffle = reader.nextBoolean(code);
 				break;
 			case dacp_repeat:
-				repeat = reader.nextBoolean(code);
+				repeat = reader.nextByte(code);
 				break;
 			case dacp_nowplaying:
 				int[] canp = reader.nextLongLong(code);
@@ -136,7 +146,7 @@ public class PlayStatusUpdate extends Response {
 		writer.appendInteger(Constants.dmcp_mediarevision, revision);
 		writer.appendByte(Constants.dacp_state, state.value());
 		writer.appendBoolean(Constants.dacp_shuffle, shuffle);
-		writer.appendBoolean(Constants.dacp_repeat, repeat);
+		writer.appendByte(Constants.dacp_repeat, (byte)repeat);
 		writer.appendInteger(Constants.dacp_albumshuffle, 2);
 		writer.appendInteger(Constants.dacp_albumrepeat, 6);
 
@@ -212,7 +222,7 @@ public class PlayStatusUpdate extends Response {
 		public final int totalTime;
 
 		public Active(int revision, Status state, boolean shuffle,
-				boolean repeat, int currentDatabase, int currentPlaylist,
+				int repeat, int currentDatabase, int currentPlaylist,
 				int currentPosition, int currentTrackId, String trackTitle,
 				String trackArtist, String trackAlbum, String trackGenre,
 				long currentAlbumId, int mediaKind, int remainingTime, int totalTime) {

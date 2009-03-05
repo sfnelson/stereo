@@ -21,7 +21,7 @@ public class PlayStatusUpdateTest {
 	@Before
 	public void setUp() throws Exception {
 
-		input = new PlayStatusUpdate.Active(15, PlayStatusUpdate.Status.PAUSED, true, false, 1, 3, 9, 21, "Title", "Artist", "Album", "Genre", 123456789l, 0, 90, 180);
+		input = new PlayStatusUpdate.Active(15, PlayStatusUpdate.Status.PAUSED, true, 0, 1, 3, 9, 21, "Title", "Artist", "Album", "Genre", 123456789l, 0, 90, 180);
 
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		Writer w = new DACPWriter(out);
@@ -38,12 +38,17 @@ public class PlayStatusUpdateTest {
 		assertEquals(15, output.revision);
 		assertEquals(PlayStatusUpdate.Status.PAUSED, output.state);
 		assertEquals(true, output.shuffle);
-		assertEquals(false, output.repeat);
+		assertEquals(0, output.repeat);
 	}
 	
 	@Test
 	public void testPlayStatusUpdateActive() {
 		PlayStatusUpdate.Active output = this.output.active();
+		
+		assertEquals(15, output.revision);
+		assertEquals(PlayStatusUpdate.Status.PAUSED, output.state);
+		assertEquals(true, output.shuffle);
+		assertEquals(0, output.repeat);
 		
 		assertEquals(1, output.currentDatabase);
 		assertEquals(3, output.currentPlaylist);

@@ -66,13 +66,13 @@ public class PlayStatusUpdate implements Command, PlaybackListener {
 		
 		util.response.ctrlint.PlayStatusUpdate update;
 		if (state == Status.STOPPED) {
-			update = new util.response.ctrlint.PlayStatusUpdate(revision, true, true);
+			update = new util.response.ctrlint.PlayStatusUpdate(revision, false, 0);
 		}
 		else {
 			Integer total = (Integer)current.get(Constants.daap_songtime);
 			if (total == null) total = 0;
 			update = new util.response.ctrlint.PlayStatusUpdate.Active(
-					revision, state, true, true,
+					revision, state, false, 0,
 					database, playlist.id(), position, current.id(),
 					(String)current.get(Constants.dmap_itemname),
 					(String)current.get(Constants.daap_songartist),
