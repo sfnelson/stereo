@@ -60,6 +60,7 @@ DAAPLib/src/dacp/Main.java -text
 DAAPLib/src/mpris/MPRISServer.java -text
 DAAPLib/src/mpris/RootObject.java -text
 DAAPLib/src/mpris/dbustypes/FullVersion.java -text
+DAAPLib/src/mpris/dbustypes/StatusCode.java -text
 DAAPLib/src/org/freedesktop/MediaPlayer.java -text
 DAAPLib/src/reader/DACPRequestParser.java -text
 DAAPLib/src/reader/DACPResponseParser.java -text

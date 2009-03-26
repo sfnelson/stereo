@@ -18,7 +18,10 @@ public class MPRISServer {
 			conn = DBusConnection.getConnection(DBusConnection.SESSION);
 			System.out.println("Got connection " + conn);
 			conn.requestBusName("org.mpris.stereo");
-			conn.exportObject("/", new RootObject());
+			RootObject mprisObject = new RootObject(dj);
+			conn.exportObject("/", mprisObject);
+			conn.exportObject("/TrackList", mprisObject);
+			conn.exportObject("/Player", mprisObject);
 			System.out.println("All fine so far.");
 		} catch (DBusException e) {
 			// TODO Auto-generated catch block
