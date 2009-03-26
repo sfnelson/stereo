@@ -9,6 +9,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * DAAPLackey polls DAAP libraries for changes and updates the DJ's library.
+ */
 public class DAAPLackey {
 
 	private final Set<DAAPClient> clients;
