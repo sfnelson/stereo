@@ -3,6 +3,7 @@ package dacp;
 import java.io.IOException;
 
 import daap.DAAPLackey;
+import mpris.MPRISServer;
 import music.DJ;
 
 public class Main {
@@ -11,5 +12,6 @@ public class Main {
 		DJ dj = new DJ("Memphis Stereo");
 		new DAAPLackey(dj.library());
 		new DACPServer(args[0], args.length>1?Integer.parseInt(args[1]):3689, dj);
+		new MPRISServer(dj);
 	}
 }

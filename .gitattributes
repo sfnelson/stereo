@@ -57,6 +57,10 @@ DAAPLib/src/dacp/DACPReader.java -text svneol=unset#text/plain
 DAAPLib/src/dacp/DACPServer.java -text
 DAAPLib/src/dacp/DACPWriter.java -text svneol=unset#text/plain
 DAAPLib/src/dacp/Main.java -text
+DAAPLib/src/mpris/MPRISServer.java -text
+DAAPLib/src/mpris/RootObject.java -text
+DAAPLib/src/mpris/dbustypes/FullVersion.java -text
+DAAPLib/src/org/freedesktop/MediaPlayer.java -text
 DAAPLib/src/reader/DACPRequestParser.java -text
 DAAPLib/src/reader/DACPResponseParser.java -text
 DAAPLib/src/util/DACPPacket.java -text
