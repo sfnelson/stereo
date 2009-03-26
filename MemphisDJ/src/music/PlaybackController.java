@@ -49,7 +49,6 @@ public class PlaybackController implements PlaybackControl, PlayerListener, Queu
 	}
 	
 	public void prev() {
-		
 		if (player.elapsed() < 5000) {
 			queue.prev();
 		}
@@ -77,7 +76,6 @@ public class PlaybackController implements PlaybackControl, PlayerListener, Queu
 	}
 	
 	public void jump(int index) {
-		
 		if (index >= 0) {
 			while (index > 1) {
 				queue.next();
