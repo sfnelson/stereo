@@ -2,6 +2,7 @@ package mpris;
 
 import interfaces.Constants;
 import interfaces.DJInterface;
+import interfaces.PlaybackQueue;
 import interfaces.Player;
 import interfaces.Track;
 import interfaces.collection.Collection;
@@ -13,15 +14,17 @@ import java.util.Map;
 
 import mpris.dbustypes.FullVersion;
 import mpris.dbustypes.StatusCode;
+import notification.PlaybackListener;
 
 import org.freedesktop.MediaPlayer;
 import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.Variant;
 import org.freedesktop.dbus.exceptions.DBusException;
 
-public class MPRISServer implements MediaPlayer {
+public class MPRISServer implements MediaPlayer, PlaybackListener {
 	private final DJInterface dj;
 	private static final Map<Constants, String> metadataNames = new HashMap<Constants, String>();;
+	private final DBusConnection conn;
 	
 	{
 		metadataNames.put(Constants.daap_songdataurl, "location");
@@ -38,7 +41,6 @@ public class MPRISServer implements MediaPlayer {
 	public MPRISServer(DJInterface dj) throws IOException {
 		this.dj = dj;
 		
-		DBusConnection conn;
 		try {
 			conn = DBusConnection.getConnection(DBusConnection.SESSION);
 			System.out.println("Got connection " + conn);
@@ -50,7 +52,11 @@ public class MPRISServer implements MediaPlayer {
 		} catch (DBusException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new IOException("Error initialising DBUS");
 		}
+		
+		//Listen for updates from the DJ, when the state, track or queue changes
+		dj.playbackControl().registerListener(this);
 	}
 
 	public boolean isRemote() {
@@ -151,7 +157,10 @@ public class MPRISServer implements MediaPlayer {
 	}
 	
 	public StatusCode GetStatus() {
-		byte state = dj.playbackStatus().state();
+		return statusCodeForState(dj.playbackStatus().state());
+	}
+	
+	private StatusCode statusCodeForState(byte state) {
 		return new StatusCode(state == Player.PLAYING ? 0 : (state == Player.PAUSED ? 1 : 2), false, false, true);
 	}
 	
@@ -198,5 +207,37 @@ public class MPRISServer implements MediaPlayer {
 	
 	public int PositionGet() {
 		return dj.playbackStatus().elapsedTime();
+	}
+
+	//Methods for PlaybackListener
+	public void queueChanged(PlaybackQueue queue) {
+		try {
+			conn.sendSignal(new TrackListChange("/TrackList", queue.playlist().size()));
+			conn.sendSignal(new CapsChange("/Player", GetCaps()));
+			//TODO: is queue.playlist() the same as dj.playbackStatus().playlist()? 
+		} catch (DBusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void stateChanged(byte state) {
+		try {
+			conn.sendSignal(new StatusChange("/Player", statusCodeForState(state)));
+			conn.sendSignal(new CapsChange("/Player", GetCaps()));
+		} catch (DBusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void trackChanged(Track track) {
+		try {
+			conn.sendSignal(new TrackChange("/Player", metadataFor(track)));
+			conn.sendSignal(new CapsChange("/Player", GetCaps()));
+		} catch (DBusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

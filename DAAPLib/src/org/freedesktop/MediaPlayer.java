@@ -6,7 +6,9 @@ import mpris.dbustypes.FullVersion;
 import mpris.dbustypes.StatusCode;
 
 import org.freedesktop.dbus.DBusInterface;
+import org.freedesktop.dbus.DBusSignal;
 import org.freedesktop.dbus.Variant;
+import org.freedesktop.dbus.exceptions.DBusException;
 
 public interface MediaPlayer extends DBusInterface {
 	/**
@@ -91,7 +93,7 @@ public interface MediaPlayer extends DBusInterface {
 	 */
 	public void SetRandom(boolean random);
 	
-	//Methods for /Player
+	//Methods for '/Player'
 	/**
 	 * Goes to the next element.
 	 */
@@ -175,4 +177,64 @@ public interface MediaPlayer extends DBusInterface {
 	 * @return Current position, in milliseconds, in the range 0-&lt;track length&gt;
 	 */
 	public int PositionGet();
+	
+	//Signals for '/Player' object
+	/**
+	 * Signal is emitted when the "Media Player" plays another "Track".
+	 * The argument of the signal is the metadata attached to the new "Track".
+	 */
+	public class TrackChange extends DBusSignal {
+		public final Map<String, Variant<?>> newTrack;
+		
+		public TrackChange(String path, Map<String, Variant<?>> newTrack) throws DBusException {
+			super(path, newTrack);
+			this.newTrack = newTrack;
+		}
+	}
+
+	/**
+	 * Signal is emitted when the status of the "Media Player" change.
+	 * The argument has the same meaning as the value returned by GetStatus.
+	 * @author andrew
+	 */
+	public class StatusChange extends DBusSignal {
+		public final StatusCode newStatus;
+		
+		public StatusChange(String path, StatusCode newStatus) throws DBusException {
+			super(path, newStatus);
+			this.newStatus = newStatus;
+		}
+	}
+
+	/**
+	 * Signal is emitted when the "Media Player" changes capabilities, see GetCaps method.
+	 * @author andrew
+	 */
+	public class CapsChange extends DBusSignal {
+		public final int newCaps;
+		
+		public CapsChange(String path, int newCaps) throws DBusException {
+			super(path, newCaps);
+			this.newCaps = newCaps;
+		}
+	}
+	
+	//Signals for '/TrackList' object
+	/**
+	 * Signal is emitted when the "TrackList" content has changed:
+	 * <ul>
+	 *  <li>When one or more elements have been added</li>
+	 *  <li>When one or more elements have been removed</li>
+	 *  <li>When the ordering of elements has changed</li>
+	 * </ul> 
+	 * The argument is the number of elements in the TrackList after the change happened. 
+	 */
+	public class TrackListChange extends DBusSignal {
+		public final int newSize;
+		
+		public TrackListChange(String path, int newSize) throws DBusException {
+			super(path, newSize);
+			this.newSize = newSize;
+		}
+	}
 }
