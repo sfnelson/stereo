@@ -181,7 +181,6 @@ public class RootObject implements MediaPlayer {
 	}
 	
 	public int PositionGet() {
-		//TODO
-		return 0;
+		return dj.playbackStatus().elapsedTime();
 	}
 }
