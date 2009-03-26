@@ -43,12 +43,10 @@ public class MPRISServer implements MediaPlayer, PlaybackListener {
 		
 		try {
 			conn = DBusConnection.getConnection(DBusConnection.SESSION);
-			System.out.println("Got connection " + conn);
 			conn.requestBusName("org.mpris.stereo");
 			conn.exportObject("/", this);
 			conn.exportObject("/TrackList", this);
 			conn.exportObject("/Player", this);
-			System.out.println("All fine so far.");
 		} catch (DBusException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -57,6 +55,8 @@ public class MPRISServer implements MediaPlayer, PlaybackListener {
 		
 		//Listen for updates from the DJ, when the state, track or queue changes
 		dj.playbackControl().registerListener(this);
+		
+		System.out.println("MPRIS control interface started.");
 	}
 
 	public boolean isRemote() {
