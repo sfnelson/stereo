@@ -64,8 +64,10 @@ public class RootObject implements MediaPlayer {
 	private Map<String, Variant<?>> metadataFor(Track track) {
 		Map<String, Variant<?>> metadata = new HashMap<String, Variant<?>>();
 		
-		for (Constants tag: track.getAllTags()) {
-			metadata.put(metadataNames.containsKey(tag) ? metadataNames.get(tag) : tag.toString(), new Variant<Object>(track.get(tag)));
+		if (track != null) {
+			for (Constants tag: track.getAllTags()) {
+				metadata.put(metadataNames.containsKey(tag) ? metadataNames.get(tag) : tag.toString(), new Variant<Object>(track.get(tag)));
+			}
 		}
 		
 		return metadata;
@@ -138,8 +140,27 @@ public class RootObject implements MediaPlayer {
 	
 	public int GetCaps() {
 		byte state = dj.playbackStatus().state();
-		return MediaPlayer.CAN_GO_NEXT + MediaPlayer.CAN_GO_PREV + (state == Player.PLAYING || state == Player.PAUSED ? MediaPlayer.CAN_PAUSE : 0) + MediaPlayer.CAN_PLAY + MediaPlayer.CAN_PROVIDE_METADATA + MediaPlayer.CAN_HAS_TRACKLIST;
-		//TODO: turn CAN_PLAY and CAN_GO_PREV on and off as appropriate
+		int position = dj.playbackStatus().position();
+		int playlistSize = dj.playbackStatus().playlist().size();
+		
+		int capabilities = MediaPlayer.CAN_HAS_TRACKLIST;
+		if (playlistSize > 0 && playlistSize >= position) {
+			capabilities += MediaPlayer.CAN_GO_NEXT;
+		}
+		if (position > 0) {
+			capabilities += MediaPlayer.CAN_GO_PREV;
+		}
+		if (state == Player.PLAYING || state == Player.PAUSED) {
+			capabilities += MediaPlayer.CAN_PAUSE;
+		}
+		if (dj.playbackStatus().current() != null || playlistSize > 0) {
+			capabilities += MediaPlayer.CAN_PLAY;
+		}
+		if (dj.playbackStatus().current() != null) {
+			capabilities += MediaPlayer.CAN_PROVIDE_METADATA;
+		}
+		
+		return capabilities;
 	}
 	
 	public void VolumeSet(int volume) {
