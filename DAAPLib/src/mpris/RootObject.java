@@ -74,7 +74,7 @@ public class RootObject implements MediaPlayer {
 	}
 
 	public int GetCurrentTrack() {
-		return dj.playbackStatus().position();
+		return dj.playbackStatus().position() - 1; //Position in dj is counted from 1, but MPRIS counts from 0
 	}
 	
 	public int GetLength() {
@@ -140,14 +140,14 @@ public class RootObject implements MediaPlayer {
 	
 	public int GetCaps() {
 		byte state = dj.playbackStatus().state();
-		int position = dj.playbackStatus().position();
+		int position = dj.playbackStatus().position(); //Note that this is counted from 1 not 0 (0 means no current track)
 		int playlistSize = dj.playbackStatus().playlist().size();
 		
 		int capabilities = MediaPlayer.CAN_HAS_TRACKLIST;
-		if (playlistSize > 0 && playlistSize >= position) {
+		if (playlistSize > position) {
 			capabilities += MediaPlayer.CAN_GO_NEXT;
 		}
-		if (position > 0) {
+		if (position > 1) {
 			capabilities += MediaPlayer.CAN_GO_PREV;
 		}
 		if (state == Player.PLAYING || state == Player.PAUSED) {
