@@ -42,7 +42,10 @@ public class PlaybackController implements PlaybackControl, PlayerListener, Queu
 	public void next() {
 		queue.next();
 		
-		player.setTrack(queue.current());
+		if (player.setTrackKeepStatus(queue.current())) {
+			revision++;
+			notifier.notifyStateChanged(player.status());
+		}
 	}
 	
 	public void prev() {
@@ -51,7 +54,10 @@ public class PlaybackController implements PlaybackControl, PlayerListener, Queu
 			queue.prev();
 		}
 		
-		player.setTrack(queue.current());
+		if (player.setTrackKeepStatus(queue.current())) {
+			revision++;
+			notifier.notifyStateChanged(player.status());
+		}
 	}
 
 	public void pause() {
@@ -137,7 +143,8 @@ public class PlaybackController implements PlaybackControl, PlayerListener, Queu
 	public void tracksAvailable() {
 		if (outOfTracks) {
 			outOfTracks = false;
-			next();
+			queue.next();
+			player.setTrack(queue.current());
 		}
 	}
 

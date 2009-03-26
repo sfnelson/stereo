@@ -43,8 +43,13 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	public synchronized void setTrack(Track t) {
+		setTrackWithoutStarting(t);
+		start();
+	}
+
+	@SuppressWarnings("deprecation")
+	public synchronized byte setTrackWithoutStarting(Track t) {
 		System.out.println("Setting the track on the player: " + t);
 		if (thread != null) {
 			thread.resume();
@@ -52,17 +57,31 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 			thread = null;
 		}
 		thread = new TrackThread(t);
-		start();
+		
+		byte oldState = state;
+		state = STOPPED;
+		return oldState;
+	}
+	
+	public synchronized boolean setTrackKeepStatus(Track t) {
+		byte oldStatus = setTrackWithoutStarting(t);
+		if (oldStatus == PLAYING) {
+			start();
+			return false;
+		}
+		else {
+			return true;
+		}
 	}
 
 	@SuppressWarnings("deprecation")
 	public synchronized void start() {
-		if (thread == null);
-		else if (thread.isAlive()) {
+		if (thread == null); //No current track, so do nothing
+		else if (thread.isAlive()) { //Was paused
 			thread.resume();
 			state = PLAYING;
 		}
-		else {
+		else { //Was stopped
 			thread.start();
 			state = PLAYING;
 		}

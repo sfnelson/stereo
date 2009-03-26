@@ -51,6 +51,7 @@ public class Cue implements Command {
 			
 			if (cmd.equals("play")) {
 				dj.playbackControl().next();
+				dj.playbackControl().play();
 			}
 			else if (cmd.equals("clear")) {
 				dj.playbackControl().clear();
