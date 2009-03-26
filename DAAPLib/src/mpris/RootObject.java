@@ -104,7 +104,7 @@ public class RootObject implements MediaPlayer {
 	}
 	
 	public void Prev() {
-		dj.playbackControl().prev();
+		dj.playbackControl().jump(-1); //TODO: This does not work
 	}
 	
 	public void Pause() {
@@ -122,7 +122,12 @@ public class RootObject implements MediaPlayer {
 	}
 	
 	public void Play() {
-		dj.playbackControl().play(); //TODO: Check that this meets specification, when already playing
+		if (dj.playbackStatus().state() == Player.PLAYING) {
+			dj.playbackControl().prev(); //Contrary to the method name, this actually restarts the current track
+		}
+		else {
+			dj.playbackControl().play();
+		}
 	}
 	
 	public void Repeat(boolean repeat) {
