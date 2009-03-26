@@ -4,6 +4,8 @@
   <property name="Asunder.location" value="../Asunder"/>
   <property name="MemphisDJ.location" value="../MemphisDJ"/>
 
+  <property name="DAAPLib.java.library.path" value="/usr/local/lib/jni"/>
+
   <property name="debuglevel" value="source,lines,vars"/>
 
   <property name="target" value="1.5"/>
@@ -46,7 +48,11 @@
     </fileset>
     <path refid="MemphisDJ.classpath"/>
     <path refid="Asunder.classpath"/>
+    <pathelement location="/usr/local/share/java/dbus.jar"/>
+    <pathelement location="/usr/local/share/java/unix.jar"/>
+    <pathelement location="/usr/local/share/java/debug-disable.jar"/>
   </path>
+
   <target name="init" depends="resolve">
     <mkdir dir="bin"/>
     <copy includeemptydirs="false" todir="bin">
@@ -63,7 +69,7 @@
     <ant antfile="${MemphisDJ.location}/build.xml" inheritAll="false" target="clean"/>
   </target>
   <target depends="build-subprojects,build-project" name="build">
-    <echo file="run.sh" message="#!/bin/sh${line.separator}${line.separator}${java.home}/bin/java -cp ${toString:DAAPLib.classpath} dacp.Main $* ${line.separator}" />
+    <echo file="run.sh" message="#!/bin/sh${line.separator}${line.separator}${java.home}/bin/java -cp ${toString:DAAPLib.classpath} -Djava.library.path=${DAAPLib.java.library.path} dacp.Main $* ${line.separator}" />
     <exec executable="chmod">
       <arg line="755 run.sh"/>
     </exec>
