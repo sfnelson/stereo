@@ -97,17 +97,18 @@
 		return;
 	}
 	
-	NSMutableArray *devices = [remoteProperties valueForKey:@"devices"];
+	NSMutableArray *clients = [remoteProperties valueForKey:@"clients"];
 	
-	if (devices == nil) {
-		[self alert:@"Failed to find devices entry in Remote plist"];
+	if (clients == nil) {
+		[self alert:@"Failed to find clients entry in Remote plist"];
 		return;
 	}
 	
-	NSMutableDictionary *device  = [NSMutableDictionary dictionary];
-	NSMutableDictionary *clients = [NSMutableDictionary dictionary];
-	NSMutableDictionary *daap    = [NSMutableDictionary dictionary];
-	NSMutableDictionary *txt     = [NSMutableDictionary dictionary];
+	NSMutableDictionary *client	 = [NSMutableDictionary dictionary];
+	[client setObject:@"com.apple.DAAP" forKey:@"identifier"];
+	[client setObject:description		forKey:@"name"];
+
+	NSMutableDictionary *txt	 = [NSMutableDictionary dictionary];
 	
 	[txt setObject:[identifier dataUsingEncoding:NSUTF8StringEncoding]
 			forKey:@"DbId"];
@@ -122,20 +123,13 @@
 	[txt setObject:[@"1" dataUsingEncoding:NSUTF8StringEncoding]
 			forKey:@"txtvers"];
 	
-	[daap setObject:txt                    forKey:@"txt"];
-	[daap setObject:description            forKey:@"name"];
-	[daap setObject:@"0x0000000000000000"  forKey:@"pairingGuid"];
-	[daap setObject:identifier             forKey:@"serviceName"];
-	[daap setObject:@"_touch-able._tcp."   forKey:@"serviceType"];
-	[daap setObject:@"local."              forKey:@"serviceDomain"];
-	
-	[clients setObject:daap forKey:@"com.apple.DAAP"];
-	
-	[device setObject:description            forKey:@"name"];
-	[device setObject:identifier             forKey:@"identifier"];
-	[device setObject:clients                forKey:@"clients"];
-	
-	[devices addObject:device];
+	[client setObject:txt                    forKey:@"txt"];
+	[client setObject:@"0x0000000000000000"  forKey:@"pairingGuid"];
+	[client setObject:identifier             forKey:@"serviceName"];
+	[client setObject:@"_touch-able._tcp."   forKey:@"serviceType"];
+	[client setObject:@"local."              forKey:@"serviceDomain"];
+
+	[clients addObject:client];
 	
 	[remoteProperties writeToFile:dictionaryPath atomically:YES];
 	
