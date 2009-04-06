@@ -49,9 +49,8 @@ public class QueryParser {
 
 	private static final Terminals OPERATORS = Terminals.operators("+", ",", "(", ")");
 
-	@SuppressWarnings("unchecked")
-	private static final Parser<String> TOKENIZER =
-		Parsers.or(SINGLE_QUOTE_STRING.map(SINGLE_QUOTE_STRING_MAP), (Parser<String>)OPERATORS.tokenizer());
+	private static final Parser<Object> TOKENIZER =
+		Parsers.or(SINGLE_QUOTE_STRING.map(SINGLE_QUOTE_STRING_MAP), OPERATORS.tokenizer());
 
 	private static Parser<?> term(String... names) {
 		return OPERATORS.token(names);

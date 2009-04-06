@@ -6,6 +6,7 @@ import java.util.Map;
 
 import util.command.ctrlint.ControlPromptUpdate;
 import util.command.ctrlint.Cue;
+import util.command.ctrlint.Current;
 import util.command.ctrlint.GetProperty;
 import util.command.ctrlint.GetSpeakers;
 import util.command.ctrlint.NextItem;
@@ -86,5 +87,9 @@ public class CtrlInt extends PathNode implements Command {
 	
 	public Command playspec(int db) {
 		return new PlaySpec();
+	}
+	
+	public Command current(int db) {
+		return new Current();
 	}
 }

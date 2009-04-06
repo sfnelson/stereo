@@ -8,6 +8,7 @@ import java.text.DateFormat;
 import java.util.Date;
 
 import util.command.Image;
+import util.command.Song;
 import util.node.PageNode;
 import api.Response;
 import api.Writer;
@@ -41,6 +42,16 @@ public class DACPResponseGenerator {
 			out.print("Date: "+DateFormat.getDateInstance().format(new Date())+"\r\n");
 			
 			data = image;
+		}
+		else if (content instanceof Song) {
+			
+			byte[] song = ((Song)content).song();
+			
+			out.print("Content-Type: audio/mpeg\r\n");
+			out.print("Content-Length: "+song.length+"\r\n");
+			out.print("Date: "+DateFormat.getDateInstance().format(new Date())+"\r\n");
+			
+			data = song;
 		}
 		else if (content.type() != null) {
 

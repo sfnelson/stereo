@@ -15,56 +15,64 @@ import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceInfo;
 
 import reader.DACPRequestParser;
+import spi.StereoServer;
 import util.command.Command;
 import writer.DACPResponseGenerator;
 import api.Response;
 
 
-public class DACPServer {
+public class DACPServer implements StereoServer {
 
-	private final int PORT;
+	private String DEVICE;
+	private int PORT;
+	private ServerSocket SERVER_SOCK;
+	private DJInterface dj;
 
-	private final ServerSocket SERVER_SOCK;
+	private DACPResponseGenerator printer = new DACPResponseGenerator();
 
-	private final DJInterface dj;
+	public void start(DJInterface dj, String[] args) {
 
-	private final DACPResponseGenerator printer = new DACPResponseGenerator();
-
-	public DACPServer(String device, int port, DJInterface dj) throws IOException {
-		this.PORT = port;
+		this.DEVICE = (args.length>0)?args[0]:"localhost";
+		this.PORT = (args.length>1)?new Scanner(args[1]).nextInt():3689;
 		this.dj = dj;
-		SERVER_SOCK = new ServerSocket(PORT);
-		System.out.println("Server starting.\n--------\n");
-		new ServerSocketThread().start();
 
-		Set<InetAddress> addresses = new HashSet<InetAddress>();
+		try {
+			SERVER_SOCK = new ServerSocket(PORT);
+			System.out.println("Server starting.\n--------\n");
+			new ServerSocketThread().start();
 
-		addresses.add(InetAddress.getByName(device));
+			Set<InetAddress> addresses = new HashSet<InetAddress>();
 
-		String hostname = InetAddress.getLocalHost().getHostName();
-		hostname = new Scanner(hostname).useDelimiter("[.]").next();
-		
-		String hash = Integer.toHexString(hostname.hashCode()).toUpperCase();
-		hash = (hash+hash).substring(0,13);
-		
-		System.out.println("registering mDNS for " + hostname + " (" + hash + ")");
-		
-		Hashtable<String, String> records = new Hashtable<String, String>();
+			addresses.add(InetAddress.getByName(this.DEVICE));
 
-		records.put("CtlN","Stereo on " + hostname);
-		records.put("OSsi","0x1F6");
-		records.put("Ver","131073");
-		records.put("txtvers","1");
-		records.put("DvTy","iTunes");
-		records.put("DvSv","2049");
-		records.put("DbId", hash);
+			String hostname = InetAddress.getLocalHost().getHostName();
+			hostname = new Scanner(hostname).useDelimiter("[.]").next();
 
-		ServiceInfo dmcp = ServiceInfo.create("_touch-able._tcp.local.", hash, PORT, 0, 0, records);
+			String hash = Integer.toHexString(hostname.hashCode()).toUpperCase();
+			hash = (hash+hash).substring(0,13);
 
-		for (InetAddress a: addresses) {
-			final JmDNS mdns = JmDNS.create(a);
-			System.out.println("binding on " + a);
-			mdns.registerService(dmcp);
+			System.out.println("registering mDNS for " + hostname + " (" + hash + ")");
+
+			Hashtable<String, String> records = new Hashtable<String, String>();
+
+			records.put("CtlN","Stereo on " + hostname);
+			records.put("OSsi","0x1F6");
+			records.put("Ver","131073");
+			records.put("txtvers","1");
+			records.put("DvTy","iTunes");
+			records.put("DvSv","2049");
+			records.put("DbId", hash);
+
+			ServiceInfo dmcp = ServiceInfo.create("_touch-able._tcp.local.", hash, PORT, 0, 0, records);
+
+			for (InetAddress a: addresses) {
+				final JmDNS mdns = JmDNS.create(a);
+				System.out.println("binding on " + a);
+				mdns.registerService(dmcp);
+			}
+		}
+		catch (IOException ex) {
+			ex.printStackTrace();
 		}
 	}
 
@@ -101,18 +109,18 @@ public class DACPServer {
 
 					try {
 						Command s = DACPRequestParser.parse(parseText);
-						
+
 						if (s != null) {
-							
+
 							Response content = s.run(dj);
-							
+
 							if (content != null) {
 								printer.success(content, sock.getOutputStream());
 							}
 							else {
 								printer.error("204 No Content", sock.getOutputStream());
 							}
-							
+
 						}
 						else {
 							System.out.println("No command to execute for " + parseText);

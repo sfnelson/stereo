@@ -10,6 +10,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
+import util.command.Song;
 import util.response.ControlPromptUpdate;
 import util.response.CtrlInt;
 import util.response.Databases;
@@ -41,8 +42,9 @@ public abstract class DACPResponseParser {
 		String buffer = "";
 		while (true) {
 			char c = (char) input.read();
-			buffer += c;
-			if (c == '\n' && buffer.endsWith("\r\n\r\n"))
+			if (c != '\r')
+				buffer += c;
+			if (c == '\n' && buffer.endsWith("\n\n"))
 				break;
 		}
 
@@ -57,12 +59,15 @@ public abstract class DACPResponseParser {
 		if (status/100 != 2)
 			throw new IOException("Error connecting to server: " + status + " " + code);
 
-		if (!sc.nextLine().equals(""))
-			throw new IOException("Expected empty line after header");
+		String last = sc.nextLine();
+		if (!last.equals(""))
+			throw new IOException("Expected empty line after header, instead receieved: '"+last+"'");
 
+		String contentType = null;
+		
 		//TODO use these fields for sanity check
 		@SuppressWarnings("unused")
-		String contentType, date, version = null;
+		String date, version = null;
 		
 		int available = 0;
 		String line;
@@ -88,7 +93,15 @@ public abstract class DACPResponseParser {
 			}
 		}
 		
-		return parse(input, available);
+		if (contentType == null);
+		else if (contentType.equals("application/x-dmap-tagged")) {
+			return parse(input, available);
+		}
+		else if (contentType.equals("audio/mpeg")) {
+			return new Song(input, available);
+		}
+		
+		return null;
 	}
 	
 	public Response parse(InputStream input, int available) {

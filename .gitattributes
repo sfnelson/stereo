@@ -39,6 +39,7 @@ DAAPLib/build.xml -text
 DAAPLib/etc/memphis-stereo.plist -text
 DAAPLib/etc/str2bin.pl -text
 DAAPLib/ivy.xml -text
+DAAPLib/src/META-INF/services/spi.StereoServer -text
 DAAPLib/src/api/Node.java -text svneol=unset#text/plain
 DAAPLib/src/api/Reader.java -text svneol=unset#text/plain
 DAAPLib/src/api/Response.java -text svneol=unset#text/plain
@@ -56,11 +57,6 @@ DAAPLib/src/daap/content-codes.txt -text
 DAAPLib/src/dacp/DACPReader.java -text svneol=unset#text/plain
 DAAPLib/src/dacp/DACPServer.java -text
 DAAPLib/src/dacp/DACPWriter.java -text svneol=unset#text/plain
-DAAPLib/src/dacp/Main.java -text
-DAAPLib/src/mpris/MPRISServer.java -text
-DAAPLib/src/mpris/dbustypes/FullVersion.java -text
-DAAPLib/src/mpris/dbustypes/StatusCode.java -text
-DAAPLib/src/org/freedesktop/MediaPlayer.java -text
 DAAPLib/src/reader/DACPRequestParser.java -text
 DAAPLib/src/reader/DACPResponseParser.java -text
 DAAPLib/src/util/DACPPacket.java -text
@@ -77,9 +73,11 @@ DAAPLib/src/util/command/Logout.java -text
 DAAPLib/src/util/command/PathNode.java -text
 DAAPLib/src/util/command/RequestNode.java -text
 DAAPLib/src/util/command/ServerInfo.java -text
+DAAPLib/src/util/command/Song.java -text svneol=unset#text/plain
 DAAPLib/src/util/command/Update.java -text
 DAAPLib/src/util/command/ctrlint/ControlPromptUpdate.java -text
 DAAPLib/src/util/command/ctrlint/Cue.java -text
+DAAPLib/src/util/command/ctrlint/Current.java -text svneol=unset#text/plain
 DAAPLib/src/util/command/ctrlint/GetProperty.java -text
 DAAPLib/src/util/command/ctrlint/GetSpeakers.java -text svneol=unset#text/plain
 DAAPLib/src/util/command/ctrlint/NextItem.java -text
