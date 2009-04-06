@@ -153,13 +153,13 @@ DACPServer/test/util/response/ctrlint/GetPropertyTest.java -text svneol=unset#te
 DACPServer/test/util/response/ctrlint/PlayStatusUpdateTest.java -text svneol=unset#text/plain
 DACPServer/test/util/response/databases/BrowseTest.java -text svneol=unset#text/plain
 DACPServer/test/util/response/databases/NewPlaylistTest.java -text svneol=unset#text/plain
-MPRISlib/.classpath -text svneol=unset#text/plain
-MPRISlib/.project -text svneol=unset#text/plain
-MPRISlib/src/META-INF/services/spi.StereoServer -text
-MPRISlib/src/freedesktop/MediaPlayer.java -text
-MPRISlib/src/mpris/MPRISServer.java -text
-MPRISlib/src/mpris/dbustypes/FullVersion.java -text
-MPRISlib/src/mpris/dbustypes/StatusCode.java -text
+MPRISServer/.classpath -text svneol=unset#text/plain
+MPRISServer/.project -text svneol=unset#text/plain
+MPRISServer/src/META-INF/services/spi.StereoServer -text
+MPRISServer/src/freedesktop/MediaPlayer.java -text
+MPRISServer/src/mpris/MPRISServer.java -text
+MPRISServer/src/mpris/dbustypes/FullVersion.java -text
+MPRISServer/src/mpris/dbustypes/StatusCode.java -text
 MemphisDJ/.classpath -text
 MemphisDJ/.project -text
 MemphisDJ/Sample/sample/CompositeEntry.java -text
