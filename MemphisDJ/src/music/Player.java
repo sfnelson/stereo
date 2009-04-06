@@ -4,6 +4,7 @@ import interfaces.Constants;
 import interfaces.Track;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -119,6 +120,16 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 			return null;
 		}
 	}
+	
+	public synchronized byte[] getCurrentSong() {
+		if (thread != null) {
+			System.out.println("retrieving song data for " + thread.track);
+			return thread.image();
+		}
+		else {
+			return null;
+		}
+	}
 
 	private void trackFinished() {
 		Thread t = new Thread() {
@@ -153,6 +164,7 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 		private AudioPlayer player;
 		private volatile boolean stopped = false;
 		private final Track track;
+		private byte[] data;
 		//private final BufferedInputStream in;
 		private byte[] imageArray;
 
@@ -169,17 +181,34 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 					player = null;
 					return;
 				}
+				
+				ByteArrayOutputStream in = new ByteArrayOutputStream();
+				
+				byte[] buf = new byte[256];
+				while (true) {
+					int read = stream.read(buf, 0, 256);
+					
+					if (read > 0) in.write(buf, 0, read);
+					
+					if (read == -1) break;
+				}
+				
+				data = in.toByteArray();
+				
+				stream = new ByteArrayInputStream(data);
 				player = new AudioPlayer(new BufferedInputStream(stream));
 
 			} catch (IOException e) {
 				System.err.println("Unable to get track stream, failing");
 				e.printStackTrace();
 				player = null;
+				data = new byte[0];
 				return;
 			} 
 			catch (UnsupportedAudioFileException e) {
 				e.printStackTrace();
 				player = null;
+				data = new byte[0];
 				return;
 			}
 		}
@@ -188,6 +217,10 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 			synchronized (track) {
 				return imageArray;
 			}
+		}
+		
+		public byte[] data() {
+			return data;
 		}
 
 		private void getAlbumArt(final Track track) {
@@ -230,77 +263,6 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 
 		}
 
-		/*
-		private void getAlbumArtOld(Track track) {
-
-			try {
-				Thread.sleep(500); //TODO Tag reader doesn't block to read the whole tag
-			}
-			catch (InterruptedException ex) {}
-
-			try {
-				InputStream in = track.getStream();
-				ID3v2 t = new ID3v2(in);
-				in.close();
-
-				ID3v2Frame img = (ID3v2Frame)t.getFrame("APIC").firstElement();
-				byte[] bytes = img.getContent();
-				ByteArrayInputStream ba = new ByteArrayInputStream(bytes);
-
-				int read = 0;
-
-				ba.read(); //read the first null byte
-				read++;
-
-				String contentType = "";
-
-				//read content type from stream:
-				while (true) {
-					int b = ba.read();
-					read++;
-
-					if (b == 0) break;
-					contentType += (char)b;
-				}
-				System.out.println("Album art: " + contentType);
-
-				ba.read(); //picture type;
-				read++;
-
-				//read description
-				while (true) {
-					int b = ba.read();
-					read++;
-
-					if (b == 0) break;
-				}
-
-				imageArray = new byte[bytes.length - read];
-				ba.read(imageArray);
-
-			} catch (ID3v2IllegalVersionException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (ID3v2WrongCRCException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (ID3v2DecompressionException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (NegativeArraySizeException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (NoID3v2TagException e) {
-				System.out.println("no album art available");
-			} catch (ID3v2NoSuchFrameException e) {
-				System.out.println("no album art available");
-			}
-		}
-		*/
-
 		public int elapsed() {
 			if (player != null) {
 				return player.getPosition();
@@ -316,7 +278,7 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 			}
 
 			trackStarted();
-			try {
+			/*try {
 				System.out.println("playing");
 				player.play();
 				System.out.println("done");
@@ -326,7 +288,7 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 				ex.printStackTrace();
 			}
 			player.close();
-			if (!stopped) trackFinished();
+			if (!stopped) trackFinished();*/
 		}
 
 		public void close() {

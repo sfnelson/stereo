@@ -38,4 +38,5 @@ public interface Player extends EventGenerator<PlayerListener> {
 	public byte status();
 	public int elapsed();
 	public byte[] getAlbumArt();
+	public byte[] getCurrentSong();
 }

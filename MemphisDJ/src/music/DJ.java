@@ -64,6 +64,10 @@ public class DJ implements DJInterface, PlaybackStatus {
 	public byte[] getAlbumArt() {
 		return player.getAlbumArt();
 	}
+	
+	public byte[] getCurrentSong() {
+		return player.getCurrentSong();
+	}
 
 	public Collection<? extends Track> playlist() {
 		return queue.playlist();

@@ -171,6 +171,7 @@ MemphisDJ/Sample/sample/SourceFactory.java -text
 MemphisDJ/Sample/sample/TypedEntry.java -text
 MemphisDJ/build.xml -text
 MemphisDJ/ivy.xml -text
+MemphisDJ/src/Main.java -text svneol=unset#text/plain
 MemphisDJ/src/interfaces/AbstractAlbum.java -text
 MemphisDJ/src/interfaces/AbstractTrack.java -text svneol=unset#text/plain
 MemphisDJ/src/interfaces/Album.java -text
@@ -212,6 +213,7 @@ MemphisDJ/src/notification/PlaybackListener.java -text
 MemphisDJ/src/notification/PlayerListener.java -text
 MemphisDJ/src/notification/QueueListener.java -text
 MemphisDJ/src/notification/TrackSourceListener.java -text
+MemphisDJ/src/spi/StereoServer.java -text svneol=unset#text/plain
 MemphisDJ/test/music/DJTest.java -text
 MemphisDJ/test/music/LibraryTest.java -text
 MemphisDJ/test/music/PlaylistTest.java -text
