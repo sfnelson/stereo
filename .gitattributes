@@ -153,6 +153,10 @@ DAAPLib/test/util/response/ctrlint/GetPropertyTest.java -text svneol=unset#text/
 DAAPLib/test/util/response/ctrlint/PlayStatusUpdateTest.java -text svneol=unset#text/plain
 DAAPLib/test/util/response/databases/BrowseTest.java -text svneol=unset#text/plain
 DAAPLib/test/util/response/databases/NewPlaylistTest.java -text svneol=unset#text/plain
+MPRISlib/src/freedesktop/MediaPlayer.java -text
+MPRISlib/src/mpris/MPRISServer.java -text
+MPRISlib/src/mpris/dbustypes/FullVersion.java -text
+MPRISlib/src/mpris/dbustypes/StatusCode.java -text
 MemphisDJ/.classpath -text
 MemphisDJ/.project -text
 MemphisDJ/Sample/sample/CompositeEntry.java -text
