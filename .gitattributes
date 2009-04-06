@@ -33,126 +33,126 @@ CLI/src/clinterface/CLIPlaylist.java -text
 CLI/src/clinterface/CLITrack.java -text
 CLI/src/clinterface/DACPDJInterface.java -text
 CLI/test/clinterface/CLITest.java -text
-DAAPLib/.classpath -text
-DAAPLib/.project -text
-DAAPLib/build.xml -text
-DAAPLib/etc/memphis-stereo.plist -text
-DAAPLib/etc/str2bin.pl -text
-DAAPLib/ivy.xml -text
-DAAPLib/src/META-INF/services/spi.StereoServer -text
-DAAPLib/src/api/Node.java -text svneol=unset#text/plain
-DAAPLib/src/api/Reader.java -text svneol=unset#text/plain
-DAAPLib/src/api/Response.java -text svneol=unset#text/plain
-DAAPLib/src/api/Writer.java -text svneol=unset#text/plain
-DAAPLib/src/api/nodes/AlbumNode.java -text svneol=unset#text/plain
-DAAPLib/src/api/nodes/PlaylistNode.java -text svneol=unset#text/plain
-DAAPLib/src/api/nodes/TrackNode.java -text svneol=unset#text/plain
-DAAPLib/src/daap/DAAPAlbum.java -text
-DAAPLib/src/daap/DAAPClient.java -text
-DAAPLib/src/daap/DAAPEntry.java -text
-DAAPLib/src/daap/DAAPLackey.java -text
-DAAPLib/src/daap/DAAPTrack.java -text
-DAAPLib/src/daap/DAAPUtilities.java -text
-DAAPLib/src/daap/content-codes.txt -text
-DAAPLib/src/dacp/DACPReader.java -text svneol=unset#text/plain
-DAAPLib/src/dacp/DACPServer.java -text
-DAAPLib/src/dacp/DACPWriter.java -text svneol=unset#text/plain
-DAAPLib/src/reader/DACPRequestParser.java -text
-DAAPLib/src/reader/DACPResponseParser.java -text
-DAAPLib/src/util/DACPPacket.java -text
-DAAPLib/src/util/DACPStatusPacket.java -text
-DAAPLib/src/util/command/Command.java -text
-DAAPLib/src/util/command/Connect.java -text svneol=unset#text/plain
-DAAPLib/src/util/command/ContentCodes.java -text svneol=unset#text/plain
-DAAPLib/src/util/command/CtrlInt.java -text
-DAAPLib/src/util/command/Databases.java -text
-DAAPLib/src/util/command/HTMLClient.java -text
-DAAPLib/src/util/command/Image.java -text svneol=unset#text/plain
-DAAPLib/src/util/command/Login.java -text
-DAAPLib/src/util/command/Logout.java -text
-DAAPLib/src/util/command/PathNode.java -text
-DAAPLib/src/util/command/RequestNode.java -text
-DAAPLib/src/util/command/ServerInfo.java -text
-DAAPLib/src/util/command/Song.java -text svneol=unset#text/plain
-DAAPLib/src/util/command/Update.java -text
-DAAPLib/src/util/command/ctrlint/ControlPromptUpdate.java -text
-DAAPLib/src/util/command/ctrlint/Cue.java -text
-DAAPLib/src/util/command/ctrlint/Current.java -text svneol=unset#text/plain
-DAAPLib/src/util/command/ctrlint/GetProperty.java -text
-DAAPLib/src/util/command/ctrlint/GetSpeakers.java -text svneol=unset#text/plain
-DAAPLib/src/util/command/ctrlint/NextItem.java -text
-DAAPLib/src/util/command/ctrlint/NowPlayingArtwork.java -text
-DAAPLib/src/util/command/ctrlint/Pause.java -text
-DAAPLib/src/util/command/ctrlint/PlayPause.java -text
-DAAPLib/src/util/command/ctrlint/PlaySpec.java -text
-DAAPLib/src/util/command/ctrlint/PlayStatusUpdate.java -text
-DAAPLib/src/util/command/ctrlint/Playlist.java -text
-DAAPLib/src/util/command/ctrlint/PrevItem.java -text
-DAAPLib/src/util/command/ctrlint/SetProperty.java -text
-DAAPLib/src/util/command/ctrlint/Stop.java -text
-DAAPLib/src/util/command/databases/Browse.java -text
-DAAPLib/src/util/command/databases/ContainerEdit.java -text
-DAAPLib/src/util/command/databases/Containers.java -text
-DAAPLib/src/util/command/databases/Edit.java -text
-DAAPLib/src/util/command/databases/Groups.java -text
-DAAPLib/src/util/command/databases/Items.java -text
-DAAPLib/src/util/node/BooleanNode.java -text
-DAAPLib/src/util/node/ByteNode.java -text
-DAAPLib/src/util/node/Composite.java -text
-DAAPLib/src/util/node/ImageNode.java -text
-DAAPLib/src/util/node/IntegerNode.java -text
-DAAPLib/src/util/node/LengthVisitor.java -text
-DAAPLib/src/util/node/LongLongNode.java -text
-DAAPLib/src/util/node/LongNode.java -text
-DAAPLib/src/util/node/Node.java -text
-DAAPLib/src/util/node/PageNode.java -text
-DAAPLib/src/util/node/StringNode.java -text
-DAAPLib/src/util/node/VersionNode.java -text
-DAAPLib/src/util/node/Visitor.java -text
-DAAPLib/src/util/queryparser/And.java -text
-DAAPLib/src/util/queryparser/ApplyFilter.java -text
-DAAPLib/src/util/queryparser/BinOp.java -text
-DAAPLib/src/util/queryparser/Filter.java -text
-DAAPLib/src/util/queryparser/Or.java -text
-DAAPLib/src/util/queryparser/QueryParser.java -text
-DAAPLib/src/util/queryparser/Token.java -text
-DAAPLib/src/util/response/ContentCodes.java -text svneol=unset#text/plain
-DAAPLib/src/util/response/ControlPromptUpdate.java -text svneol=unset#text/plain
-DAAPLib/src/util/response/CtrlInt.java -text svneol=unset#text/plain
-DAAPLib/src/util/response/Databases.java -text svneol=unset#text/plain
-DAAPLib/src/util/response/Login.java -text svneol=unset#text/plain
-DAAPLib/src/util/response/PlaylistSongs.java -text svneol=unset#text/plain
-DAAPLib/src/util/response/ServerInfo.java -text svneol=unset#text/plain
-DAAPLib/src/util/response/Update.java -text svneol=unset#text/plain
-DAAPLib/src/util/response/ctrlint/GetProperty.java -text svneol=unset#text/plain
-DAAPLib/src/util/response/ctrlint/GetSpeakers.java -text svneol=unset#text/plain
-DAAPLib/src/util/response/ctrlint/PlayStatusUpdate.java -text svneol=unset#text/plain
-DAAPLib/src/util/response/databases/Browse.java -text svneol=unset#text/plain
-DAAPLib/src/util/response/databases/Groups.java -text svneol=unset#text/plain
-DAAPLib/src/util/response/databases/NewPlaylist.java -text svneol=unset#text/plain
-DAAPLib/src/util/response/databases/Playlists.java -text svneol=unset#text/plain
-DAAPLib/src/writer/DACPRequestGenerator.java -text
-DAAPLib/src/writer/DACPResponseGenerator.java -text
-DAAPLib/test/client/ClientBroadcasterTest.java -text
-DAAPLib/test/server/ServerParserTest.java -text
-DAAPLib/test/test/Album.java -text svneol=unset#text/plain
-DAAPLib/test/test/DACPResponseParser.java -text svneol=unset#text/plain
-DAAPLib/test/test/Playlist.java -text svneol=unset#text/plain
-DAAPLib/test/test/StreamPrinter.java -text svneol=unset#text/plain
-DAAPLib/test/test/Track.java -text svneol=unset#text/plain
-DAAPLib/test/util/response/ContentCodesTest.java -text svneol=unset#text/plain
-DAAPLib/test/util/response/ControlPromptUpdateTest.java -text svneol=unset#text/plain
-DAAPLib/test/util/response/CtrlIntTest.java -text svneol=unset#text/plain
-DAAPLib/test/util/response/DatabasePlaylistsTest.java -text svneol=unset#text/plain
-DAAPLib/test/util/response/DatabasesTest.java -text svneol=unset#text/plain
-DAAPLib/test/util/response/LoginTest.java -text svneol=unset#text/plain
-DAAPLib/test/util/response/PlaylistSongsTest.java -text svneol=unset#text/plain
-DAAPLib/test/util/response/ServerInfoTest.java -text svneol=unset#text/plain
-DAAPLib/test/util/response/UpdateTest.java -text svneol=unset#text/plain
-DAAPLib/test/util/response/ctrlint/GetPropertyTest.java -text svneol=unset#text/plain
-DAAPLib/test/util/response/ctrlint/PlayStatusUpdateTest.java -text svneol=unset#text/plain
-DAAPLib/test/util/response/databases/BrowseTest.java -text svneol=unset#text/plain
-DAAPLib/test/util/response/databases/NewPlaylistTest.java -text svneol=unset#text/plain
+DACPlib/.classpath -text
+DACPlib/.project -text
+DACPlib/build.xml -text
+DACPlib/etc/memphis-stereo.plist -text
+DACPlib/etc/str2bin.pl -text
+DACPlib/ivy.xml -text
+DACPlib/src/META-INF/services/spi.StereoServer -text
+DACPlib/src/api/Node.java -text svneol=unset#text/plain
+DACPlib/src/api/Reader.java -text svneol=unset#text/plain
+DACPlib/src/api/Response.java -text svneol=unset#text/plain
+DACPlib/src/api/Writer.java -text svneol=unset#text/plain
+DACPlib/src/api/nodes/AlbumNode.java -text svneol=unset#text/plain
+DACPlib/src/api/nodes/PlaylistNode.java -text svneol=unset#text/plain
+DACPlib/src/api/nodes/TrackNode.java -text svneol=unset#text/plain
+DACPlib/src/daap/DAAPAlbum.java -text
+DACPlib/src/daap/DAAPClient.java -text
+DACPlib/src/daap/DAAPEntry.java -text
+DACPlib/src/daap/DAAPLackey.java -text
+DACPlib/src/daap/DAAPTrack.java -text
+DACPlib/src/daap/DAAPUtilities.java -text
+DACPlib/src/daap/content-codes.txt -text
+DACPlib/src/dacp/DACPReader.java -text svneol=unset#text/plain
+DACPlib/src/dacp/DACPServer.java -text
+DACPlib/src/dacp/DACPWriter.java -text svneol=unset#text/plain
+DACPlib/src/reader/DACPRequestParser.java -text
+DACPlib/src/reader/DACPResponseParser.java -text
+DACPlib/src/util/DACPPacket.java -text
+DACPlib/src/util/DACPStatusPacket.java -text
+DACPlib/src/util/command/Command.java -text
+DACPlib/src/util/command/Connect.java -text svneol=unset#text/plain
+DACPlib/src/util/command/ContentCodes.java -text svneol=unset#text/plain
+DACPlib/src/util/command/CtrlInt.java -text
+DACPlib/src/util/command/Databases.java -text
+DACPlib/src/util/command/HTMLClient.java -text
+DACPlib/src/util/command/Image.java -text svneol=unset#text/plain
+DACPlib/src/util/command/Login.java -text
+DACPlib/src/util/command/Logout.java -text
+DACPlib/src/util/command/PathNode.java -text
+DACPlib/src/util/command/RequestNode.java -text
+DACPlib/src/util/command/ServerInfo.java -text
+DACPlib/src/util/command/Song.java -text svneol=unset#text/plain
+DACPlib/src/util/command/Update.java -text
+DACPlib/src/util/command/ctrlint/ControlPromptUpdate.java -text
+DACPlib/src/util/command/ctrlint/Cue.java -text
+DACPlib/src/util/command/ctrlint/Current.java -text svneol=unset#text/plain
+DACPlib/src/util/command/ctrlint/GetProperty.java -text
+DACPlib/src/util/command/ctrlint/GetSpeakers.java -text svneol=unset#text/plain
+DACPlib/src/util/command/ctrlint/NextItem.java -text
+DACPlib/src/util/command/ctrlint/NowPlayingArtwork.java -text
+DACPlib/src/util/command/ctrlint/Pause.java -text
+DACPlib/src/util/command/ctrlint/PlayPause.java -text
+DACPlib/src/util/command/ctrlint/PlaySpec.java -text
+DACPlib/src/util/command/ctrlint/PlayStatusUpdate.java -text
+DACPlib/src/util/command/ctrlint/Playlist.java -text
+DACPlib/src/util/command/ctrlint/PrevItem.java -text
+DACPlib/src/util/command/ctrlint/SetProperty.java -text
+DACPlib/src/util/command/ctrlint/Stop.java -text
+DACPlib/src/util/command/databases/Browse.java -text
+DACPlib/src/util/command/databases/ContainerEdit.java -text
+DACPlib/src/util/command/databases/Containers.java -text
+DACPlib/src/util/command/databases/Edit.java -text
+DACPlib/src/util/command/databases/Groups.java -text
+DACPlib/src/util/command/databases/Items.java -text
+DACPlib/src/util/node/BooleanNode.java -text
+DACPlib/src/util/node/ByteNode.java -text
+DACPlib/src/util/node/Composite.java -text
+DACPlib/src/util/node/ImageNode.java -text
+DACPlib/src/util/node/IntegerNode.java -text
+DACPlib/src/util/node/LengthVisitor.java -text
+DACPlib/src/util/node/LongLongNode.java -text
+DACPlib/src/util/node/LongNode.java -text
+DACPlib/src/util/node/Node.java -text
+DACPlib/src/util/node/PageNode.java -text
+DACPlib/src/util/node/StringNode.java -text
+DACPlib/src/util/node/VersionNode.java -text
+DACPlib/src/util/node/Visitor.java -text
+DACPlib/src/util/queryparser/And.java -text
+DACPlib/src/util/queryparser/ApplyFilter.java -text
+DACPlib/src/util/queryparser/BinOp.java -text
+DACPlib/src/util/queryparser/Filter.java -text
+DACPlib/src/util/queryparser/Or.java -text
+DACPlib/src/util/queryparser/QueryParser.java -text
+DACPlib/src/util/queryparser/Token.java -text
+DACPlib/src/util/response/ContentCodes.java -text svneol=unset#text/plain
+DACPlib/src/util/response/ControlPromptUpdate.java -text svneol=unset#text/plain
+DACPlib/src/util/response/CtrlInt.java -text svneol=unset#text/plain
+DACPlib/src/util/response/Databases.java -text svneol=unset#text/plain
+DACPlib/src/util/response/Login.java -text svneol=unset#text/plain
+DACPlib/src/util/response/PlaylistSongs.java -text svneol=unset#text/plain
+DACPlib/src/util/response/ServerInfo.java -text svneol=unset#text/plain
+DACPlib/src/util/response/Update.java -text svneol=unset#text/plain
+DACPlib/src/util/response/ctrlint/GetProperty.java -text svneol=unset#text/plain
+DACPlib/src/util/response/ctrlint/GetSpeakers.java -text svneol=unset#text/plain
+DACPlib/src/util/response/ctrlint/PlayStatusUpdate.java -text svneol=unset#text/plain
+DACPlib/src/util/response/databases/Browse.java -text svneol=unset#text/plain
+DACPlib/src/util/response/databases/Groups.java -text svneol=unset#text/plain
+DACPlib/src/util/response/databases/NewPlaylist.java -text svneol=unset#text/plain
+DACPlib/src/util/response/databases/Playlists.java -text svneol=unset#text/plain
+DACPlib/src/writer/DACPRequestGenerator.java -text
+DACPlib/src/writer/DACPResponseGenerator.java -text
+DACPlib/test/client/ClientBroadcasterTest.java -text
+DACPlib/test/server/ServerParserTest.java -text
+DACPlib/test/test/Album.java -text svneol=unset#text/plain
+DACPlib/test/test/DACPResponseParser.java -text svneol=unset#text/plain
+DACPlib/test/test/Playlist.java -text svneol=unset#text/plain
+DACPlib/test/test/StreamPrinter.java -text svneol=unset#text/plain
+DACPlib/test/test/Track.java -text svneol=unset#text/plain
+DACPlib/test/util/response/ContentCodesTest.java -text svneol=unset#text/plain
+DACPlib/test/util/response/ControlPromptUpdateTest.java -text svneol=unset#text/plain
+DACPlib/test/util/response/CtrlIntTest.java -text svneol=unset#text/plain
+DACPlib/test/util/response/DatabasePlaylistsTest.java -text svneol=unset#text/plain
+DACPlib/test/util/response/DatabasesTest.java -text svneol=unset#text/plain
+DACPlib/test/util/response/LoginTest.java -text svneol=unset#text/plain
+DACPlib/test/util/response/PlaylistSongsTest.java -text svneol=unset#text/plain
+DACPlib/test/util/response/ServerInfoTest.java -text svneol=unset#text/plain
+DACPlib/test/util/response/UpdateTest.java -text svneol=unset#text/plain
+DACPlib/test/util/response/ctrlint/GetPropertyTest.java -text svneol=unset#text/plain
+DACPlib/test/util/response/ctrlint/PlayStatusUpdateTest.java -text svneol=unset#text/plain
+DACPlib/test/util/response/databases/BrowseTest.java -text svneol=unset#text/plain
+DACPlib/test/util/response/databases/NewPlaylistTest.java -text svneol=unset#text/plain
 MPRISlib/.classpath -text svneol=unset#text/plain
 MPRISlib/.project -text svneol=unset#text/plain
 MPRISlib/src/META-INF/services/spi.StereoServer -text
