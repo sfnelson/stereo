@@ -21,10 +21,12 @@ import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.Variant;
 import org.freedesktop.dbus.exceptions.DBusException;
 
+import spi.StereoServer;
+
 public class MPRISServer implements MediaPlayer, PlaybackListener, StereoServer {
-	private final DJInterface dj;
-	private static final Map<Constants, String> metadataNames = new HashMap<Constants, String>();;
-	private final DBusConnection conn;
+	private DJInterface dj;
+	private static Map<Constants, String> metadataNames = new HashMap<Constants, String>();;
+	private DBusConnection conn;
 	
 	{
 		metadataNames.put(Constants.daap_songdataurl, "location");
@@ -37,8 +39,8 @@ public class MPRISServer implements MediaPlayer, PlaybackListener, StereoServer 
 		metadataNames.put(Constants.daap_songgenre, "genre");
 		metadataNames.put(Constants.daap_songtime, "mtime");
 	}
-
-	public MPRISServer(DJInterface dj) throws IOException {
+	
+	public void start(DJInterface dj, String[] args) {
 		this.dj = dj;
 		
 		try {
@@ -48,9 +50,7 @@ public class MPRISServer implements MediaPlayer, PlaybackListener, StereoServer 
 			conn.exportObject("/TrackList", this);
 			conn.exportObject("/Player", this);
 		} catch (DBusException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-			throw new IOException("Error initialising DBUS");
 		}
 		
 		//Listen for updates from the DJ, when the state, track or queue changes
