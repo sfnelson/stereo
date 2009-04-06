@@ -153,6 +153,7 @@ DAAPLib/test/util/response/ctrlint/GetPropertyTest.java -text svneol=unset#text/
 DAAPLib/test/util/response/ctrlint/PlayStatusUpdateTest.java -text svneol=unset#text/plain
 DAAPLib/test/util/response/databases/BrowseTest.java -text svneol=unset#text/plain
 DAAPLib/test/util/response/databases/NewPlaylistTest.java -text svneol=unset#text/plain
+MPRISlib/src/META-INF/services/spi.StereoServer -text
 MPRISlib/src/freedesktop/MediaPlayer.java -text
 MPRISlib/src/mpris/MPRISServer.java -text
 MPRISlib/src/mpris/dbustypes/FullVersion.java -text
