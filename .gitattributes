@@ -11,23 +11,24 @@ Asunder/.settings/org.eclipse.wst.jsdt.ui.superType.container -text
 Asunder/.settings/org.eclipse.wst.jsdt.ui.superType.name -text
 Asunder/.settings/org.eclipse.wst.validation.prefs -text
 Asunder/build.xml -text
-Asunder/webserver/FileLoader.java -text
-Asunder/webserver/ajax.js -text
-Asunder/webserver/bignum.js -text
-Asunder/webserver/control/daap.js -text svneol=unset#text/plain
-Asunder/webserver/control/dacp.js -text svneol=unset#text/plain
-Asunder/webserver/control/index.html -text svneol=unset#text/plain
-Asunder/webserver/dacp.js -text
-Asunder/webserver/favicon.ico -text
-Asunder/webserver/index.xhtml -text
-Asunder/webserver/spotlight/daap.js -text svneol=unset#text/plain
-Asunder/webserver/spotlight/dacp.js -text svneol=unset#text/plain
-Asunder/webserver/spotlight/index.html -text svneol=unset#text/plain
-Asunder/webserver/spotlight/jquery-1.3.1.min.js -text svneol=unset#text/plain
-Asunder/webserver/spotlight/style.css -text svneol=unset#text/plain
-Asunder/webserver/spotlight/views.js -text svneol=unset#text/plain
-Asunder/webserver/style.css -text
-Asunder/webserver/svgloader.js -text
+Asunder/ivy.xml -text
+Asunder/src/webserver/FileLoader.java -text
+Asunder/src/webserver/ajax.js -text
+Asunder/src/webserver/bignum.js -text
+Asunder/src/webserver/control/daap.js -text svneol=unset#text/plain
+Asunder/src/webserver/control/dacp.js -text svneol=unset#text/plain
+Asunder/src/webserver/control/index.html -text svneol=unset#text/plain
+Asunder/src/webserver/dacp.js -text
+Asunder/src/webserver/favicon.ico -text
+Asunder/src/webserver/index.xhtml -text
+Asunder/src/webserver/spotlight/daap.js -text svneol=unset#text/plain
+Asunder/src/webserver/spotlight/dacp.js -text svneol=unset#text/plain
+Asunder/src/webserver/spotlight/index.html -text svneol=unset#text/plain
+Asunder/src/webserver/spotlight/jquery-1.3.1.min.js -text svneol=unset#text/plain
+Asunder/src/webserver/spotlight/style.css -text svneol=unset#text/plain
+Asunder/src/webserver/spotlight/views.js -text svneol=unset#text/plain
+Asunder/src/webserver/style.css -text
+Asunder/src/webserver/svgloader.js -text
 CLI/.classpath -text
 CLI/.project -text
 CLI/build.xml -text
