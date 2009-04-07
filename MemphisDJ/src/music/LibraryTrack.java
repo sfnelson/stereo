@@ -5,7 +5,6 @@ import interfaces.Constants;
 import interfaces.Track;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -66,10 +65,10 @@ public class LibraryTrack implements Track {
 		return current.getAllTags();
 	}
 	
-	public InputStream getStream() throws IOException {
+	public void getStream(StreamReader reader) throws IOException {
 		Track current = current();
-		if (current == null) return null;
-		return current.getStream();
+		if (current == null) return;
+		current.getStream(reader);
 	}
 	
 	public String toString() {

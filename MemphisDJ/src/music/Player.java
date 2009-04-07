@@ -3,15 +3,12 @@ package music;
 import interfaces.Constants;
 import interfaces.Track;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPathConstants;
@@ -159,23 +156,32 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 	public static final byte PAUSED = 3;
 	public static final byte PLAYING = 4;
 
-	private class TrackThread extends Thread {
+	private class TrackThread extends Thread implements Track.StreamReader {
 
 		private AudioPlayer player;
-		private volatile boolean stopped = false;
 		private final Track track;
 		private byte[] data;
-		//private final BufferedInputStream in;
 		private byte[] imageArray;
 
 		public TrackThread(final Track track) {
 
 			this.track = track;
-
-			getAlbumArt(track);
-
+			
 			try {
-				InputStream stream = track.getStream();
+				getAlbumArt(track);
+				track.getStream(this);
+				
+			} catch (IOException e) {
+				System.err.println("Unable to get track stream, failing");
+				e.printStackTrace();
+				player = null;
+				data = new byte[0];
+				return;
+			}
+
+		}
+		
+		public void read(InputStream stream) throws IOException {
 
 				if (stream == null) {
 					player = null;
@@ -195,22 +201,8 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 				
 				data = in.toByteArray();
 				
-				stream = new ByteArrayInputStream(data);
-				player = new AudioPlayer(new BufferedInputStream(stream));
-
-			} catch (IOException e) {
-				System.err.println("Unable to get track stream, failing");
-				e.printStackTrace();
-				player = null;
-				data = new byte[0];
-				return;
-			} 
-			catch (UnsupportedAudioFileException e) {
-				e.printStackTrace();
-				player = null;
-				data = new byte[0];
-				return;
-			}
+				//stream = new ByteArrayInputStream(data);
+				//player = new AudioPlayer(new BufferedInputStream(stream));
 		}
 
 		public byte[] image() {
@@ -272,10 +264,10 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 
 		public void run() {
 			System.out.println("running");
-			if (player == null) {
+			/*if (player == null) {
 				trackFinished();
 				return;
-			}
+			}*/
 
 			trackStarted();
 			/*try {
@@ -292,7 +284,6 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 		}
 
 		public void close() {
-			stopped = true;
 			if (player != null) {
 				player.close();
 			}

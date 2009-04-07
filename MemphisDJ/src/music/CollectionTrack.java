@@ -5,7 +5,6 @@ import interfaces.Constants;
 import interfaces.Track;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 
 public class CollectionTrack implements Track {
@@ -57,8 +56,8 @@ public class CollectionTrack implements Track {
 		return tags;
 	}
 
-	public InputStream getStream() throws IOException {
-		return track.getStream();
+	public void getStream(StreamReader reader) throws IOException {
+		track.getStream(reader);
 	}
 
 	public int id() {

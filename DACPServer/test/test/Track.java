@@ -1,16 +1,11 @@
 package test;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 public class Track extends interfaces.AbstractTrack {
 
 	public Track(int id, long pid) {
 		super(id, pid);
-	}
-	
-	public InputStream getStream() throws IOException {
-		return null;
 	}
 	
 	public static class TrackFactory implements interfaces.Track.TrackFactory {
@@ -19,6 +14,11 @@ public class Track extends interfaces.AbstractTrack {
 			return new test.Track(id, persistentId);
 		}
 
+	}
+
+	public void getStream(StreamReader reader) throws IOException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

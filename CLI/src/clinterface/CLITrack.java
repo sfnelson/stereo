@@ -5,8 +5,6 @@ import interfaces.Constants;
 import interfaces.Track;
 
 import java.io.IOException;
-import java.io.InputStream;
-
 
 public class CLITrack extends AbstractTrack {
 	
@@ -14,8 +12,8 @@ public class CLITrack extends AbstractTrack {
 		super(id, persistent);
 	}
 
-	public InputStream getStream() throws IOException {
-		return null;
+	public void getStream(StreamReader reader) throws IOException {
+		//do nothing
 	}
 	
 	public String toString() {

@@ -1,7 +1,5 @@
 package interfaces;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,14 +56,6 @@ public abstract class AbstractTrack implements Track {
 	public Iterable<Constants> getAllTags() {
 		return tags.keySet();
 	}
-	
-	/**
-	 * Returns the track as a playable stream of data.
-	 * 
-	 * @return A stream, possibly null
-	 * @throws IOException
-	 */
-	public abstract InputStream getStream() throws IOException;
 	
 	public interface TrackFactory {
 		public AbstractTrack create(int id, long persistentId);

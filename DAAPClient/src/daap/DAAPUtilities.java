@@ -1,12 +1,13 @@
 package daap;
 
 import interfaces.Constants;
+import interfaces.Track;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
@@ -19,9 +20,6 @@ public class DAAPUtilities {
 	public static final String LOGIN_REQUEST = "login";
 	public static final String UPDATE_REQUEST = "update";
 	public static final String DATABASE_REQUEST = "databases";
-
-	private final HttpClient  client;	
-	private final HttpClient  clientSong;
 
 	private final String path;
 
@@ -40,9 +38,6 @@ public class DAAPUtilities {
 
 	public DAAPUtilities(final String path) {
 		this.path = path;
-
-		client = new DefaultHttpClient();
-		clientSong = new DefaultHttpClient();
 	}
 
 	public String connect() throws IOException {
@@ -102,30 +97,23 @@ public class DAAPUtilities {
 		return tracks;
 	}
 
-	public InputStream song(int db, int song) throws IOException {
+	public void readSong(int db, int song, Track.StreamReader reader) throws IOException {
 
 		String request = DATABASE_REQUEST + "/" + db + "/items/" + song + ".mp3"
 		+ "?session-id=" + session;
 
-		return songRequest(request);
+		requestStream(request, reader);
 	}
 
 	private DAAPEntry getProperty(String request, Constants property) throws IOException {
 
-		DAAPEntry response = request(request);
+		DAAPEntry response = requestDAAP(request);
 
 		return getProperty(response, property);
 	}
 
-	private DAAPEntry request(String request) throws IOException {
-		return DAAPEntry.parseStream(request(client, path, request));
-	}
-
-	private InputStream songRequest(String request) throws IOException {
-		return request(clientSong, path, request);
-	}
-
-	private static InputStream request(HttpClient client, String path, String request) throws IOException {
+	private final HttpClient client = new DefaultHttpClient();
+	private synchronized DAAPEntry requestDAAP(String request) throws IOException {
 		String requestURI = path + "/" + request;
 
 		HttpGet method = new HttpGet(requestURI);
@@ -139,6 +127,29 @@ public class DAAPUtilities {
 		}
 
 		// Read the response body.
-		return response.getEntity().getContent();
+		HttpEntity entity = response.getEntity();
+		DAAPEntry entry = DAAPEntry.parseStream(entity.getContent());
+		entity.consumeContent();
+		
+		return entry;
+	}
+	
+	private synchronized void requestStream(String request, Track.StreamReader reader) throws IOException {
+		String requestURI = path + "/" + request;
+
+		HttpGet method = new HttpGet(requestURI);
+
+		// Execute the method.
+		HttpResponse response = client.execute(method);
+
+		int statusCode = response.getStatusLine().getStatusCode();
+		if (statusCode/100 != HttpStatus.SC_OK/100) {
+			System.err.println("Method failed: " + response.getStatusLine());
+		}
+
+		// Read the response body.
+		HttpEntity entity = response.getEntity();
+		reader.read(entity.getContent());
+		entity.consumeContent();
 	}
 }

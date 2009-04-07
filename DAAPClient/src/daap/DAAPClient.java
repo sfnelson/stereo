@@ -1,5 +1,6 @@
 package daap;
 
+import interfaces.Track;
 import interfaces.collection.AbstractSetSource;
 import interfaces.collection.Collection;
 import interfaces.collection.ConcreteCollection;
@@ -160,8 +161,8 @@ public class DAAPClient extends AbstractSetSource<DAAPTrack>
 		
 	}
 
-	public InputStream getStream(DAAPTrack track) throws IOException {
+	public void readStream(DAAPTrack track, Track.StreamReader reader) throws IOException {
 		int song = track.id();
-		return connection.song(dbid, song);
+		connection.readSong(dbid, song, reader);
 	}
 }

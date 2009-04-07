@@ -1,12 +1,10 @@
 package music;
 
-import static org.junit.Assert.*;
-
+import static org.junit.Assert.assertTrue;
 import interfaces.AbstractTrack;
 import interfaces.Track;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -53,10 +51,9 @@ public class LibraryTest {
 			super(id, id);
 		}
 
-		@Override
-		public InputStream getStream() throws IOException {
+		public void getStream(StreamReader reader) throws IOException {
 			// TODO Auto-generated method stub
-			return null;
+			
 		}
 	}
 

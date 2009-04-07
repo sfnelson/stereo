@@ -5,11 +5,9 @@ import interfaces.Album;
 import interfaces.Constants;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
-
 
 public class DAAPTrack extends AbstractTrack {
 	
@@ -105,8 +103,8 @@ public class DAAPTrack extends AbstractTrack {
 		put(Constants.daap_songalbumid, album.get(Constants.dmap_persistentid));
 	}
 	
-	public InputStream getStream() throws IOException{
-		return publisher.getStream(this);
+	public void getStream(StreamReader reader) throws IOException {
+		publisher.readStream(this, reader);
 	}
 	
 }

@@ -3,7 +3,6 @@ package player;
 import interfaces.AbstractTrack;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
 
@@ -16,18 +15,17 @@ public class PlayerTest {
 		String in1 = "music.mp3";
 		String in2 = "music.ogg";
 				
-		testSkip(in1, in2);
+		new PlayerTest().testSkip(in1, in2);
 
 	}
-	
 
-	public static void testCompletePlay(String stream) {
+	public void testCompletePlay(String stream) {
 		Player player = new Player();
 		player.setTrack(new FakeTrack(stream));
 	}
 	
 	
-	public static void testPlayer(String stream) {
+	public void testPlayer(String stream) {
 		Player player = new Player();
 		player.setTrack(new FakeTrack(stream));
 
@@ -50,7 +48,7 @@ public class PlayerTest {
 		player.stop();
 	}
 	
-	public static void testSkip(String in1, String in2) throws UnsupportedAudioFileException, IOException {
+	public void testSkip(String in1, String in2) throws UnsupportedAudioFileException, IOException {
 		Player player = new Player();
 		player.setTrack(new FakeTrack(in1));
 		try {
@@ -70,7 +68,7 @@ public class PlayerTest {
 		
 	}
 	
-	private static class FakeTrack extends AbstractTrack {
+	private class FakeTrack extends AbstractTrack {
 
 		private String file;
 		
@@ -79,8 +77,8 @@ public class PlayerTest {
 			this.file = file;
 		}
 		
-		public InputStream getStream() throws IOException {
-			return PlayerTest.class.getResourceAsStream(file);
+		public void getStream(StreamReader reader) throws IOException {
+			reader.read(PlayerTest.class.getResourceAsStream(file));
 		}
 	}
 }

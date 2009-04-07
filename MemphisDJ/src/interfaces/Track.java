@@ -14,9 +14,13 @@ public interface Track extends HasMetadata {
 	public Object get(Constants tag);
 	public void put(Constants tag, Object value);
 	public Iterable<Constants> getAllTags();
-	public InputStream getStream() throws IOException;
+	public void getStream(StreamReader reader) throws IOException;
 	
 	public interface TrackFactory {
 		public Track create(int id, long persistentId);
+	}
+	
+	public interface StreamReader {
+		public void read(InputStream stream) throws IOException;
 	}
 }

@@ -1,16 +1,16 @@
 package music;
 
-import static org.junit.Assert.*;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import interfaces.AbstractTrack;
 import interfaces.Constants;
 import interfaces.Track;
 import interfaces.collection.Collection;
 import interfaces.collection.Source;
+
+import java.io.IOException;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -159,11 +159,6 @@ public class ShufflePlaylistTest {
 			super(name.hashCode(), name.hashCode());
 			this.put(Constants.dmap_itemname, name);
 		}
-
-		@Override
-		public InputStream getStream() throws IOException {
-			return null;
-		}
 		
 		public boolean equals(Object o) {
 			if (o == this) return true;
@@ -171,6 +166,11 @@ public class ShufflePlaylistTest {
 			if (o instanceof Track) return ((Track)o).id() == id();
 			
 			return false;
+		}
+
+		public void getStream(StreamReader reader) throws IOException {
+			// TODO Auto-generated method stub
+			
 		}
 		
 	}
