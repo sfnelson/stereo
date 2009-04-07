@@ -121,7 +121,7 @@ public class Player extends AbstractEventGenerator<PlayerListener> implements in
 	public synchronized byte[] getCurrentSong() {
 		if (thread != null) {
 			System.out.println("retrieving song data for " + thread.track);
-			return thread.image();
+			return thread.data();
 		}
 		else {
 			return null;

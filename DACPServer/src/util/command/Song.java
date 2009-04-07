@@ -1,6 +1,5 @@
 package util.command;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -19,15 +18,14 @@ public class Song extends Response {
 	public Song(InputStream in, int length) throws IOException {
 		super(null, Response.OK);
 		
-		ByteArrayOutputStream str = new ByteArrayOutputStream(length);
-		byte[] buf = new byte[256];
-		while (true) {
-			int read = in.read(buf, 0, 256);
-			if (read > 0) str.write(buf, 0, read);
+		byte[] buf = new byte[length];
+		for (int i = 0; i < length;) {
+			int read = in.read(buf, i, in.available());
+			if (read > 0) i += read;
 			else if (read == -1) break;
 		}
 		
-		song = str.toByteArray();
+		song = buf;
 	}
 
 	public byte[] song() {

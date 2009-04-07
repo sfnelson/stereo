@@ -52,16 +52,16 @@ public abstract class DACPResponseParser {
 
 		String protocol = sc.next();
 		int status = sc.nextInt();
-		String code = sc.next();
+		String code = sc.nextLine();
 
 		if (!protocol.equals("HTTP/1.1"))
 			throw new IOException("Unsupported Protocol: " + protocol);
 		if (status/100 != 2)
 			throw new IOException("Error connecting to server: " + status + " " + code);
 
-		String last = sc.nextLine();
-		if (!last.equals(""))
-			throw new IOException("Expected empty line after header, instead receieved: '"+last+"'");
+		//String last = sc.nextLine();
+		//if (!last.equals(""))
+		//	throw new IOException("Expected empty line after header, instead recieved: '"+last+"'");
 
 		String contentType = null;
 		
