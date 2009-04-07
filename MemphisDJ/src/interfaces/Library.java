@@ -6,6 +6,8 @@ import notification.LibraryListener;
 
 public interface Library<T extends Track> extends Source<T> {
 
+	public void connect(String path);
+	
 	public boolean addSource(Source<? extends Track> source);
 	public boolean removeSource(Source<? extends Track> source);
 	

@@ -9,37 +9,35 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import spi.SourceProvider;
+
 /**
  * DAAPLackey polls DAAP libraries for changes and updates the DJ's library.
  */
-public class DAAPLackey {
+public class DAAPLackey implements SourceProvider {
 
-	private final Set<DAAPClient> clients;
+	private Set<DAAPClient> clients;
 	
-	private final Library<? extends Track> library;
-	
-	private static DAAPLackey lackey;
-	public static DAAPLackey lackey() {
-		return lackey;
-	}
+	private Library<? extends Track> library;
 
-	public DAAPLackey(Library<? extends Track> library) {
-
-		lackey = this;
-		
+	public void create(Library<? extends Track> library) {
 		this.library = library;
 		this.clients = new HashSet<DAAPClient>();
 
 		new PollThread().start();
 	}
 	
-	public void request(final String host, final int port) {
+	public void connect(String path) {
+		
+		if (!path.substring(0, 4).equals("daap")) return;
+			
+		final String pth = "http"+path.substring(4);
 		
 		new Thread("DAAP Connection Thread") {
 			public void run() {
 				
 				try {
-					List<DAAPClient> pls =  DAAPClient.create(host, port, library.nextCollectionId());
+					List<DAAPClient> pls =  DAAPClient.create(pth, library.nextCollectionId());
 
 					for (DAAPClient c: pls) {
 						add(c);

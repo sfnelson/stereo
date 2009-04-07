@@ -23,8 +23,7 @@ public class DAAPUtilities {
 	private final HttpClient  client;	
 	private final HttpClient  clientSong;
 
-	private final String hostname;
-	private final int port;
+	private final String path;
 
 	private int session;
 
@@ -39,9 +38,8 @@ public class DAAPUtilities {
 		return null;
 	}
 
-	public DAAPUtilities(final String hostname, final int port) {
-		this.hostname = hostname;
-		this.port = port;
+	public DAAPUtilities(final String path) {
+		this.path = path;
 
 		client = new DefaultHttpClient();
 		clientSong = new DefaultHttpClient();
@@ -120,15 +118,15 @@ public class DAAPUtilities {
 	}
 
 	private DAAPEntry request(String request) throws IOException {
-		return DAAPEntry.parseStream(request(client, hostname, port, request));
+		return DAAPEntry.parseStream(request(client, path, request));
 	}
 
 	private InputStream songRequest(String request) throws IOException {
-		return request(clientSong, hostname, port, request);
+		return request(clientSong, path, request);
 	}
 
-	private static InputStream request(HttpClient client, String hostname, int port, String request) throws IOException {
-		String requestURI = "http://" + hostname + ":" + port + "/" + request;
+	private static InputStream request(HttpClient client, String path, String request) throws IOException {
+		String requestURI = path + "/" + request;
 
 		HttpGet method = new HttpGet(requestURI);
 

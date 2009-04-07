@@ -33,6 +33,16 @@ CLI/src/clinterface/CLIPlaylist.java -text
 CLI/src/clinterface/CLITrack.java -text
 CLI/src/clinterface/DACPDJInterface.java -text
 CLI/test/clinterface/CLITest.java -text
+DAAPClient/.classpath -text svneol=unset#text/plain
+DAAPClient/.project -text svneol=unset#text/plain
+DAAPClient/src/META-INF/services/spi.SourceProvider -text
+DAAPClient/src/daap/DAAPAlbum.java -text
+DAAPClient/src/daap/DAAPClient.java -text
+DAAPClient/src/daap/DAAPEntry.java -text
+DAAPClient/src/daap/DAAPLackey.java -text
+DAAPClient/src/daap/DAAPTrack.java -text
+DAAPClient/src/daap/DAAPUtilities.java -text
+DAAPClient/src/daap/content-codes.txt -text
 DACPServer/.classpath -text
 DACPServer/.project -text
 DACPServer/build.xml -text
@@ -47,13 +57,6 @@ DACPServer/src/api/Writer.java -text svneol=unset#text/plain
 DACPServer/src/api/nodes/AlbumNode.java -text svneol=unset#text/plain
 DACPServer/src/api/nodes/PlaylistNode.java -text svneol=unset#text/plain
 DACPServer/src/api/nodes/TrackNode.java -text svneol=unset#text/plain
-DACPServer/src/daap/DAAPAlbum.java -text
-DACPServer/src/daap/DAAPClient.java -text
-DACPServer/src/daap/DAAPEntry.java -text
-DACPServer/src/daap/DAAPLackey.java -text
-DACPServer/src/daap/DAAPTrack.java -text
-DACPServer/src/daap/DAAPUtilities.java -text
-DACPServer/src/daap/content-codes.txt -text
 DACPServer/src/dacp/DACPReader.java -text svneol=unset#text/plain
 DACPServer/src/dacp/DACPServer.java -text
 DACPServer/src/dacp/DACPWriter.java -text svneol=unset#text/plain
@@ -213,6 +216,7 @@ MemphisDJ/src/notification/PlaybackListener.java -text
 MemphisDJ/src/notification/PlayerListener.java -text
 MemphisDJ/src/notification/QueueListener.java -text
 MemphisDJ/src/notification/TrackSourceListener.java -text
+MemphisDJ/src/spi/SourceProvider.java -text svneol=unset#text/plain
 MemphisDJ/src/spi/StereoServer.java -text svneol=unset#text/plain
 MemphisDJ/test/music/DJTest.java -text
 MemphisDJ/test/music/LibraryTest.java -text

@@ -4,8 +4,6 @@ import interfaces.DJInterface;
 
 import java.util.Map;
 
-import daap.DAAPLackey;
-
 import api.Response;
 
 public class Connect implements Command {
@@ -26,7 +24,7 @@ public class Connect implements Command {
 
 		if (port == 0) port = 3689;
 		if (host != null) {
-			DAAPLackey.lackey().request(host, port);
+			dj.library().connect("daap://"+host+":"+port);
 		}
 		
 		return new Response(null, Response.NO_CONTENT);

@@ -16,12 +16,12 @@ import java.util.Set;
 public class DAAPClient extends AbstractSetSource<DAAPTrack>
 		implements Source<DAAPTrack> {
 	
-	public static List<DAAPClient> create(String hostname, int port, int id) throws IOException {
+	public static List<DAAPClient> create(String path, int id) throws IOException {
 		
-		DAAPUtilities helper = new DAAPUtilities(hostname, port);
+		DAAPUtilities helper = new DAAPUtilities(path);
 		
 		final String name = helper.connect();
-		System.out.println("connected to " + name + " (" + hostname + ")");
+		System.out.println("connected to " + name + " (" + path + ")");
 		
 		final int revision = helper.update(0);
 		
@@ -43,7 +43,7 @@ public class DAAPClient extends AbstractSetSource<DAAPTrack>
 			System.out.println(dbname);
 			
 			int na = dbname.hashCode();
-			int hs = hostname.hashCode();
+			int hs = path.hashCode();
 			
 			byte[] persistant = new byte[8];
 			persistant[0] = (byte)(na>>24 & 0xFF);
@@ -57,7 +57,7 @@ public class DAAPClient extends AbstractSetSource<DAAPTrack>
 
 			long per = new BigInteger(persistant).longValue();
 			
-			if (dbname == null) throw new IOException("Database name not found (" + hostname + ")");
+			if (dbname == null) throw new IOException("Database name not found (" + path + ")");
 			
 			collections.add(new DAAPClient(id++, per, revision, dbid, dbname, helper));
 		}
