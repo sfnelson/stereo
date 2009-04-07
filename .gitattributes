@@ -227,7 +227,7 @@ MemphisDJ/test/music/DJTest.java -text
 MemphisDJ/test/music/LibraryTest.java -text
 MemphisDJ/test/music/PlaylistTest.java -text
 MemphisDJ/test/music/ShufflePlaylistTest.java -text svneol=unset#text/plain
-MemphisDJ/test/player/PlayerTest.java -text
+MemphisDJ/test/player/PlayerTest.java -text svneol=unset#text/plain
 MemphisDJ/test/player/music.mp3 -text
 MemphisDJ/test/player/music.ogg -text
 StereoPair/Classes/StereoPairAppDelegate.h -text
