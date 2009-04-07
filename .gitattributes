@@ -1,4 +1,9 @@
 * text=auto !eol
+Amp/.classpath -text svneol=unset#text/plain
+Amp/.project -text svneol=unset#text/plain
+Amp/src/stereo/player/AudioPlayer.java -text svneol=unset#text/plain
+Amp/src/stereo/player/Main.java -text svneol=unset#text/plain
+Amp/src/stereo/player/StereoAmp.java -text svneol=unset#text/plain
 Asunder/.classpath -text
 Asunder/.project -text
 Asunder/.settings/.jsdtscope -text
