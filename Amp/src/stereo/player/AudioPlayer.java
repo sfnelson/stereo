@@ -45,11 +45,13 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineEvent;
+import javax.sound.sampled.LineListener;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-public class AudioPlayer {
+public class AudioPlayer implements LineListener {
 	/**	Flag for debugging messages.
 	 *	If true, some messages are dumped to the console
 	 *	during operation.	
@@ -70,6 +72,7 @@ public class AudioPlayer {
 		{
 			line = (SourceDataLine) AudioSystem.getLine(info);
 			line.open(audioFormat);
+			line.addLineListener(this);
 		}
 		catch (LineUnavailableException e)
 		{
@@ -128,7 +131,7 @@ public class AudioPlayer {
 		return audioInputStream;
 	}
 
-	public void play() throws IOException {
+	public void start() throws IOException {
 		/*
 		 *	Still not enough. The line now can receive data,
 		 *	but will not pass them on to the audio output device
@@ -154,13 +157,34 @@ public class AudioPlayer {
 	public int getPosition() {
 		return (int)(line.getMicrosecondPosition() / 1000);
 	}
+	
+	public void pause() {
+		System.out.println("player: pause");
+		line.stop();
+	}
 
-	public void close() {
+	public void play() {
+		System.out.println("player: play");
+		line.start();
+	}
+	
+	public boolean isPlaying() {
+		return line.isActive();
+	}
+
+	public void stop() {
+		System.out.println("player: stop");
 		try {
 			if (stream != null) stream.close();
 		}
 		catch (IOException ex) {}
+		line.flush();
 		line.close();
+	}
+
+	@Override
+	public void update(LineEvent ev) {
+		System.out.println(ev.toString());
 	}
 
 }

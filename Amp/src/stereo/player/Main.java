@@ -77,17 +77,16 @@ public class Main {
             ServiceInfo[] infos = null;
             
             while (true) {
-            	
-            	try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    break;
-                }
                 
                 infos = jmdns.list("_touch-able._tcp.local.");
                 
                 if (infos.length > 0) break;
                 
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    break;
+                }
             }
             
             jmdns.close();

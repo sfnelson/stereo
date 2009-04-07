@@ -24,6 +24,9 @@ public class StereoAmp extends Thread {
 	private final int port;
 	private final DACPResponseParser parser;
 	
+	private AudioPlayer player;
+	private int current;
+	
 	public StereoAmp(String host, int port) {
 		
 		this.host = host;
@@ -49,24 +52,26 @@ public class StereoAmp extends Thread {
 
 			if (response.state == PlayStatusUpdate.Status.PLAYING) {
 
+				current = response.active().currentTrackId;
+				
 				System.out.println("playing " + response.active().trackTitle);
 				Song song = (Song)request("/ctrl-int/1/current");
 				System.out.println("recieved song: " + song);
 
-				AudioPlayer player = null;
+				player = null;
 				try {
 					player = new AudioPlayer(new ByteArrayInputStream(song.song()));
 					System.out.println("playing");
-					player.play();
+					player.start(); //blocks until stream finishes playing
 					System.out.println("done");
-					player.close();
+					player.stop();
 				}
 				catch (IOException ex) {
 					ex.printStackTrace();
 				} catch (UnsupportedAudioFileException e) {
 					e.printStackTrace();
 				}
-				if (player != null) player.close();
+				if (player != null) player.stop();
 				
 				System.out.println("next song");
 				request("/ctrl-int/1/nextitem?revison-number="+revision);
@@ -92,9 +97,24 @@ public class StereoAmp extends Thread {
 				
 				revision = psu.revision;
 				
+				switch (psu.state) {
+				case STOPPED:
+					if (player != null && !player.isPlaying()) player.stop();
+					break;
+				case PAUSED:
+					if (player != null && player.isPlaying()) player.pause();
+					break;
+				case PLAYING:
+					if (player != null && !player.isPlaying()) player.play();
+					break;
+				}
+				
 				if (psu.active()!=null) {
 					PlayStatusUpdate.Active psua = psu.active();
 					System.out.printf("Playing %s by %s\n", psua.trackTitle, psua.trackArtist);
+					if (current != psua.currentTrackId) {
+						if (player != null) player.stop();
+					}
 				}
 				else {
 					System.out.println("Stopped");
