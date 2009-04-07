@@ -50,7 +50,7 @@ public class QueryParser {
 	private static final Terminals OPERATORS = Terminals.operators("+", ",", "(", ")");
 
 	private static final Parser<Object> TOKENIZER =
-		Parsers.or(SINGLE_QUOTE_STRING.map(SINGLE_QUOTE_STRING_MAP), OPERATORS.tokenizer());
+		Parsers.<Object>or(SINGLE_QUOTE_STRING.map(SINGLE_QUOTE_STRING_MAP), OPERATORS.tokenizer());
 
 	private static Parser<?> term(String... names) {
 		return OPERATORS.token(names);

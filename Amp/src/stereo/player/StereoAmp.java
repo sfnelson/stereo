@@ -39,7 +39,7 @@ public class StereoAmp extends Thread {
 		while (true) {
 			
 			PlayStatusUpdate response;
-			if (revision > 0) {
+			if (revision > -1) {
 				response = (PlayStatusUpdate)request("/ctrl-int/1/playstatusupdate");
 			}
 			else {
