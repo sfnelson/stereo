@@ -1,6 +1,8 @@
 * text=auto !eol
 Amp/.classpath -text svneol=unset#text/plain
 Amp/.project -text svneol=unset#text/plain
+Amp/build.xml -text
+Amp/ivy.xml -text
 Amp/src/stereo/player/AudioPlayer.java -text svneol=unset#text/plain
 Amp/src/stereo/player/Main.java -text svneol=unset#text/plain
 Amp/src/stereo/player/StereoAmp.java -text svneol=unset#text/plain
@@ -41,6 +43,8 @@ CLI/src/clinterface/DACPDJInterface.java -text
 CLI/test/clinterface/CLITest.java -text
 DAAPClient/.classpath -text svneol=unset#text/plain
 DAAPClient/.project -text svneol=unset#text/plain
+DAAPClient/build.xml -text
+DAAPClient/ivy.xml -text
 DAAPClient/src/META-INF/services/spi.SourceProvider -text
 DAAPClient/src/daap/DAAPAlbum.java -text
 DAAPClient/src/daap/DAAPClient.java -text
@@ -241,4 +245,7 @@ StereoPair/StereoPair.xcodeproj/project.pbxproj -text
 StereoPair/StereoPairViewController.xib -text
 StereoPair/StereoPair_Prefix.pch -text
 StereoPair/main.m -text
+/build.xml -text
+/common.xml -text
+/ivy.xml -text
 /ivysettings.xml -text

@@ -1,5 +1,5 @@
 <ivy-module version="1.0">
-  <info organisation="memphis" module="Jukebox"/>
+  <info organisation="memphis" module="CLI"/>
   <dependencies>
 	<dependency org="junit" name="junit" rev="4.3.1" />
   </dependencies>

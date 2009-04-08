@@ -4,15 +4,26 @@
        <!ENTITY common SYSTEM "../common.xml">
 ]>
 
-<project basedir="." default="build" name="MemphisDJ" xmlns:ivy="antlib:org.apache.ivy.ant">
+<project basedir="." default="build" name="Amp" xmlns:ivy="antlib:org.apache.ivy.ant">
+
+  <property name="MemphisDJ.location" value="../MemphisDJ"/>
+  <property name="DACPServer.location" value="../DACPServer"/>
 
   &common;
 
   <path id="MemphisDJ.classpath">
+    <pathelement location="${MemphisDJ.location}/bin"/>
+  </path>
+  <path id="DACPServer.classpath">
+    <pathelement location="${DACPServer.location}/bin"/>
+  </path>
+  <path id="Amp.classpath">
     <pathelement location="bin"/>
     <fileset dir="${lib.dir}">
       <include name="**/*.jar"/>
     </fileset>
+    <path refid="MemphisDJ.classpath"/>
+    <path refid="DACPServer.classpath"/>
   </path>
 
   <target name="init" depends="resolve">
@@ -26,17 +37,16 @@
     <delete dir="bin"/>
   </target>
 
-  <target name="build-subprojects"/>
+  <target name="build-subprojects">
+    <ant antfile="${MemphisDJ.location}/build.xml" inheritAll="false" target="build"/>
+    <ant antfile="${DACPServer.location}/build.xml" inheritAll="false" target="build"/>
+  </target>
 
   <target depends="init" name="build-project">
     <echo message="${ant.project.name}: ${ant.file}"/>
     <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
       <src path="src"/>
-      <classpath refid="MemphisDJ.classpath"/>
-    </javac>
-    <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
-      <src path="test"/>
-      <classpath refid="MemphisDJ.classpath"/>
+      <classpath refid="Amp.classpath"/>
     </javac>
   </target>
 

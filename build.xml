@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project basedir="." default="build" name="Stereo" xmlns:ivy="antlib:org.apache.ivy.ant">
+
+  <property name="lib.dir" value="lib"/>
+
+  <property name="Amp.location" value="Amp"/>
+  <property name="Asunder.location" value="Asunder"/>
+  <property name="DAAPClient.location" value="DAAPClient"/>
+  <property name="DACPServer.location" value="DACPServer"/>
+  <property name="MemphisDJ.location" value="MemphisDJ"/>
+
+  <path id="Stereo.classpath">
+    <pathelement location="Amp/bin"/>
+    <pathelement location="Asunder/bin"/>
+    <pathelement location="DAAPClient/bin"/>
+    <pathelement location="DACPServer/bin"/>
+    <pathelement location="MemphisDJ/bin"/>
+    <fileset dir="${lib.dir}">
+      <include name="**/*.jar"/>
+    </fileset>
+  </path>
+
+  <target name="init" depends="resolve">
+    <mkdir dir="bin"/>
+  </target>
+
+  <target depends="build-subprojects,build-project" name="build"/>
+
+  <target name="build-subprojects">
+    <ant antfile="${MemphisDJ.location}/build.xml" inheritAll="false" target="build-project"/>
+    <ant antfile="${DAAPClient.location}/build.xml" inheritAll="false" target="build-project"/>
+    <ant antfile="${Asunder.location}/build.xml" inheritAll="false" target="build-project"/>
+    <ant antfile="${DACPServer.location}/build.xml" inheritAll="false" target="build-project"/>
+    <ant antfile="${Amp.location}/build.xml" inheritAll="false" target="build-project"/>
+  </target>
+
+  <target name="clean">
+    <delete dir="bin"/>    
+    <ant antfile="${Amp.location}/build.xml" inheritAll="false" target="clean"/>
+    <ant antfile="${Asunder.location}/build.xml" inheritAll="false" target="clean"/>
+    <ant antfile="${DAAPClient.location}/build.xml" inheritAll="false" target="clean"/>
+    <ant antfile="${DACPServer.location}/build.xml" inheritAll="false" target="clean"/>
+    <ant antfile="${MemphisDJ.location}/build.xml" inheritAll="false" target="clean"/>
+  </target>
+
+  <target depends="init" name="build-project">
+    <echo message="${ant.project.name}: ${ant.file}"/>
+    <echo file="bin/stereo.sh" message="#!/bin/bash${line.separator}${line.separator}
+	${java.home}/bin/java
+		-cp ${toString:Stereo.classpath}
+		Main $*
+	${line.separator}"/>
+    <exec executable="chmod">
+      <arg line="755 bin/stereo.sh"/>
+    </exec>
+  </target>
+
+  <property name="ivy.install.version" value="2.0.0"/>
+  <available file="${lib.dir}/ivy.jar" property="ivy.available"/>
+  <target name="download-ivy" unless="ivy.available">
+    <!-- download Ivy from web site so that it can be used even without any special installation -->
+    <echo message="installing ivy..."/>
+    <mkdir dir="${lib.dir}"/>
+    <get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"
+          dest="${lib.dir}/ivy.jar" usetimestamp="true"/>
+  </target>
+  
+  <target name="install-ivy" depends="download-ivy">
+    <path id="ivy.lib.path">
+      <fileset dir="${lib.dir}" includes="*.jar"/>
+    </path>
+    <taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/>
+  </target>
+  
+  <target name="resolve" depends="install-ivy">
+    <ivy:settings file="ivysettings.xml" />
+    <ivy:retrieve />
+  </target>
+
+</project>

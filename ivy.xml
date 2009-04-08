@@ -1,0 +1,12 @@
+<ivy-module version="1.0">
+  <info organisation="memphis" module="DAAPClient"/>
+  <dependencies>
+    <dependency org="net.javazoom" name="jlayer" rev="1.0" />
+    <dependency org="net.javazoom" name="mp3spi" rev="1.9.4" />
+    <dependency org="org.tritonus" name="tritonus_share" rev="1.0" />
+    <dependency org="java_mp3" name="java_mp3" rev="0.3r1" />
+    <dependency org="tritonus_mp3" name="tritonus_mp3" rev="0.3.6" />
+    <dependency org="tritonus_jorbis" name="tritonus_jorbis" rev="0.3.6" />
+    <dependency org="jorbis" name="jorbis" rev="0.0.17" />
+  </dependencies>
+</ivy-module>

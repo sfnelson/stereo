@@ -1,0 +1,6 @@
+<ivy-module version="1.0">
+        <info organisation="memphis" module="Amp"/>
+        <dependencies>
+	  <dependency org="jmdns" name="jmdns" rev="2.1"/>
+        </dependencies>
+</ivy-module>

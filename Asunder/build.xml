@@ -22,6 +22,10 @@
     </copy>
   </target>
 
+  <target name="clean">
+    <delete dir="bin"/>
+  </target>
+
   <target name="build-subprojects"/>
 
   <target depends="init" name="build-project">
