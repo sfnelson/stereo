@@ -22,7 +22,7 @@ import org.w3c.dom.Node;
 
 public class Player extends AbstractEventGenerator<PlayerListener> implements interfaces.Player {
 
-	private byte state;
+	private byte state = STOPPED;
 	
 	public void pause() {
 		Current c = current();
