@@ -72,7 +72,9 @@ public class LibraryTrack implements Track {
 	}
 	
 	public String toString() {
-		return current().toString();
+		Track c = current();
+		if (c == null) return "";
+		return c.toString();
 	}
 	
 	synchronized void addBackingTrack(Track t) {

@@ -44,26 +44,27 @@ import java.io.InputStream;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Control;
 import javax.sound.sampled.DataLine;
-import javax.sound.sampled.LineEvent;
-import javax.sound.sampled.LineListener;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-public class AudioPlayer implements LineListener {
-	/**	Flag for debugging messages.
-	 *	If true, some messages are dumped to the console
-	 *	during operation.	
-	 */
+public class AudioPlayer {
+	
 	private static boolean	DEBUG = false;
 
 	private final SourceDataLine line;
-	private final AudioInputStream stream;
+	private final AudioInputStream stream; 
+	private final String track;
+	
+	private boolean stopped = false;
+	private boolean paused = false;
 
-	public AudioPlayer(InputStream inputStream) throws UnsupportedAudioFileException, IOException {
+	public AudioPlayer(String track, InputStream in) throws UnsupportedAudioFileException, IOException {
 
-		stream = convertAudioStream(inputStream);
+		this.stream = convertAudioStream(in);
+		this.track = track;
 
 		AudioFormat	audioFormat = stream.getFormat();
 
@@ -72,7 +73,6 @@ public class AudioPlayer implements LineListener {
 		{
 			line = (SourceDataLine) AudioSystem.getLine(info);
 			line.open(audioFormat);
-			line.addLineListener(this);
 		}
 		catch (LineUnavailableException e)
 		{
@@ -131,40 +131,41 @@ public class AudioPlayer implements LineListener {
 		return audioInputStream;
 	}
 
-	public void start() throws IOException {
-		/*
-		 *	Still not enough. The line now can receive data,
-		 *	but will not pass them on to the audio output device
-		 *	(which means to your sound card). This has to be
-		 *	activated.
-		 */
-		line.start();
+	public boolean start() throws IOException {
 
-		int	read = 0;
+		line.start();
+		
+		System.err.println("--- player: start (" + track + ")");
+
 		byte[]	abData = new byte[128000];
-		if (DEBUG) System.out.println("AudioPlayer.main(): starting main loop");
-		while (read != -1)
-		{
+		for (int read = 0; read != -1;) {
 			read = stream.read(abData, 0, abData.length);
 			if (read > 0) line.write(abData, 0, read);
 		}
-		if (DEBUG) System.out.println("AudioPlayer.main(): finished main loop");
-
-		line.drain();
-		line.close();
+		stream.close();
+		
+		//wait for the line to finish playing the track
+		while (line.isOpen()) {
+			line.drain();
+			if (stopped) break;
+			if (paused) continue;
+			line.close();
+		}
+		
+		return !stopped;
 	}
 
 	public int getPosition() {
 		return (int)(line.getMicrosecondPosition() / 1000);
 	}
 	
-	public void pause() {
-		System.out.println("player: pause");
+	public synchronized void pause() {
+		System.err.println("--- player: pause ("+ track +")");
 		line.stop();
 	}
 
-	public void play() {
-		System.out.println("player: play");
+	public synchronized void play() {
+		System.err.println("--- player: play ("+ track +")");
 		line.start();
 	}
 	
@@ -172,19 +173,16 @@ public class AudioPlayer implements LineListener {
 		return line.isActive();
 	}
 
-	public void stop() {
-		System.out.println("player: stop");
-		try {
-			if (stream != null) stream.close();
-		}
-		catch (IOException ex) {}
+	public synchronized void stop() {
+		System.err.println("--- player: stop ("+ track +")");
+		stopped = true;
+		line.stop();
 		line.flush();
 		line.close();
 	}
-
-	@Override
-	public void update(LineEvent ev) {
-		System.out.println(ev.toString());
+	
+	public boolean stopped() {
+		return stopped;
 	}
 
 }

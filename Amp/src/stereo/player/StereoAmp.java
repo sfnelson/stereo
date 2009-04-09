@@ -53,28 +53,40 @@ public class StereoAmp extends Thread {
 			if (response.state == PlayStatusUpdate.Status.PLAYING) {
 
 				current = response.active().currentTrackId;
-				
-				System.out.println("playing " + response.active().trackTitle);
 				Song song = (Song)request("/ctrl-int/1/current");
-				System.out.println("recieved song: " + song);
 
-				player = null;
-				try {
-					player = new AudioPlayer(new ByteArrayInputStream(song.song()));
-					System.out.println("playing");
-					player.start(); //blocks until stream finishes playing
-					System.out.println("done");
-					player.stop();
+				if (song != null && song.song() != null) {
+					try {
+						String name = response.active().trackTitle + " by " + response.active().trackArtist;
+						player = new AudioPlayer(name, new ByteArrayInputStream(song.song()));
+						System.out.println("playing");
+						player.start(); //blocks until stream finishes playing
+						System.out.println("done");
+						
+						if (!player.stopped()) {
+							System.out.println("finished: next song");
+							request("/ctrl-int/1/nextitem?revison-number="+revision);
+						}
+						
+						player = null;
+						song = null;
+					}
+					catch (IOException ex) {
+						ex.printStackTrace();
+					} catch (UnsupportedAudioFileException e) {
+						e.printStackTrace();
+					}
 				}
-				catch (IOException ex) {
-					ex.printStackTrace();
-				} catch (UnsupportedAudioFileException e) {
-					e.printStackTrace();
-				}
-				if (player != null) player.stop();
 				
-				System.out.println("next song");
-				request("/ctrl-int/1/nextitem?revison-number="+revision);
+				if (song != null) {
+					if (player != null) {
+						player.stop();
+						player = null;
+					}
+					
+					System.out.println("error: next song");
+					request("/ctrl-int/1/nextitem?revison-number="+revision);
+				}
 			}
 		}
 	}
