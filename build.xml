@@ -51,8 +51,13 @@
 		-cp ${toString:Stereo.classpath}
 		Main $*
 	${line.separator}"/>
+    <echo file="bin/amp.sh" message="#!/bin/bash${line.separator}${line.separator}
+	${java.home}/bin/java
+		-cp ${toString:Stereo.classpath}
+		stereo.player.Main $*
+	${line.separator}"/>
     <exec executable="chmod">
-      <arg line="755 bin/stereo.sh"/>
+      <arg line="755 bin/stereo.sh bin/amp.sh"/>
     </exec>
   </target>
 

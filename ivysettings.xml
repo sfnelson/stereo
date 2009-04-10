@@ -2,7 +2,8 @@
   <settings defaultResolver="chain" />
   <resolvers>
     <chain name="chain">
-      <url name="sandpit">
+      <url name="ecs">
+	<artifact pattern="http://www.ecs.vuw.ac.nz/~stephen/ivy/[artifact]-[revision].[ext]" />
 	<artifact pattern="http://www.ecs.vuw.ac.nz/~vipul/ivy/[artifact]-[revision].[ext]" />
       </url>
       <ibiblio name="jlayer" root="http://ppnetmedia.com/repository/" m2compatible="true" />
