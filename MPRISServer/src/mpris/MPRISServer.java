@@ -7,7 +7,6 @@ import interfaces.Player;
 import interfaces.Track;
 import interfaces.collection.Collection;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +24,7 @@ import spi.StereoServer;
 
 public class MPRISServer implements MediaPlayer, PlaybackListener, StereoServer {
 	private DJInterface dj;
-	private static Map<Constants, String> metadataNames = new HashMap<Constants, String>();;
+	private static final Map<Constants, String> metadataNames = new HashMap<Constants, String>();
 	private DBusConnection conn;
 	
 	{

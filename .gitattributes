@@ -169,10 +169,10 @@ DACPServer/test/util/response/databases/NewPlaylistTest.java -text svneol=unset#
 MPRISServer/.classpath -text svneol=unset#text/plain
 MPRISServer/.project -text svneol=unset#text/plain
 MPRISServer/src/META-INF/services/spi.StereoServer -text
-MPRISServer/src/freedesktop/MediaPlayer.java -text
 MPRISServer/src/mpris/MPRISServer.java -text
 MPRISServer/src/mpris/dbustypes/FullVersion.java -text
 MPRISServer/src/mpris/dbustypes/StatusCode.java -text
+MPRISServer/src/org/freedesktop/MediaPlayer.java -text
 MemphisDJ/.classpath -text
 MemphisDJ/.project -text
 MemphisDJ/Sample/sample/CompositeEntry.java -text
