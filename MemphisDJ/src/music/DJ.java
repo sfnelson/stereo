@@ -35,6 +35,7 @@ public class DJ implements DJInterface, PlaybackStatus {
 		queue = new PlaybackQueue(library);
 		library.addCollection(queue.queue());
 		library.addCollection(queue.shuffle());
+		library.addCollection(queue.recent());
 		
 		player = new Player();
 		control = new PlaybackController(player, queue);

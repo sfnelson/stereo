@@ -202,6 +202,10 @@ class PlaybackQueue extends AbstractEventGenerator<QueueListener>
 	public Collection<? extends Track> shuffle() {
 		return shuffle.collection();
 	}
+	
+	public Collection<? extends Track> recent() {
+		return recent.collection();
+	}
 
 	public synchronized Collection<? extends Track> playlist() {
 		QueueSource qs = new QueueSource();
