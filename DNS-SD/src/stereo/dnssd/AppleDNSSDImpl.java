@@ -42,6 +42,7 @@ public final class AppleDNSSDImpl implements stereo.dnssd.DNSSDProvider {
 				return type;
 			}
 			public void serviceAvailable(Service service) {
+				System.out.println("added " + service);
 				services.add(service);
 			}
 			public void serviceUnavailable(Service service) {
@@ -83,8 +84,8 @@ public final class AppleDNSSDImpl implements stereo.dnssd.DNSSDProvider {
 			DNSSDService browse = DNSSD.register(
 					0, //flags: 0 or NO_AUTO_RENAME
 					0, //interface id, or 0
-					null, //name or null (host name)
-					service.name, //type
+					service.name, //name or null (host name)
+					service.type, //type
 					null, //domain
 					null, //host
 					service.port, //port
@@ -171,7 +172,7 @@ public final class AppleDNSSDImpl implements stereo.dnssd.DNSSDProvider {
 					records.put(record.getKey(i), record.getValueAsString(i));
 				}
 			}
-			listener.serviceAvailable(new Service(listener.type(), hostName, port, records));
+			listener.serviceAvailable(new Service(fullName, listener.type(), hostName, port, records));
 		}
 	}
 }

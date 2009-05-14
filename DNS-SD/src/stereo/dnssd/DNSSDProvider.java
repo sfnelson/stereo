@@ -24,21 +24,24 @@ public interface DNSSDProvider {
 	
 	class Service implements Iterable<String> {
 		public final String name;
+		public final String type;
 		public final String host;
 		public final int port;
 		
 		private Map<String, String> records;
 		
-		public Service(String name, String host, int port) {
-			this.name = name;
-			this.host = host;
+		public Service(String type, int port) {
+			this.name = null;
+			this.type = type;
+			this.host = null;
 			this.port = port;
 			
 			records = new HashMap<String, String>();
 		}
 		
-		public Service(String name, String host, int port, Map<String, String> records) {
+		public Service(String name, String type, String host, int port, Map<String, String> records) {
 			this.name = name;
+			this.type = type;
 			this.host = host;
 			this.port = port;
 			
@@ -49,13 +52,16 @@ public interface DNSSDProvider {
 			if (o == this) return true;
 			if (!o.getClass().equals(this.getClass())) return false;
 			Service that = (Service)o;
-			return this.name.equals(that.name)
-				&& this.host.equals(that.host)
-				&& this.port == that.port;
+			if (this.name == null) {
+				return that.name == null && this.type.equals(that.type);
+			}
+			else {
+				return this.type.equals(that.type) && this.name.equals(that.name);
+			}
 		}
 		
 		public int hashCode() {
-			return name.hashCode() ^ host.hashCode() ^ port;
+			return type.hashCode() ^ ((name!=null)?name.hashCode():0);
 		}
 		
 		public String get(String key) {
@@ -64,6 +70,10 @@ public interface DNSSDProvider {
 		
 		public Iterator<String> iterator() {
 			return records.keySet().iterator();
+		}
+		
+		public String toString() {
+			return this.name + " on " + this.host + ":" + this.port + "(" + this.type + ")";
 		}
 	}
 }
