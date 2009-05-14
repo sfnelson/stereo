@@ -49,6 +49,16 @@ public abstract class AbstractTrack implements Track {
 		return tags.get(tag);
 	}
 	
+	public Object get(Constants tag, Object defaultValue) {
+		Object ret = get(tag);
+		if (ret == null) {
+			return defaultValue;
+		}
+		else {
+			return ret;
+		}
+	}
+	
 	public void put(Constants tag, Object value) {
 		tags.put(tag, value);
 	}

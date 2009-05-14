@@ -12,6 +12,7 @@ public interface Track extends HasMetadata {
 	public Album getAlbum();
 	public void setAlbum(Album album);
 	public Object get(Constants tag);
+	public Object get(Constants tag, Object defaultValue);
 	public void put(Constants tag, Object value);
 	public Iterable<Constants> getAllTags();
 	public void getStream(StreamReader reader) throws IOException;

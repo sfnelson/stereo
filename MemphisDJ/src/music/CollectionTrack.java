@@ -41,6 +41,16 @@ public class CollectionTrack implements Track {
 			return track.get(tag);
 		}
 	}
+	
+	public Object get(Constants tag, Object defaultValue) {
+		Object ret = get(tag);
+		if (ret == null) {
+			return defaultValue;
+		}
+		else {
+			return ret;
+		}
+	}
 
 	public Album getAlbum() {
 		return track.getAlbum();

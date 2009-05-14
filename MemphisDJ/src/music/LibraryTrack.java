@@ -58,6 +58,16 @@ public class LibraryTrack implements Track {
 		if (current == null) return null;
 		return current.get(tag);
 	}
+	
+	public Object get(Constants tag, Object defaultValue) {
+		Object ret = get(tag);
+		if (ret == null) {
+			return defaultValue;
+		}
+		else {
+			return ret;
+		}
+	}
 
 	public Iterable<Constants> getAllTags() {
 		Track current = current();

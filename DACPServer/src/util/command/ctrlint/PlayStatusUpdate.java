@@ -74,11 +74,11 @@ public class PlayStatusUpdate implements Command, PlaybackListener {
 			update = new util.response.ctrlint.PlayStatusUpdate.Active(
 					revision, state, false, 0,
 					database, playlist.id(), position, current.id(),
-					(String)current.get(Constants.dmap_itemname),
-					(String)current.get(Constants.daap_songartist),
-					(String)current.get(Constants.daap_songalbum),
-					(String)current.get(Constants.daap_songgenre),
-					(Long)current.get(Constants.daap_songalbumid),
+					(String)current.get(Constants.dmap_itemname, ""),
+					(String)current.get(Constants.daap_songartist, ""),
+					(String)current.get(Constants.daap_songalbum, ""),
+					(String)current.get(Constants.daap_songgenre, ""),
+					(Long)current.get(Constants.daap_songalbumid, new Long(0)),
 					1 /* only support songs atm */,
 					total-elapsed,
 					total);
