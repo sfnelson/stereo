@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.Set;
 
 import spi.SourceProvider;
+import stereo.dnssd.DNSSD;
+import stereo.dnssd.DNSSDProvider;
+import stereo.dnssd.DNSSDProvider.Service;
 
 /**
  * DAAPLackey polls DAAP libraries for changes and updates the DJ's library.
@@ -25,6 +28,20 @@ public class DAAPLackey implements SourceProvider {
 		this.clients = new HashSet<DAAPClient>();
 
 		new PollThread().start();
+		
+		DNSSD.impl().registerListener(new DNSSDProvider.ServiceListener() {
+
+			public void serviceAvailable(Service service) {
+				connect("daap://"+service.host+":"+service.port);
+			}
+
+			public void serviceUnavailable(Service service) {}
+
+			public String type() {
+				return "_daap._tcp";
+			}
+			
+		});
 	}
 	
 	public void connect(String path) {
