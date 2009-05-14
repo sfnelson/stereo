@@ -1,5 +1,7 @@
 import java.io.IOException;
-import java.util.ServiceLoader;
+import java.util.Iterator;
+
+import javax.imageio.spi.ServiceRegistry;
 
 import spi.StereoServer;
 
@@ -11,9 +13,9 @@ public class Main {
 	public static void main(String [] args) throws IOException {
 		DJ dj = new DJ("Memphis Stereo");
 		
-		ServiceLoader<StereoServer> loader = ServiceLoader.load(StereoServer.class);
-		for (StereoServer server: loader) {
-			System.out.println(server.getClass());
+		for (Iterator<StereoServer> it = ServiceRegistry.lookupProviders(StereoServer.class); it.hasNext();) {
+			StereoServer server = it.next();
+			System.out.println("loading server: " + server.getClass());
 			server.start(dj, args);
 		}
 	}

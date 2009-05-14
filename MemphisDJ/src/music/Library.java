@@ -10,9 +10,11 @@ import interfaces.collection.Source;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
-import java.util.ServiceLoader;
 import java.util.Set;
+
+import javax.imageio.spi.ServiceRegistry;
 
 import spi.SourceProvider;
 
@@ -36,8 +38,8 @@ public class Library extends AbstractSetSource<LibraryTrack>
 		addCollection(this.collection()); //library is a collection in the library
 		monitor.nextVersion();
 		
-		ServiceLoader<SourceProvider> loader = ServiceLoader.load(SourceProvider.class);
-		for (SourceProvider provider: loader) {
+		for (Iterator<SourceProvider> it = ServiceRegistry.lookupProviders(SourceProvider.class); it.hasNext();) {
+			SourceProvider provider = it.next();
 			System.out.println("using source provider: " + provider.getClass().getName());
 			provider.create(this);
 			providers.add(provider);
