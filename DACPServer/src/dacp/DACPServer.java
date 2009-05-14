@@ -49,9 +49,11 @@ public class DACPServer implements StereoServer {
 			records.put("DvTy","iTunes");
 			records.put("DvSv","2049");
 			records.put("DbId", hash);
-			DNSSDProvider.Service service = new DNSSDProvider.Service(hash, "_touch-able._tcp.", null, PORT, records);
-
+			DNSSDProvider.Service service = new DNSSDProvider.Service(hash, "_touch-able._tcp", null, PORT, records);
 			DNSSD.impl().registerService(service);
+			
+			DNSSDProvider.Service webserver = new DNSSDProvider.Service("Stereo on " + hostname, "_http._tcp", null, PORT, new HashMap<String,String>());
+			DNSSD.impl().registerService(webserver);
 		}
 		catch (IOException ex) {
 			ex.printStackTrace();
