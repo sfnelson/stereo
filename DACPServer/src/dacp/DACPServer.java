@@ -6,24 +6,19 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashSet;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Scanner;
-import java.util.Set;
-
-import javax.jmdns.JmDNS;
-import javax.jmdns.ServiceInfo;
 
 import reader.DACPRequestParser;
 import spi.StereoServer;
+import stereo.dnssd.DNSSD;
+import stereo.dnssd.DNSSDProvider;
 import util.command.Command;
 import writer.DACPResponseGenerator;
 import api.Response;
 
-
 public class DACPServer implements StereoServer {
 
-	private String DEVICE;
 	private int PORT;
 	private ServerSocket SERVER_SOCK;
 	private DJInterface dj;
@@ -32,7 +27,6 @@ public class DACPServer implements StereoServer {
 
 	public void start(DJInterface dj, String[] args) {
 
-		this.DEVICE = (args.length>0)?args[0]:"localhost";
 		this.PORT = (args.length>1)?new Scanner(args[1]).nextInt():3689;
 		this.dj = dj;
 
@@ -41,20 +35,13 @@ public class DACPServer implements StereoServer {
 			System.out.println("Server starting.\n--------\n");
 			new ServerSocketThread().start();
 
-			Set<InetAddress> addresses = new HashSet<InetAddress>();
-
-			addresses.add(InetAddress.getByName(this.DEVICE));
-
 			String hostname = InetAddress.getLocalHost().getHostName();
 			hostname = new Scanner(hostname).useDelimiter("[.]").next();
 
 			String hash = Integer.toHexString(hostname.hashCode()).toUpperCase();
 			hash = (hash+hash).substring(0,13);
 
-			System.out.println("registering mDNS for " + hostname + " (" + hash + ")");
-
-			Hashtable<String, String> records = new Hashtable<String, String>();
-
+			HashMap<String, String> records = new HashMap<String, String>();
 			records.put("CtlN","Stereo on " + hostname);
 			records.put("OSsi","0x1F6");
 			records.put("Ver","131073");
@@ -62,14 +49,9 @@ public class DACPServer implements StereoServer {
 			records.put("DvTy","iTunes");
 			records.put("DvSv","2049");
 			records.put("DbId", hash);
+			DNSSDProvider.Service service = new DNSSDProvider.Service(hash, "_touch-able._tcp.", null, PORT, records);
 
-			ServiceInfo dmcp = ServiceInfo.create("_touch-able._tcp.local.", hash, PORT, 0, 0, records);
-
-			for (InetAddress a: addresses) {
-				final JmDNS mdns = JmDNS.create(a);
-				System.out.println("binding on " + a);
-				mdns.registerService(dmcp);
-			}
+			DNSSD.impl().registerService(service);
 		}
 		catch (IOException ex) {
 			ex.printStackTrace();
