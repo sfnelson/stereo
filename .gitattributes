@@ -166,6 +166,12 @@ DACPServer/test/util/response/ctrlint/GetPropertyTest.java -text svneol=unset#te
 DACPServer/test/util/response/ctrlint/PlayStatusUpdateTest.java -text svneol=unset#text/plain
 DACPServer/test/util/response/databases/BrowseTest.java -text svneol=unset#text/plain
 DACPServer/test/util/response/databases/NewPlaylistTest.java -text svneol=unset#text/plain
+DNS-SD/.project -text svneol=unset#text/plain
+DNS-SD/src/META-INF/services/spi.StereoServer -text
+DNS-SD/src/META-INF/services/stereo.dnssd.DNSSDProvider -text
+DNS-SD/src/stereo/dnssd/AppleDNSSDImpl.java -text svneol=unset#text/plain
+DNS-SD/src/stereo/dnssd/DNSSD.java -text svneol=unset#text/plain
+DNS-SD/src/stereo/dnssd/DNSSDProvider.java -text svneol=unset#text/plain
 MPRISServer/.classpath -text svneol=unset#text/plain
 MPRISServer/.project -text svneol=unset#text/plain
 MPRISServer/src/META-INF/services/spi.StereoServer -text
