@@ -42,11 +42,11 @@ public class StereoAmp extends Thread {
 		while (true) {
 			
 			PlayStatusUpdate response;
-			if (revision > -1) {
-				response = (PlayStatusUpdate)request("/ctrl-int/1/playstatusupdate");
+			if (revision > 0) {
+				response = (PlayStatusUpdate)request("/ctrl-int/1/playstatusupdate?revision-number="+revision);
 			}
 			else {
-				response = (PlayStatusUpdate)request("/ctrl-int/1/playstatusupdate?revison-number="+revision);
+				response = (PlayStatusUpdate)request("/ctrl-int/1/playstatusupdate");
 			}
 			revision = response.revision;
 
@@ -65,7 +65,7 @@ public class StereoAmp extends Thread {
 						
 						if (!player.stopped()) {
 							System.out.println("finished: next song");
-							request("/ctrl-int/1/nextitem?revison-number="+revision);
+							request("/ctrl-int/1/nextitem?revision-number="+revision);
 						}
 						
 						player = null;
@@ -85,7 +85,7 @@ public class StereoAmp extends Thread {
 					}
 					
 					System.out.println("error: next song");
-					request("/ctrl-int/1/nextitem?revison-number="+revision);
+					request("/ctrl-int/1/nextitem?revision-number="+revision);
 				}
 			}
 		}
