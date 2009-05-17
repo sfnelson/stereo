@@ -5,8 +5,10 @@ import interfaces.Track;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import spi.SourceProvider;
@@ -19,20 +21,22 @@ import stereo.dnssd.DNSSDProvider.Service;
  */
 public class DAAPLackey implements SourceProvider {
 
-	private Set<DAAPClient> clients;
+	private Set<String> hosts;
+	private Map<DAAPClient, String> clients;
 	
 	private Library<? extends Track> library;
 
 	public void create(Library<? extends Track> library) {
 		this.library = library;
-		this.clients = new HashSet<DAAPClient>();
+		this.hosts = new HashSet<String>();
+		this.clients = new HashMap<DAAPClient, String>();
 
 		new PollThread().start();
 		
 		DNSSD.impl().registerListener(new DNSSDProvider.ServiceListener() {
 
 			public void serviceAvailable(Service service) {
-				connect("daap://"+service.host+":"+service.port);
+				connect(service.name, "daap://"+service.host+":"+service.port);
 			}
 
 			public void serviceUnavailable(Service service) {}
@@ -44,7 +48,9 @@ public class DAAPLackey implements SourceProvider {
 		});
 	}
 	
-	public void connect(String path) {
+	public synchronized void connect(final String name, final String path) {
+		
+		if (clients.containsKey(name)) return;
 		
 		if (!path.substring(0, 4).equals("daap")) return;
 			
@@ -57,7 +63,7 @@ public class DAAPLackey implements SourceProvider {
 					List<DAAPClient> pls =  DAAPClient.create(pth, library.nextCollectionId());
 
 					for (DAAPClient c: pls) {
-						add(c);
+						add(name, c);
 					}
 				}
 				catch (IOException ex) {
@@ -68,8 +74,9 @@ public class DAAPLackey implements SourceProvider {
 		}.start();
 	}
 	
-	private synchronized void add(DAAPClient client) {
-		clients.add(client);
+	private synchronized void add(String name, DAAPClient client) {
+		hosts.add(name);
+		clients.put(client, name);
 		library.addSource(client);
 		library.addCollection(client.collection());
 	}
@@ -78,10 +85,11 @@ public class DAAPLackey implements SourceProvider {
 		library.removeCollection(client.collection());
 		library.removeSource(client);
 		clients.remove(client);
+		hosts.remove(client);
 	}
 	
 	private synchronized List<DAAPClient> clients() {
-		return new ArrayList<DAAPClient>(clients);
+		return new ArrayList<DAAPClient>(clients.keySet());
 	}
 
 	private class PollThread extends Thread {
