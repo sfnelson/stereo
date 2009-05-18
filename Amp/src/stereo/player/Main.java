@@ -4,12 +4,8 @@ import java.util.Set;
 
 import stereo.dnssd.DNSSDProvider.Service;
 
-import com.apple.dnssd.DNSSDException;
-
 public class Main {
-
-	public static void main(String args[]) throws InterruptedException, DNSSDException {
-
+	public static void main(String args[]) throws InterruptedException {
 		String host = null;
 		int port = 3689;
 
@@ -54,7 +50,6 @@ public class Main {
 			StereoAmp amp = new StereoAmp(host, port);
 			amp.start();
 			amp.listen();
-		}
-		
+		}	
 	}
 }
