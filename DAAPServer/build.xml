@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE project [
+       <!ENTITY common SYSTEM "../common.xml">
+]>
+
+<project basedir="." default="build" name="DAAPClient" xmlns:ivy="antlib:org.apache.ivy.ant">
+
+  <property name="MemphisDJ.location" value="../MemphisDJ"/>
+
+  &common;
+
+  <path id="MemphisDJ.classpath">
+    <pathelement location="${MemphisDJ.location}/bin"/>
+  </path>
+  <path id="DAAPClient.classpath">
+    <pathelement location="bin"/>
+    <fileset dir="${lib.dir}">
+      <include name="**/*.jar"/>
+    </fileset>
+    <path refid="MemphisDJ.classpath"/>
+  </path>
+
+  <target name="init" depends="resolve">
+    <mkdir dir="bin"/>
+    <copy includeemptydirs="false" todir="bin">
+      <fileset dir="src" excludes="**/*.java"/>
+    </copy>
+  </target>
+
+  <target name="clean">
+    <delete dir="bin"/>
+  </target>
+
+  <target name="build-subprojects">
+    <ant antfile="${MemphisDJ.location}/build.xml" inheritAll="false" target="build"/>
+  </target>
+
+  <target depends="init" name="build-project">
+    <echo message="${ant.project.name}: ${ant.file}"/>
+    <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+      <src path="src"/>
+      <classpath refid="DAAPClient.classpath"/>
+    </javac>
+  </target>
+
+</project>

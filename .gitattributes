@@ -53,6 +53,7 @@ DAAPClient/src/daap/DAAPLackey.java -text
 DAAPClient/src/daap/DAAPTrack.java -text
 DAAPClient/src/daap/DAAPUtilities.java -text
 DAAPClient/src/daap/content-codes.txt -text
+DAAPServer/build.xml -text
 DACPServer/.classpath -text
 DACPServer/.project -text
 DACPServer/build.xml -text
