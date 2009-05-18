@@ -48,9 +48,16 @@ public class DAAPLackey implements SourceProvider {
 		});
 	}
 	
+	public void connect(final String path) {
+		
+		connect(path, path);
+		
+	}
+	
 	public synchronized void connect(final String name, final String path) {
 		
-		if (clients.containsKey(name)) return;
+		if (hosts.contains(name)) return;
+		else hosts.add(name);
 		
 		if (!path.substring(0, 4).equals("daap")) return;
 			
@@ -66,10 +73,7 @@ public class DAAPLackey implements SourceProvider {
 						add(name, c);
 					}
 				}
-				catch (IOException ex) {
-					System.err.println("Error connecting to daap server: " + ex.getMessage());
-				}
-				
+				catch (IOException ex) {}
 			}
 		}.start();
 	}

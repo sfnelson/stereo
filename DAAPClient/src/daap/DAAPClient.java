@@ -20,8 +20,14 @@ public class DAAPClient extends AbstractSetSource<DAAPTrack>
 		
 		DAAPUtilities helper = new DAAPUtilities(path);
 		
-		final String name = helper.connect();
-		System.out.println("connected to " + name + " (" + path + ")");
+		try {
+			final String name = helper.connect();
+			System.out.println("connected to " + name + " (" + path + ")");
+		}
+		catch (IOException ex) {
+			System.err.println("error connecting to " + path + ": " + ex.getMessage());
+			throw ex;
+		}
 		
 		final int revision = helper.update(0);
 		

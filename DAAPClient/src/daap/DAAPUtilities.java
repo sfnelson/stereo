@@ -109,7 +109,12 @@ public class DAAPUtilities {
 
 		DAAPEntry response = requestDAAP(request);
 
-		return getProperty(response, property);
+		if (response != null) {
+			return getProperty(response, property);
+		}
+		else {
+			return null;
+		}
 	}
 
 	private final HttpClient client = new DefaultHttpClient();
@@ -124,6 +129,7 @@ public class DAAPUtilities {
 		int statusCode = response.getStatusLine().getStatusCode();
 		if (statusCode/100 != HttpStatus.SC_OK/100) {
 			System.err.println("Method failed: " + response.getStatusLine());
+			return null;
 		}
 
 		// Read the response body.
@@ -145,6 +151,7 @@ public class DAAPUtilities {
 		int statusCode = response.getStatusLine().getStatusCode();
 		if (statusCode/100 != HttpStatus.SC_OK/100) {
 			System.err.println("Method failed: " + response.getStatusLine());
+			return;
 		}
 
 		// Read the response body.
