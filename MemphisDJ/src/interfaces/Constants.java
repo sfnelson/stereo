@@ -163,6 +163,7 @@ public enum Constants {
 	dmap_supportsindex							( "msix",  1),
 	dmap_loginrequired							( "mslr",  1),
 	dmap_speakermachineaddress					( "msma",  7), //not idea! only seen '0'
+	dmap_speakermachinelist						( "msml",  12),
 	dmap_supportspersistentids					( "mspi",  1),
 	dmap_supportsquery							( "msqy",  1),
 	dmap_supportsresolve						( "msrs",  1),
