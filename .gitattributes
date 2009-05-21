@@ -167,6 +167,62 @@ DACPServer/test/util/response/ctrlint/GetPropertyTest.java -text svneol=unset#te
 DACPServer/test/util/response/ctrlint/PlayStatusUpdateTest.java -text svneol=unset#text/plain
 DACPServer/test/util/response/databases/BrowseTest.java -text svneol=unset#text/plain
 DACPServer/test/util/response/databases/NewPlaylistTest.java -text svneol=unset#text/plain
+DMAP/.classpath -text svneol=unset#text/plain
+DMAP/.project -text svneol=unset#text/plain
+DMAP/src/api/Node.java -text
+DMAP/src/api/Reader.java -text
+DMAP/src/api/Response.java -text
+DMAP/src/api/Writer.java -text
+DMAP/src/dmap/DACPReader.java -text
+DMAP/src/dmap/DACPWriter.java -text
+DMAP/src/dmap/node/AlbumNode.java -text
+DMAP/src/dmap/node/BooleanNode.java -text
+DMAP/src/dmap/node/ByteNode.java -text
+DMAP/src/dmap/node/Composite.java -text
+DMAP/src/dmap/node/ImageNode.java -text
+DMAP/src/dmap/node/IntegerNode.java -text
+DMAP/src/dmap/node/LengthVisitor.java -text
+DMAP/src/dmap/node/LongLongNode.java -text
+DMAP/src/dmap/node/LongNode.java -text
+DMAP/src/dmap/node/Node.java -text
+DMAP/src/dmap/node/PageNode.java -text
+DMAP/src/dmap/node/PlaylistNode.java -text
+DMAP/src/dmap/node/StringNode.java -text
+DMAP/src/dmap/node/TrackNode.java -text
+DMAP/src/dmap/node/VersionNode.java -text
+DMAP/src/dmap/node/Visitor.java -text
+DMAP/src/dmap/response/ContentCodes.java -text
+DMAP/src/dmap/response/ControlPromptUpdate.java -text
+DMAP/src/dmap/response/CtrlInt.java -text
+DMAP/src/dmap/response/Databases.java -text
+DMAP/src/dmap/response/Login.java -text
+DMAP/src/dmap/response/PlaylistSongs.java -text
+DMAP/src/dmap/response/ServerInfo.java -text
+DMAP/src/dmap/response/Update.java -text
+DMAP/src/dmap/response/ctrlint/GetProperty.java -text
+DMAP/src/dmap/response/ctrlint/GetSpeakers.java -text
+DMAP/src/dmap/response/ctrlint/PlayStatusUpdate.java -text
+DMAP/src/dmap/response/databases/Browse.java -text
+DMAP/src/dmap/response/databases/Groups.java -text
+DMAP/src/dmap/response/databases/NewPlaylist.java -text
+DMAP/src/dmap/response/databases/Playlists.java -text
+DMAP/test/test/Album.java -text
+DMAP/test/test/Playlist.java -text
+DMAP/test/test/StreamPrinter.java -text
+DMAP/test/test/Track.java -text
+DMAP/test/util/response/ContentCodesTest.java -text
+DMAP/test/util/response/ControlPromptUpdateTest.java -text
+DMAP/test/util/response/CtrlIntTest.java -text
+DMAP/test/util/response/DatabasePlaylistsTest.java -text
+DMAP/test/util/response/DatabasesTest.java -text
+DMAP/test/util/response/LoginTest.java -text
+DMAP/test/util/response/PlaylistSongsTest.java -text
+DMAP/test/util/response/ServerInfoTest.java -text
+DMAP/test/util/response/UpdateTest.java -text
+DMAP/test/util/response/ctrlint/GetPropertyTest.java -text
+DMAP/test/util/response/ctrlint/PlayStatusUpdateTest.java -text
+DMAP/test/util/response/databases/BrowseTest.java -text
+DMAP/test/util/response/databases/NewPlaylistTest.java -text
 DNS-SD/.classpath -text svneol=unset#text/plain
 DNS-SD/.project -text svneol=unset#text/plain
 DNS-SD/src/META-INF/services/spi.StereoServer -text
