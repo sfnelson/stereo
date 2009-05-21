@@ -106,7 +106,6 @@ public class DACPWriterTest {
 			}
 		});
 		writer.appendList(Constants.daap_browseartistlisting, (byte)0, list);
-		for (byte b:  stream.toByteArray()) System.out.print((char)b);
 		assertArrayEquals(new byte[] {
 				'm', 'u', 't', 'y', 0, 0, 0, 1, 0,
 				'm', 't', 'c', 'o', 0, 0, 0, 4, 0, 0, 0, 1,
