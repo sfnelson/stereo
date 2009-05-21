@@ -8,7 +8,7 @@ import api.Response;
 
 public class ContentCodes implements Command {
 	
-	private static Response contentCodes = new util.response.ContentCodes();
+	private static Response contentCodes = new dmap.response.ContentCodes();
 
 	public void init(Map<String, String> args) {
 		//nothing to do

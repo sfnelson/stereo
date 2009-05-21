@@ -17,7 +17,7 @@ public class Login implements Command {
 	public Response run(DJInterface dj) {
 		
 		int session = ++Login.session;
-		return new util.response.Login(session);
+		return new dmap.response.Login(session);
 		
 	}
 }

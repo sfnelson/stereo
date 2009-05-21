@@ -2,6 +2,7 @@ package api;
 
 import interfaces.Constants;
 
+import java.util.Calendar;
 import java.util.Iterator;
 
 
@@ -25,14 +26,14 @@ public interface Reader extends Iterable<Constants> {
 	public boolean hasNextVersion(Constants code);
 	public byte[] nextVersion(Constants code);
 	
+	public boolean hasNextDate(Constants code);
+	public Calendar nextDate(Constants code);
+	
 	public boolean hasNextLongLong(Constants code);
 	public int[] nextLongLong(Constants code);
 	
 	public boolean hasNextString(Constants code);
 	public String nextString(Constants code);
-	
-	public boolean hasNextBytes(Constants code);
-	public byte[] nextBytes(Constants code);
 	
 	public boolean hasNextComposite(Constants code);
 	public Reader nextComposite(Constants code);

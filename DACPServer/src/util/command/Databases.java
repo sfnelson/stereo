@@ -21,8 +21,8 @@ public class Databases extends PathNode implements Command {
 		int items = dj.library().size();
 		int containers = dj.library().numCollections();
 		
-		util.response.Databases databases =
-			new util.response.Databases(1, 0xf35226b7c8ee14d3l,
+		dmap.response.Databases databases =
+			new dmap.response.Databases(1, 0xf35226b7c8ee14d3l,
 					"Memphis Stereo", items, containers);
 		
 		return databases;

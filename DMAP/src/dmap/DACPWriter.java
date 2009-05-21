@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Calendar;
 import java.util.List;
 
 import api.Node;
@@ -34,11 +35,6 @@ public class DACPWriter implements Writer {
 	public void appendShort(Constants code, short value) {
 		check(code, new int[] {Constants.SHORT, Constants.SIGNED_SHORT});
 		write(code.code, 2, value);
-	}
-
-	public void appendBytes(Constants code, byte[] value) {
-		check(code, new int[] {});
-		write(code.code, value.length, value);
 	}
 
 	public void appendInteger(Constants code, int value) {
@@ -96,9 +92,9 @@ public class DACPWriter implements Writer {
 		write(code.code, value.length, value);
 	}
 	
-	public void appendDate(Constants code, int value) {
+	public void appendDate(Constants code, Calendar date) {
 		check(code, new int[] { Constants.DATE });
-		write(code.code, 4, value);
+		write(code.code, 4, (int)(date.getTimeInMillis()/1000));
 	}
 
 	public void appendList(final Constants code, final byte type, final List<? extends Node> list) {

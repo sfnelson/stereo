@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/MemphisDJ"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/DNS-SD"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/DMAP"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/DACPServer"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

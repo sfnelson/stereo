@@ -10,12 +10,13 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+import dmap.node.AlbumNode;
+
 import util.command.Command;
 import util.queryparser.ApplyFilter;
 import util.queryparser.Filter;
 import util.queryparser.QueryParser;
 import api.Response;
-import api.nodes.AlbumNode;
 
 public class Groups implements Command {
 
@@ -80,7 +81,7 @@ public class Groups implements Command {
 		
 		System.out.println("returning " + nodes.size() + " elements");
 
-		return new util.response.databases.Groups<AlbumNode>(Constants.daap_albumgrouping, nodes);
+		return new dmap.response.databases.Groups<AlbumNode>(Constants.daap_albumgrouping, nodes);
 	}
 
 }

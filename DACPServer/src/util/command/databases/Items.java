@@ -73,7 +73,7 @@ public class Items implements Command {
 		
 		System.out.println("returning " + source.size() + " elements");
 		
-		return new util.response.PlaylistSongs(pl);
+		return new dmap.response.PlaylistSongs(pl);
 	}
 	
 }

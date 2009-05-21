@@ -1,0 +1,6 @@
+<ivy-module version="1.0">
+	<info organisation="memphis" module="Amp"/>
+	<dependencies>
+		<dependency org="org.jaudiotagger" name="jaudiotagger" rev="1.0.8"/>
+	</dependencies>
+</ivy-module>

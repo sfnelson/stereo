@@ -76,7 +76,7 @@ public class Browse implements Command {
 
 		System.out.println("returning " + list.size() + " elements from " + dj.library().size());
 
-		return new util.response.databases.Browse(code, list);
+		return new dmap.response.databases.Browse(code, list);
 	}
 
 }

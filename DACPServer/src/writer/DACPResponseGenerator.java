@@ -9,10 +9,10 @@ import java.util.Date;
 
 import util.command.Image;
 import util.command.Song;
-import util.node.PageNode;
 import api.Response;
 import api.Writer;
-import dacp.DACPWriter;
+import dmap.DACPWriter;
+import dmap.node.PageNode;
 
 public class DACPResponseGenerator {
 

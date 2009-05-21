@@ -29,7 +29,7 @@ public class CtrlInt extends PathNode implements Command {
 
 	public Response run(DJInterface dj) {
 		
-		return new util.response.CtrlInt(1);
+		return new dmap.response.CtrlInt(1);
 		
 	}
 	

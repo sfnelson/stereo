@@ -4,6 +4,7 @@ import interfaces.Constants;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -18,42 +19,53 @@ public class DACPReader implements Reader {
 	}
 
 	public boolean hasNextBoolean(Constants code) {
+		assert code.type == Constants.BYTE;
 		return available(code, 1);
 	}
 
 	public boolean hasNextByte(Constants code) {
+		assert code.type == Constants.BYTE || code.type == Constants.SIGNED_BYTE;
 		return available(code, 1);
 	}
 
-	public boolean hasNextBytes(Constants code) {
+	public boolean hasNextComposite(Constants code) {
+		assert code.type == Constants.COMPOSITE;
+		if (length != 0 && length < 8) return false;
 		return available(code, length);
 	}
-
-	public boolean hasNextComposite(Constants code) {
-		return available(code, length);
+	
+	public boolean hasNextDate(Constants code) {
+		assert code.type == Constants.DATE;
+		return available(code, 4);
 	}
 
 	public boolean hasNextInteger(Constants code) {
+		assert code.type == Constants.INTEGER || code.type == Constants.SIGNED_INTEGER;
 		return available(code, 4);
 	}
 
 	public boolean hasNextLong(Constants code) {
+		assert code.type == Constants.LONG || code.type == Constants.SIGNED_LONG;
 		return available(code, 8);
 	}
 
 	public boolean hasNextLongLong(Constants code) {
+		assert code.type == Constants.LONG_LONG;
 		return available(code, 16);
 	}
 
 	public boolean hasNextShort(Constants code) {
+		assert code.type == Constants.SHORT || code.type == Constants.SIGNED_SHORT;
 		return available(code, 2);
 	}
 
 	public boolean hasNextString(Constants code) {
+		assert code.type == Constants.STRING;
 		return available(code, length);
 	}
 
 	public boolean hasNextVersion(Constants code) {
+		assert code.type == Constants.VERSION;
 		return available(code, 4);
 	}
 	
@@ -68,11 +80,13 @@ public class DACPReader implements Reader {
 		read(code, 1);
 		return readByte(stream);
 	}
-
-	public byte[] nextBytes(Constants code) {
-		if (!hasNextBytes(code)) throw new NoSuchElementException(code.longName);
-		read(code, length);
-		return readBytes(stream, length);
+	
+	public Calendar nextDate(Constants code) {
+		if (!hasNextDate(code)) throw new NoSuchElementException(code.longName);
+		read(code, 4);
+		Calendar date = Calendar.getInstance();
+		date.setTimeInMillis(1000l * readInteger(stream));
+		return date;
 	}
 
 	public int nextInteger(Constants code) {
@@ -125,9 +139,15 @@ public class DACPReader implements Reader {
 	public Iterator<Constants> iterator() {
 		return new Iterator<Constants>() {
 			public boolean hasNext() {
-				return available - consumed > 0;
+				return available - consumed - 8 > 0;
 			}
 			public Constants next() {
+				if (!hasNext()) {
+					code = null;
+					length = 0;
+					throw new NoSuchElementException();
+				}
+				
 				if (!read) {
 					skip(code);
 				}

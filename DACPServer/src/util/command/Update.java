@@ -45,7 +45,7 @@ public class Update implements Command, LibraryListener {
 		}
 
 		//TODO use version to check whether update is needed
-		return new util.response.Update(dj.library().version());
+		return new dmap.response.Update(dj.library().version());
 	}
 
 	public void libraryVersionChanged(int version) {

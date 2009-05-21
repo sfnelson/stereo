@@ -11,23 +11,23 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 
 import util.command.Song;
-import util.response.ControlPromptUpdate;
-import util.response.CtrlInt;
-import util.response.Databases;
-import util.response.Login;
-import util.response.PlaylistSongs;
-import util.response.ServerInfo;
-import util.response.Update;
-import util.response.ctrlint.GetProperty;
-import util.response.ctrlint.PlayStatusUpdate;
-import util.response.databases.Browse;
-import util.response.databases.Groups;
-import util.response.databases.Playlists;
 import api.Reader;
 import api.Response;
-import api.nodes.AlbumNode.AlbumFactory;
-import api.nodes.PlaylistNode.PlaylistFactory;
-import dacp.DACPReader;
+import dmap.DACPReader;
+import dmap.node.AlbumNode.AlbumFactory;
+import dmap.node.PlaylistNode.PlaylistFactory;
+import dmap.response.ControlPromptUpdate;
+import dmap.response.CtrlInt;
+import dmap.response.Databases;
+import dmap.response.Login;
+import dmap.response.PlaylistSongs;
+import dmap.response.ServerInfo;
+import dmap.response.Update;
+import dmap.response.ctrlint.GetProperty;
+import dmap.response.ctrlint.PlayStatusUpdate;
+import dmap.response.databases.Browse;
+import dmap.response.databases.Groups;
+import dmap.response.databases.Playlists;
 
 
 public abstract class DACPResponseParser {

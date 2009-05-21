@@ -7,5 +7,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/Asunder"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/MemphisDJ"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/DNS-SD"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/DMAP"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

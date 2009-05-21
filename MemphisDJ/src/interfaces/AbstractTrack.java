@@ -1,5 +1,6 @@
 package interfaces;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,6 +61,24 @@ public abstract class AbstractTrack implements Track {
 	}
 	
 	public void put(Constants tag, Object value) {
+		if (value == null) return;
+		
+		switch (tag.type) {
+		case Constants.BYTE: assert(value instanceof Byte); break;
+		case Constants.SIGNED_BYTE: assert(value instanceof Byte); break;
+		case Constants.SHORT: assert(value instanceof Short); break;
+		case Constants.SIGNED_SHORT: assert(value instanceof Short); break;
+		case Constants.INTEGER: assert(value instanceof Integer); break;
+		case Constants.SIGNED_INTEGER: assert(value instanceof Integer); break;
+		case Constants.LONG: assert(value instanceof Long); break;
+		case Constants.SIGNED_LONG: assert(value instanceof Long); break;
+		case Constants.STRING: assert(value instanceof String); break;
+		case Constants.DATE: assert(value instanceof Calendar); break;
+		case Constants.VERSION: assert(false); break; //versions should not be stored in tracks
+		case Constants.COMPOSITE: assert(false); break; //composites should not be stored in tracks
+		case Constants.LONG_LONG: assert(false); break; //long-longs should not be stored in tracks
+		default: assert(false);
+		}
 		tags.put(tag, value);
 	}
 

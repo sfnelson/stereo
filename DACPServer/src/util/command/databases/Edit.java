@@ -43,7 +43,7 @@ public class Edit implements Command {
 				Collection<? extends Track> c = new UserCollection(params.value, id, params.value.hashCode(), dj.library()).collection();
 				dj.library().addCollection(c);
 				
-				return new util.response.databases.NewPlaylist(id);
+				return new dmap.response.databases.NewPlaylist(id);
 			}
 			else {
 				throw new RuntimeException("unknown property: " + params.property);

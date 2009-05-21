@@ -10,8 +10,8 @@ import java.util.Map;
 
 import notification.PlaybackListener;
 import util.command.Command;
-import util.response.ctrlint.PlayStatusUpdate.Status;
 import api.Response;
+import dmap.response.ctrlint.PlayStatusUpdate.Status;
 
 public class PlayStatusUpdate implements Command, PlaybackListener {
 
@@ -64,14 +64,14 @@ public class PlayStatusUpdate implements Command, PlaybackListener {
 			throw new RuntimeException("unexpected playback state " + stateValue);
 		}
 		
-		util.response.ctrlint.PlayStatusUpdate update;
+		dmap.response.ctrlint.PlayStatusUpdate update;
 		if (state == Status.STOPPED) {
-			update = new util.response.ctrlint.PlayStatusUpdate(revision, false, 0);
+			update = new dmap.response.ctrlint.PlayStatusUpdate(revision, false, 0);
 		}
 		else {
 			Integer total = (Integer)current.get(Constants.daap_songtime);
 			if (total == null) total = 0;
-			update = new util.response.ctrlint.PlayStatusUpdate.Active(
+			update = new dmap.response.ctrlint.PlayStatusUpdate.Active(
 					revision, state, false, 0,
 					database, playlist.id(), position, current.id(),
 					(String)current.get(Constants.dmap_itemname, ""),

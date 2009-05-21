@@ -14,7 +14,7 @@ public class ServerInfo implements Command {
 
 	public Response run(DJInterface dj) {
 		
-		return new util.response.ServerInfo(dj.name(), 1);
+		return new dmap.response.ServerInfo(dj.name(), 1);
 		
 	}
 

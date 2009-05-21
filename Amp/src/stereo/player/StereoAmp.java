@@ -9,14 +9,12 @@ import java.net.UnknownHostException;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-import api.Response;
-import api.nodes.AlbumNode.AlbumFactory;
-import api.nodes.PlaylistNode.PlaylistFactory;
-
 import reader.DACPResponseParser;
-
 import util.command.Song;
-import util.response.ctrlint.PlayStatusUpdate;
+import api.Response;
+import dmap.node.AlbumNode.AlbumFactory;
+import dmap.node.PlaylistNode.PlaylistFactory;
+import dmap.response.ctrlint.PlayStatusUpdate;
 
 public class StereoAmp extends Thread {
 

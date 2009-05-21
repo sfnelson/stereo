@@ -7,8 +7,8 @@ import java.util.Map;
 
 import util.command.Command;
 import util.command.PathNode;
-import util.response.databases.Playlists;
 import api.Response;
+import dmap.response.databases.Playlists;
 
 public class Containers extends PathNode implements Command {
 

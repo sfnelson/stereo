@@ -53,7 +53,11 @@ DAAPClient/src/daap/DAAPLackey.java -text
 DAAPClient/src/daap/DAAPTrack.java -text
 DAAPClient/src/daap/DAAPUtilities.java -text
 DAAPClient/src/daap/content-codes.txt -text
+DAAPServer/.classpath -text svneol=unset#text/plain
+DAAPServer/.project -text svneol=unset#text/plain
 DAAPServer/build.xml -text
+DAAPServer/ivy.xml -text svneol=unset#text/plain
+DAAPServer/src/stereo/daap/server/Main.java -text svneol=unset#text/plain
 DACPServer/.classpath -text
 DACPServer/.project -text
 DACPServer/build.xml -text
@@ -61,16 +65,7 @@ DACPServer/etc/memphis-stereo.plist -text
 DACPServer/etc/str2bin.pl -text
 DACPServer/ivy.xml -text
 DACPServer/src/META-INF/services/spi.StereoServer -text
-DACPServer/src/api/Node.java -text svneol=unset#text/plain
-DACPServer/src/api/Reader.java -text svneol=unset#text/plain
-DACPServer/src/api/Response.java -text svneol=unset#text/plain
-DACPServer/src/api/Writer.java -text svneol=unset#text/plain
-DACPServer/src/api/nodes/AlbumNode.java -text svneol=unset#text/plain
-DACPServer/src/api/nodes/PlaylistNode.java -text svneol=unset#text/plain
-DACPServer/src/api/nodes/TrackNode.java -text svneol=unset#text/plain
-DACPServer/src/dacp/DACPReader.java -text svneol=unset#text/plain
 DACPServer/src/dacp/DACPServer.java -text
-DACPServer/src/dacp/DACPWriter.java -text svneol=unset#text/plain
 DACPServer/src/reader/DACPRequestParser.java -text
 DACPServer/src/reader/DACPResponseParser.java -text
 DACPServer/src/util/DACPPacket.java -text
@@ -110,19 +105,6 @@ DACPServer/src/util/command/databases/Containers.java -text
 DACPServer/src/util/command/databases/Edit.java -text
 DACPServer/src/util/command/databases/Groups.java -text
 DACPServer/src/util/command/databases/Items.java -text
-DACPServer/src/util/node/BooleanNode.java -text
-DACPServer/src/util/node/ByteNode.java -text
-DACPServer/src/util/node/Composite.java -text
-DACPServer/src/util/node/ImageNode.java -text
-DACPServer/src/util/node/IntegerNode.java -text
-DACPServer/src/util/node/LengthVisitor.java -text
-DACPServer/src/util/node/LongLongNode.java -text
-DACPServer/src/util/node/LongNode.java -text
-DACPServer/src/util/node/Node.java -text
-DACPServer/src/util/node/PageNode.java -text
-DACPServer/src/util/node/StringNode.java -text
-DACPServer/src/util/node/VersionNode.java -text
-DACPServer/src/util/node/Visitor.java -text
 DACPServer/src/util/queryparser/And.java -text
 DACPServer/src/util/queryparser/ApplyFilter.java -text
 DACPServer/src/util/queryparser/BinOp.java -text
@@ -130,43 +112,10 @@ DACPServer/src/util/queryparser/Filter.java -text
 DACPServer/src/util/queryparser/Or.java -text
 DACPServer/src/util/queryparser/QueryParser.java -text
 DACPServer/src/util/queryparser/Token.java -text
-DACPServer/src/util/response/ContentCodes.java -text svneol=unset#text/plain
-DACPServer/src/util/response/ControlPromptUpdate.java -text svneol=unset#text/plain
-DACPServer/src/util/response/CtrlInt.java -text svneol=unset#text/plain
-DACPServer/src/util/response/Databases.java -text svneol=unset#text/plain
-DACPServer/src/util/response/Login.java -text svneol=unset#text/plain
-DACPServer/src/util/response/PlaylistSongs.java -text svneol=unset#text/plain
-DACPServer/src/util/response/ServerInfo.java -text svneol=unset#text/plain
-DACPServer/src/util/response/Update.java -text svneol=unset#text/plain
-DACPServer/src/util/response/ctrlint/GetProperty.java -text svneol=unset#text/plain
-DACPServer/src/util/response/ctrlint/GetSpeakers.java -text svneol=unset#text/plain
-DACPServer/src/util/response/ctrlint/PlayStatusUpdate.java -text svneol=unset#text/plain
-DACPServer/src/util/response/databases/Browse.java -text svneol=unset#text/plain
-DACPServer/src/util/response/databases/Groups.java -text svneol=unset#text/plain
-DACPServer/src/util/response/databases/NewPlaylist.java -text svneol=unset#text/plain
-DACPServer/src/util/response/databases/Playlists.java -text svneol=unset#text/plain
 DACPServer/src/writer/DACPRequestGenerator.java -text
 DACPServer/src/writer/DACPResponseGenerator.java -text
 DACPServer/test/client/ClientBroadcasterTest.java -text
 DACPServer/test/server/ServerParserTest.java -text
-DACPServer/test/test/Album.java -text svneol=unset#text/plain
-DACPServer/test/test/DACPResponseParser.java -text svneol=unset#text/plain
-DACPServer/test/test/Playlist.java -text svneol=unset#text/plain
-DACPServer/test/test/StreamPrinter.java -text svneol=unset#text/plain
-DACPServer/test/test/Track.java -text svneol=unset#text/plain
-DACPServer/test/util/response/ContentCodesTest.java -text svneol=unset#text/plain
-DACPServer/test/util/response/ControlPromptUpdateTest.java -text svneol=unset#text/plain
-DACPServer/test/util/response/CtrlIntTest.java -text svneol=unset#text/plain
-DACPServer/test/util/response/DatabasePlaylistsTest.java -text svneol=unset#text/plain
-DACPServer/test/util/response/DatabasesTest.java -text svneol=unset#text/plain
-DACPServer/test/util/response/LoginTest.java -text svneol=unset#text/plain
-DACPServer/test/util/response/PlaylistSongsTest.java -text svneol=unset#text/plain
-DACPServer/test/util/response/ServerInfoTest.java -text svneol=unset#text/plain
-DACPServer/test/util/response/UpdateTest.java -text svneol=unset#text/plain
-DACPServer/test/util/response/ctrlint/GetPropertyTest.java -text svneol=unset#text/plain
-DACPServer/test/util/response/ctrlint/PlayStatusUpdateTest.java -text svneol=unset#text/plain
-DACPServer/test/util/response/databases/BrowseTest.java -text svneol=unset#text/plain
-DACPServer/test/util/response/databases/NewPlaylistTest.java -text svneol=unset#text/plain
 DMAP/.classpath -text svneol=unset#text/plain
 DMAP/.project -text svneol=unset#text/plain
 DMAP/src/api/Node.java -text
@@ -206,23 +155,25 @@ DMAP/src/dmap/response/databases/Browse.java -text
 DMAP/src/dmap/response/databases/Groups.java -text
 DMAP/src/dmap/response/databases/NewPlaylist.java -text
 DMAP/src/dmap/response/databases/Playlists.java -text
-DMAP/test/test/Album.java -text
-DMAP/test/test/Playlist.java -text
-DMAP/test/test/StreamPrinter.java -text
-DMAP/test/test/Track.java -text
-DMAP/test/util/response/ContentCodesTest.java -text
-DMAP/test/util/response/ControlPromptUpdateTest.java -text
-DMAP/test/util/response/CtrlIntTest.java -text
-DMAP/test/util/response/DatabasePlaylistsTest.java -text
-DMAP/test/util/response/DatabasesTest.java -text
-DMAP/test/util/response/LoginTest.java -text
-DMAP/test/util/response/PlaylistSongsTest.java -text
-DMAP/test/util/response/ServerInfoTest.java -text
-DMAP/test/util/response/UpdateTest.java -text
-DMAP/test/util/response/ctrlint/GetPropertyTest.java -text
-DMAP/test/util/response/ctrlint/PlayStatusUpdateTest.java -text
-DMAP/test/util/response/databases/BrowseTest.java -text
-DMAP/test/util/response/databases/NewPlaylistTest.java -text
+DMAP/test/api/impl/Album.java -text
+DMAP/test/api/impl/Playlist.java -text
+DMAP/test/api/impl/StreamPrinter.java -text
+DMAP/test/api/impl/Track.java -text
+DMAP/test/dmap/DACPReaderTest.java -text svneol=unset#text/plain
+DMAP/test/dmap/DACPWriterTest.java -text svneol=unset#text/plain
+DMAP/test/dmap/response/ContentCodesTest.java -text
+DMAP/test/dmap/response/ControlPromptUpdateTest.java -text
+DMAP/test/dmap/response/CtrlIntTest.java -text
+DMAP/test/dmap/response/DatabasePlaylistsTest.java -text
+DMAP/test/dmap/response/DatabasesTest.java -text
+DMAP/test/dmap/response/LoginTest.java -text
+DMAP/test/dmap/response/PlaylistSongsTest.java -text
+DMAP/test/dmap/response/ServerInfoTest.java -text
+DMAP/test/dmap/response/UpdateTest.java -text
+DMAP/test/dmap/response/ctrlint/GetPropertyTest.java -text
+DMAP/test/dmap/response/ctrlint/PlayStatusUpdateTest.java -text
+DMAP/test/dmap/response/databases/BrowseTest.java -text
+DMAP/test/dmap/response/databases/NewPlaylistTest.java -text
 DNS-SD/.classpath -text svneol=unset#text/plain
 DNS-SD/.project -text svneol=unset#text/plain
 DNS-SD/src/META-INF/services/spi.StereoServer -text

@@ -7,8 +7,8 @@ import interfaces.collection.Collection;
 import java.util.Map;
 
 import util.command.Command;
-import util.response.PlaylistSongs;
 import api.Response;
+import dmap.response.PlaylistSongs;
 
 public class Playlist implements Command {
 

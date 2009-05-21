@@ -15,7 +15,7 @@ public class GetSpeakers implements Command {
 
 	public Response run(DJInterface dj) {
 			
-		return new util.response.ctrlint.GetSpeakers();
+		return new dmap.response.ctrlint.GetSpeakers();
 	}
 	
 }

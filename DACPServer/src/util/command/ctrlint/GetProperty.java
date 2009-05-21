@@ -21,7 +21,7 @@ public class GetProperty implements Command {
 		if (args != null && args.containsKey("properties")) {
 			String property = args.get("properties");
 			if (property.equals("dmcp.volume")) {
-				return new util.response.ctrlint.GetProperty(Constants.dmcp_volume, dj.volume().getVolume());
+				return new dmap.response.ctrlint.GetProperty(Constants.dmcp_volume, dj.volume().getVolume());
 			}
 			else {
 				throw new IllegalArgumentException("property not understood: "+property);
