@@ -1,10 +1,11 @@
 package util.queryparser;
 
-import interfaces.Constants;
-import interfaces.HasMetadata;
 
 import java.math.BigInteger;
 import java.util.regex.Pattern;
+
+import api.Constants;
+import api.tracks.HasMetadata;
 
 
 public class Token implements Filter {

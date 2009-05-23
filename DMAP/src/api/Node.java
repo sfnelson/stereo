@@ -1,6 +1,6 @@
 package api;
 
-import interfaces.Constants;
+import api.Constants;
 
 public interface Node {
 	

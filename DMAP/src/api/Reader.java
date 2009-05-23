@@ -1,9 +1,10 @@
 package api;
 
-import interfaces.Constants;
 
 import java.util.Calendar;
 import java.util.Iterator;
+
+import api.Constants;
 
 
 public interface Reader extends Iterable<Constants> {

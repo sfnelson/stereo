@@ -1,7 +1,9 @@
 package interfaces;
 
-import interfaces.collection.Collection;
-import interfaces.collection.Source;
+import api.collections.Collection;
+import api.collections.Source;
+import api.tracks.Album;
+import api.tracks.Track;
 import notification.LibraryListener;
 
 public interface Library<T extends Track> extends Source<T> {

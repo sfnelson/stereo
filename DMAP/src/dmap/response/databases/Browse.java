@@ -1,11 +1,11 @@
 package dmap.response.databases;
 
-import interfaces.Constants;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import api.Constants;
 import api.Node;
 import api.Reader;
 import api.Response;

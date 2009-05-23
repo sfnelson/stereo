@@ -1,12 +1,12 @@
 package util.command.databases;
 
-import interfaces.Constants;
 import interfaces.DJInterface;
 
 import java.util.Map;
 
 import util.command.Command;
 import util.command.PathNode;
+import api.Constants;
 import api.Response;
 import dmap.response.databases.Playlists;
 

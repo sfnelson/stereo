@@ -3,12 +3,13 @@ package music;
 import interfaces.DJInterface;
 import interfaces.PlaybackControl;
 import interfaces.PlaybackStatus;
-import interfaces.Track;
 import interfaces.VolumeControl;
-import interfaces.collection.Collection;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import api.collections.Collection;
+import api.tracks.Track;
 
 
 public class DJ implements DJInterface, PlaybackStatus {

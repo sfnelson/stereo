@@ -1,8 +1,6 @@
 package api.impl;
 
-import interfaces.AbstractAlbum;
-
-public class Album extends AbstractAlbum {
+public class Album extends common.AbstractAlbum {
 
 	public Album(int id, long pid, String name, String artist, int tracks) {
 		super(id, pid, name, artist, tracks);

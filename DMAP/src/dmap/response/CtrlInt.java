@@ -3,7 +3,7 @@ package dmap.response;
 import java.util.ArrayList;
 import java.util.List;
 
-import interfaces.Constants;
+import api.Constants;
 import api.Node;
 import api.Reader;
 import api.Response;

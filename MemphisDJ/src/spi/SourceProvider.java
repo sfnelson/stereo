@@ -1,7 +1,7 @@
 package spi;
 
+import api.tracks.Track;
 import interfaces.Library;
-import interfaces.Track;
 
 public interface SourceProvider {
 

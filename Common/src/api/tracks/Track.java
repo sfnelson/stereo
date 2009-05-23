@@ -1,7 +1,9 @@
-package interfaces;
+package api.tracks;
 
 import java.io.IOException;
 import java.io.InputStream;
+
+import api.Constants;
 
 public interface Track extends HasMetadata {
 

@@ -1,6 +1,6 @@
 package dmap.response.ctrlint;
 
-import interfaces.Constants;
+import api.Constants;
 import api.Reader;
 import api.Response;
 import api.Writer;

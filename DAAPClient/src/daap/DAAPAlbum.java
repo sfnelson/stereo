@@ -1,10 +1,11 @@
 package daap;
 
-import interfaces.AbstractAlbum;
 
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
+
+import common.AbstractAlbum;
 
 public class DAAPAlbum extends AbstractAlbum {
 

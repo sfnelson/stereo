@@ -1,13 +1,15 @@
 package daap;
 
-import interfaces.AbstractTrack;
-import interfaces.Album;
-import interfaces.Constants;
 
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
+
+import common.AbstractTrack;
+
+import api.Constants;
+import api.tracks.Album;
 
 public class DAAPTrack extends AbstractTrack {
 	

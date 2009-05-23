@@ -1,10 +1,11 @@
 package player;
 
-import interfaces.AbstractTrack;
 
 import java.io.IOException;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
+
+import common.AbstractTrack;
 
 import music.Player;
 

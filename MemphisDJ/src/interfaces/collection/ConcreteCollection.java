@@ -1,6 +1,10 @@
 package interfaces.collection;
 
-import interfaces.Track;
+import common.AbstractCollection;
+
+import api.collections.Collection;
+import api.collections.Source;
+import api.tracks.Track;
 
 public class ConcreteCollection<T extends Track> extends AbstractCollection<T> {
 

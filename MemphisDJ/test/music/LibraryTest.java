@@ -1,8 +1,6 @@
 package music;
 
 import static org.junit.Assert.assertTrue;
-import interfaces.AbstractTrack;
-import interfaces.Track;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,6 +10,10 @@ import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import common.AbstractTrack;
+
+import api.tracks.Track;
 
 public class LibraryTest {
 

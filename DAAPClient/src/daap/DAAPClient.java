@@ -1,10 +1,7 @@
 package daap;
 
-import interfaces.Track;
 import interfaces.collection.AbstractSetSource;
-import interfaces.collection.Collection;
 import interfaces.collection.ConcreteCollection;
-import interfaces.collection.Source;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -12,6 +9,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import api.collections.Collection;
+import api.collections.Source;
+import api.tracks.Track;
 
 public class DAAPClient extends AbstractSetSource<DAAPTrack>
 		implements Source<DAAPTrack> {

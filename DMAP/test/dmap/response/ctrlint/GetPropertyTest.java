@@ -1,7 +1,6 @@
 package dmap.response.ctrlint;
 
 import static org.junit.Assert.assertEquals;
-import interfaces.Constants;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -9,6 +8,7 @@ import java.io.ByteArrayOutputStream;
 import org.junit.Before;
 import org.junit.Test;
 
+import api.Constants;
 import api.Reader;
 import api.Writer;
 import dmap.DACPReader;

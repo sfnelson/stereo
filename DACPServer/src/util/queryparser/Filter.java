@@ -1,6 +1,6 @@
 package util.queryparser;
 
-import interfaces.HasMetadata;
+import api.tracks.HasMetadata;
 
 public interface Filter {
 

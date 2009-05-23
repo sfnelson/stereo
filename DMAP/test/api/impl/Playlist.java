@@ -1,10 +1,11 @@
 package api.impl;
 
-import interfaces.Track;
-import interfaces.collection.AbstractCollection;
-import interfaces.collection.Collection;
-import interfaces.collection.EditableCollection;
-import interfaces.collection.Source;
+import api.collections.Collection;
+import api.collections.EditableCollection;
+import api.collections.Source;
+import api.tracks.Track;
+
+import common.AbstractCollection;
 
 public class Playlist extends AbstractCollection<Track> implements EditableCollection<Track> {
 	

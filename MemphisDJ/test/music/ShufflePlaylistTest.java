@@ -3,17 +3,19 @@ package music;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import interfaces.AbstractTrack;
-import interfaces.Constants;
-import interfaces.Track;
-import interfaces.collection.Collection;
-import interfaces.collection.Source;
 
 import java.io.IOException;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import common.AbstractTrack;
+
+import api.Constants;
+import api.collections.Collection;
+import api.collections.Source;
+import api.tracks.Track;
 
 public class ShufflePlaylistTest {
 
@@ -54,13 +56,13 @@ public class ShufflePlaylistTest {
 			}
 
 			public void registerListener(
-					interfaces.collection.Source.Listener listener) {
+					api.collections.Source.Listener listener) {
 				// TODO Auto-generated method stub
 				
 			}
 
 			public void removeListener(
-					interfaces.collection.Source.Listener listener) {
+					api.collections.Source.Listener listener) {
 				// TODO Auto-generated method stub
 				
 			}

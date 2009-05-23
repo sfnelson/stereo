@@ -1,10 +1,12 @@
 package interfaces;
 
-import interfaces.collection.Source;
 
 import java.util.List;
 
-import notification.EventGenerator;
+import api.collections.Source;
+import api.notification.EventGenerator;
+import api.tracks.Track;
+
 import notification.PlaybackListener;
 
 public interface PlaybackControl extends EventGenerator<PlaybackListener> {

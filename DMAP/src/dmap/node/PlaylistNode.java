@@ -1,12 +1,12 @@
 package dmap.node;
 
-import interfaces.Constants;
-import interfaces.Track;
-import interfaces.collection.Collection;
-import interfaces.collection.EditableCollection;
+import api.Constants;
 import api.Node;
 import api.Reader;
 import api.Writer;
+import api.collections.Collection;
+import api.collections.EditableCollection;
+import api.tracks.Track;
 
 public class PlaylistNode implements Node {
 

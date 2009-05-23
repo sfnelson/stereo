@@ -1,7 +1,7 @@
-package interfaces.collection;
+package api.collections;
 
-import interfaces.HasMetadata;
-import interfaces.Track;
+import api.tracks.HasMetadata;
+import api.tracks.Track;
 
 public interface Collection<T extends Track>
 	extends HasMetadata {

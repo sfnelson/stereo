@@ -1,9 +1,6 @@
 package util.command.databases;
 
 import interfaces.DJInterface;
-import interfaces.Track;
-import interfaces.collection.Collection;
-import interfaces.collection.Source;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +11,9 @@ import util.queryparser.ApplyFilter;
 import util.queryparser.Filter;
 import util.queryparser.QueryParser;
 import api.Response;
+import api.collections.Collection;
+import api.collections.Source;
+import api.tracks.Track;
 
 public class Items implements Command {
 

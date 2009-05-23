@@ -1,10 +1,10 @@
 package dmap.node;
 
-import interfaces.Album;
-import interfaces.Constants;
+import api.Constants;
 import api.Node;
 import api.Reader;
 import api.Writer;
+import api.tracks.Album;
 
 public class AlbumNode implements Node {
 

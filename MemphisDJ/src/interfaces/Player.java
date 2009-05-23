@@ -1,6 +1,7 @@
 package interfaces;
 
-import notification.EventGenerator;
+import api.notification.EventGenerator;
+import api.tracks.Track;
 import notification.PlayerListener;
 
 public interface Player extends EventGenerator<PlayerListener> {

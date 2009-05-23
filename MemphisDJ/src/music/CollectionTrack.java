@@ -1,11 +1,12 @@
 package music;
 
-import interfaces.Album;
-import interfaces.Constants;
-import interfaces.Track;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+import api.Constants;
+import api.tracks.Album;
+import api.tracks.Track;
 
 public class CollectionTrack implements Track {
 

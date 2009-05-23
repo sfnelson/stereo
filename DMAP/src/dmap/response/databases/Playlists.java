@@ -1,15 +1,15 @@
 package dmap.response.databases;
 
-import interfaces.Constants;
-import interfaces.Track;
-import interfaces.collection.Collection;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import api.Constants;
 import api.Reader;
 import api.Response;
 import api.Writer;
+import api.collections.Collection;
+import api.tracks.Track;
 import dmap.node.PlaylistNode;
 
 public class Playlists extends Response {

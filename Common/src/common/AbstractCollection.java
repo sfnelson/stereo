@@ -1,11 +1,11 @@
-package interfaces.collection;
-
-
-import interfaces.Constants;
-import interfaces.Track;
+package common;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import api.Constants;
+import api.collections.Collection;
+import api.tracks.Track;
 
 public abstract class AbstractCollection<T extends Track> implements Collection<T> {
 
@@ -16,10 +16,20 @@ public abstract class AbstractCollection<T extends Track> implements Collection<
 	public AbstractCollection(int id, long persistentId) {
 		this.id = id;
 		this.persistentId = persistentId;
+		
+		put(Constants.dmap_itemid, id);
+		put(Constants.dmap_persistentid, id);
 	}
 	
 	protected void put(Constants tag, Object value) {
-		tags.put(tag, value);
+		switch (tag) {
+		case dmap_itemid:
+		case dmap_persistentid:
+			//these are read-only
+			assert false: "attempting to set read-only variable";
+		default:
+			tags.put(tag, value);
+		}
 	}
 	
 	public Object get(Constants tag) {

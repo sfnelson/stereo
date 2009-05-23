@@ -1,10 +1,6 @@
 package util.command.databases;
 
-import interfaces.Constants;
 import interfaces.DJInterface;
-import interfaces.Track;
-import interfaces.collection.Collection;
-import interfaces.collection.EditableSource;
 
 import java.util.List;
 import java.util.Map;
@@ -14,7 +10,11 @@ import util.command.Command;
 import util.queryparser.ApplyFilter;
 import util.queryparser.Filter;
 import util.queryparser.QueryParser;
+import api.Constants;
 import api.Response;
+import api.collections.Collection;
+import api.collections.EditableSource;
+import api.tracks.Track;
 
 //  /databases/1/containers/[id]/edit?action=add&edit-params='dmap.itemid:[id]' -> need to decode response
 

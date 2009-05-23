@@ -1,14 +1,14 @@
 package dmap.node;
 
-import interfaces.Constants;
-import interfaces.Track;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import api.Constants;
 import api.Node;
 import api.Reader;
 import api.Writer;
+import api.tracks.Track;
 
 public class TrackNode implements Node {
 

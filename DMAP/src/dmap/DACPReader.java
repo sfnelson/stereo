@@ -1,6 +1,5 @@
 package dmap;
 
-import interfaces.Constants;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,6 +7,7 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import api.Constants;
 import api.Reader;
 
 public class DACPReader implements Reader {

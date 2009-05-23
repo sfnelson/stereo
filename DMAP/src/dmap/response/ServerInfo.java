@@ -1,15 +1,15 @@
 package dmap.response;
 
-import interfaces.Constants;
-import interfaces.HasMetadata;
 
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import api.Constants;
 import api.Reader;
 import api.Response;
 import api.Writer;
+import api.tracks.HasMetadata;
 
 public class ServerInfo extends Response implements HasMetadata {
 	

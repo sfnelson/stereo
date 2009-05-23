@@ -1,7 +1,5 @@
 package stereo.player;
 
-import interfaces.Constants;
-import interfaces.Track.TrackFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -11,7 +9,9 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 import reader.DACPResponseParser;
 import util.command.Song;
+import api.Constants;
 import api.Response;
+import api.tracks.Track.TrackFactory;
 import dmap.node.AlbumNode.AlbumFactory;
 import dmap.node.PlaylistNode.PlaylistFactory;
 import dmap.response.ctrlint.PlayStatusUpdate;

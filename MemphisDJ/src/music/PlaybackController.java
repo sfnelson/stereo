@@ -3,13 +3,14 @@ package music;
 import interfaces.PlaybackControl;
 import interfaces.PlaybackQueue;
 import interfaces.Player;
-import interfaces.Track;
-import interfaces.collection.Source;
 
 import java.util.List;
 
+import api.collections.Source;
+import api.notification.EventGenerator;
+import api.tracks.Track;
+
 import notification.AbstractEventGenerator;
-import notification.EventGenerator;
 import notification.PlaybackListener;
 import notification.PlayerListener;
 import notification.QueueListener;

@@ -1,13 +1,13 @@
 package util.command.ctrlint;
 
 import interfaces.DJInterface;
-import interfaces.Track;
-import interfaces.collection.Collection;
 
 import java.util.Map;
 
 import util.command.Command;
 import api.Response;
+import api.collections.Collection;
+import api.tracks.Track;
 import dmap.response.PlaylistSongs;
 
 public class Playlist implements Command {

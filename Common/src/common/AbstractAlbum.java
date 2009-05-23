@@ -1,7 +1,10 @@
-package interfaces;
+package common;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import api.Constants;
+import api.tracks.Album;
 
 public class AbstractAlbum implements Album {
 

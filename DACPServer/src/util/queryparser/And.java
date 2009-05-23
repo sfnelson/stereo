@@ -1,6 +1,6 @@
 package util.queryparser;
 
-import interfaces.HasMetadata;
+import api.tracks.HasMetadata;
 
 public class And extends BinOp {
 	public And(Filter a, Filter b) {

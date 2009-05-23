@@ -1,13 +1,15 @@
 package music;
 
-import interfaces.Track;
-import interfaces.collection.AbstractCollection;
-import interfaces.collection.Collection;
-import interfaces.collection.EditableSource;
-import interfaces.collection.Source;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import common.AbstractCollection;
+
+import api.collections.Collection;
+import api.collections.EditableSource;
+import api.collections.Source;
+import api.tracks.Track;
 
 import notification.AbstractEventGenerator;
 

@@ -4,7 +4,6 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import interfaces.Constants;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -14,6 +13,7 @@ import java.util.NoSuchElementException;
 import org.junit.Before;
 import org.junit.Test;
 
+import api.Constants;
 import api.Reader;
 
 public class DACPReaderTest {

@@ -1,9 +1,6 @@
 package util.command.databases;
 
-import interfaces.Constants;
 import interfaces.DJInterface;
-import interfaces.Track;
-import interfaces.collection.Collection;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,7 +13,10 @@ import util.command.Command;
 import util.queryparser.ApplyFilter;
 import util.queryparser.Filter;
 import util.queryparser.QueryParser;
+import api.Constants;
 import api.Response;
+import api.collections.Collection;
+import api.tracks.Track;
 
 public class Browse implements Command {
 

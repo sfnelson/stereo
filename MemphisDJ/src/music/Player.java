@@ -1,7 +1,5 @@
 package music;
 
-import interfaces.Constants;
-import interfaces.Track;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -19,6 +17,9 @@ import notification.PlayerListener;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+
+import api.Constants;
+import api.tracks.Track;
 
 public class Player extends AbstractEventGenerator<PlayerListener> implements interfaces.Player {
 

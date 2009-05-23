@@ -1,7 +1,8 @@
 package notification;
 
+import api.notification.Listener;
+import api.tracks.Track;
 import interfaces.PlaybackQueue;
-import interfaces.Track;
 
 public interface PlaybackListener extends Listener {
 

@@ -1,6 +1,5 @@
 package stereo.daap.server;
 
-import interfaces.Constants;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -22,6 +21,8 @@ import org.jaudiotagger.audio.AudioFileFilter;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.AudioHeader;
 import org.jaudiotagger.tag.Tag;
+
+import api.Constants;
 
 import stereo.dnssd.DNSSD;
 import stereo.dnssd.DNSSDProvider;
@@ -149,7 +150,7 @@ public class Main {
 		}
 	}
 
-	private static class Track extends interfaces.AbstractTrack {
+	private static class Track extends common.AbstractTrack {
 
 		private final File f;
 

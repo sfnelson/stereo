@@ -1,4 +1,4 @@
-package interfaces;
+package api.tracks;
 
 
 public interface Album extends HasMetadata {

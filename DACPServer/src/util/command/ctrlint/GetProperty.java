@@ -1,11 +1,11 @@
 package util.command.ctrlint;
 
-import interfaces.Constants;
 import interfaces.DJInterface;
 
 import java.util.Map;
 
 import util.command.Command;
+import api.Constants;
 import api.Response;
 
 public class GetProperty implements Command {

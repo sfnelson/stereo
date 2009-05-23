@@ -1,6 +1,6 @@
 package dmap.response.databases;
 
-import interfaces.Constants;
+import api.Constants;
 import api.Reader;
 import api.Response;
 import api.Writer;

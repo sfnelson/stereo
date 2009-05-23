@@ -1,6 +1,5 @@
 package util.command;
 
-import interfaces.Constants;
 import interfaces.DJInterface;
 
 import java.util.Map;
@@ -9,6 +8,7 @@ import util.command.databases.Browse;
 import util.command.databases.Containers;
 import util.command.databases.Edit;
 import util.command.databases.Groups;
+import api.Constants;
 import api.Response;
 
 public class Databases extends PathNode implements Command {

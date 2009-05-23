@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import api.notification.EventGenerator;
+import api.notification.Listener;
+
 public class AbstractEventGenerator<T extends Listener> implements EventGenerator<T> {
 
 	public synchronized void registerListener(T listener) {

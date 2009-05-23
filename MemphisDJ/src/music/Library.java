@@ -1,12 +1,7 @@
 
 package music;
 
-import interfaces.Album;
-import interfaces.Track;
-import interfaces.collection.AbstractCollection;
 import interfaces.collection.AbstractSetSource;
-import interfaces.collection.Collection;
-import interfaces.collection.Source;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -15,6 +10,13 @@ import java.util.List;
 import java.util.Set;
 
 import javax.imageio.spi.ServiceRegistry;
+
+import common.AbstractCollection;
+
+import api.collections.Collection;
+import api.collections.Source;
+import api.tracks.Album;
+import api.tracks.Track;
 
 import spi.SourceProvider;
 

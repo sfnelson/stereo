@@ -1,4 +1,4 @@
-package notification;
+package api.notification;
 
 
 public interface EventGenerator<T extends Listener> {

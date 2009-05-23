@@ -1,7 +1,5 @@
 package util.command.databases;
 
-import interfaces.Album;
-import interfaces.Constants;
 import interfaces.DJInterface;
 
 import java.util.ArrayList;
@@ -16,7 +14,9 @@ import util.command.Command;
 import util.queryparser.ApplyFilter;
 import util.queryparser.Filter;
 import util.queryparser.QueryParser;
+import api.Constants;
 import api.Response;
+import api.tracks.Album;
 
 public class Groups implements Command {
 

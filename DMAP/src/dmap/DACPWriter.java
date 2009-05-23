@@ -1,6 +1,5 @@
 package dmap;
 
-import interfaces.Constants;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -9,6 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.List;
 
+import api.Constants;
 import api.Node;
 import api.Writer;
 

@@ -1,7 +1,6 @@
 package dmap;
 
 import static org.junit.Assert.assertArrayEquals;
-import interfaces.Constants;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -11,6 +10,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import api.Constants;
 import api.Node;
 import api.Writer;
 

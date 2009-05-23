@@ -1,8 +1,5 @@
 package music;
 
-import interfaces.Album;
-import interfaces.Constants;
-import interfaces.Track;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,6 +7,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import api.Constants;
+import api.tracks.Album;
+import api.tracks.Track;
 
 public class LibraryTrack implements Track {
 	

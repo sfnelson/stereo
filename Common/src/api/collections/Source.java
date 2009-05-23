@@ -1,12 +1,13 @@
-package interfaces.collection;
+package api.collections;
 
 
-import interfaces.Track;
 
 import java.util.List;
 import java.util.Set;
 
-import notification.EventGenerator;
+import api.notification.EventGenerator;
+import api.tracks.Track;
+
 
 /**
  * This interface is designed to represent the notion of a playlist/collection as a
@@ -62,7 +63,7 @@ public interface Source<T extends Track> extends EventGenerator<Source.Listener>
 	 *
 	 * @param <T>
 	 */
-	public interface Listener extends notification.Listener {
+	public interface Listener extends api.notification.Listener {
 		
 		/**
 		 * Notifies the listener that the source has new tracks, and provides

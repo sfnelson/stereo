@@ -1,7 +1,7 @@
-package interfaces.collection;
+package api.collections;
 
 
-import interfaces.Track;
+import api.tracks.Track;
 
 public interface EditableSource<T extends Track> extends Source<T> {
 

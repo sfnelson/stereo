@@ -1,11 +1,13 @@
 package interfaces;
 
-import interfaces.collection.Collection;
-import interfaces.collection.Source;
 
 import java.util.List;
 
-import notification.EventGenerator;
+import api.collections.Collection;
+import api.collections.Source;
+import api.notification.EventGenerator;
+import api.tracks.Track;
+
 import notification.QueueListener;
 
 public interface PlaybackQueue extends EventGenerator<QueueListener> {

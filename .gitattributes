@@ -41,6 +41,24 @@ CLI/src/clinterface/CLIPlaylist.java -text
 CLI/src/clinterface/CLITrack.java -text
 CLI/src/clinterface/DACPDJInterface.java -text
 CLI/test/clinterface/CLITest.java -text
+Common/.classpath -text svneol=unset#text/plain
+Common/.project -text svneol=unset#text/plain
+Common/src/api/Constants.java -text
+Common/src/api/collections/Collection.java -text
+Common/src/api/collections/EditableCollection.java -text
+Common/src/api/collections/EditableSource.java -text
+Common/src/api/collections/Source.java -text
+Common/src/api/notification/EventGenerator.java -text
+Common/src/api/notification/Listener.java -text
+Common/src/api/tracks/Album.java -text
+Common/src/api/tracks/HasMetadata.java -text
+Common/src/api/tracks/Track.java -text
+Common/src/common/AbstractAlbum.java -text
+Common/src/common/AbstractCollection.java -text
+Common/src/common/AbstractTrack.java -text
+Common/test/common/AbstractAlbumTest.java -text svneol=unset#text/plain
+Common/test/common/AbstractCollectionTest.java -text svneol=unset#text/plain
+Common/test/common/AbstractTrackTest.java -text svneol=unset#text/plain
 DAAPClient/.classpath -text svneol=unset#text/plain
 DAAPClient/.project -text svneol=unset#text/plain
 DAAPClient/build.xml -text
@@ -200,26 +218,15 @@ MemphisDJ/Sample/sample/TypedEntry.java -text
 MemphisDJ/build.xml -text
 MemphisDJ/ivy.xml -text
 MemphisDJ/src/Main.java -text svneol=unset#text/plain
-MemphisDJ/src/interfaces/AbstractAlbum.java -text
-MemphisDJ/src/interfaces/AbstractTrack.java -text svneol=unset#text/plain
-MemphisDJ/src/interfaces/Album.java -text
-MemphisDJ/src/interfaces/Constants.java -text
 MemphisDJ/src/interfaces/DJInterface.java -text
-MemphisDJ/src/interfaces/HasMetadata.java -text
 MemphisDJ/src/interfaces/Library.java -text
 MemphisDJ/src/interfaces/PlaybackControl.java -text
 MemphisDJ/src/interfaces/PlaybackQueue.java -text
 MemphisDJ/src/interfaces/PlaybackStatus.java -text
 MemphisDJ/src/interfaces/Player.java -text
-MemphisDJ/src/interfaces/Track.java -text
 MemphisDJ/src/interfaces/VolumeControl.java -text
-MemphisDJ/src/interfaces/collection/AbstractCollection.java -text
 MemphisDJ/src/interfaces/collection/AbstractSetSource.java -text
-MemphisDJ/src/interfaces/collection/Collection.java -text
 MemphisDJ/src/interfaces/collection/ConcreteCollection.java -text svneol=unset#text/plain
-MemphisDJ/src/interfaces/collection/EditableCollection.java -text svneol=unset#text/plain
-MemphisDJ/src/interfaces/collection/EditableSource.java -text svneol=unset#text/plain
-MemphisDJ/src/interfaces/collection/Source.java -text
 MemphisDJ/src/music/AudioPlayer.java -text
 MemphisDJ/src/music/CollectionTrack.java -text svneol=unset#text/plain
 MemphisDJ/src/music/DJ.java -text
@@ -234,9 +241,7 @@ MemphisDJ/src/music/VolumeControl.java -text
 MemphisDJ/src/music/getvolume.sh -text
 MemphisDJ/src/music/setvolume.sh -text
 MemphisDJ/src/notification/AbstractEventGenerator.java -text
-MemphisDJ/src/notification/EventGenerator.java -text
 MemphisDJ/src/notification/LibraryListener.java -text
-MemphisDJ/src/notification/Listener.java -text
 MemphisDJ/src/notification/PlaybackListener.java -text
 MemphisDJ/src/notification/PlayerListener.java -text
 MemphisDJ/src/notification/QueueListener.java -text

@@ -3,7 +3,6 @@ package dmap.response;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import interfaces.Track;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -16,6 +15,7 @@ import org.junit.Test;
 
 import api.Reader;
 import api.Writer;
+import api.tracks.Track;
 import dmap.DACPReader;
 import dmap.DACPWriter;
 import dmap.node.TrackNode;

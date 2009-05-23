@@ -1,7 +1,6 @@
 package util.command.ctrlint;
 
 import interfaces.DJInterface;
-import interfaces.Track;
 
 import java.util.List;
 import java.util.Map;
@@ -11,6 +10,7 @@ import util.queryparser.ApplyFilter;
 import util.queryparser.Filter;
 import util.queryparser.QueryParser;
 import api.Response;
+import api.tracks.Track;
 
 public class Cue implements Command {
 

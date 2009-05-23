@@ -1,7 +1,5 @@
 package reader;
 
-import interfaces.Constants;
-import interfaces.Track.TrackFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,8 +9,10 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 
 import util.command.Song;
+import api.Constants;
 import api.Reader;
 import api.Response;
+import api.tracks.Track.TrackFactory;
 import dmap.DACPReader;
 import dmap.node.AlbumNode.AlbumFactory;
 import dmap.node.PlaylistNode.PlaylistFactory;

@@ -1,7 +1,5 @@
 package daap;
 
-import interfaces.Constants;
-import interfaces.Track;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,6 +11,9 @@ import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+
+import api.Constants;
+import api.tracks.Track;
 
 public class DAAPUtilities {
 

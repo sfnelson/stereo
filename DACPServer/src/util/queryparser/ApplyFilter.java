@@ -1,9 +1,10 @@
 package util.queryparser;
 
-import interfaces.HasMetadata;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import api.tracks.HasMetadata;
 
 
 public class ApplyFilter {

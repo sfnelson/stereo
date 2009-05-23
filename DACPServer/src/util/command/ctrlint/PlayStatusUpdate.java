@@ -1,16 +1,16 @@
 package util.command.ctrlint;
 
-import interfaces.Constants;
 import interfaces.DJInterface;
 import interfaces.PlaybackControl;
 import interfaces.PlaybackQueue;
-import interfaces.Track;
 
 import java.util.Map;
 
 import notification.PlaybackListener;
 import util.command.Command;
+import api.Constants;
 import api.Response;
+import api.tracks.Track;
 import dmap.response.ctrlint.PlayStatusUpdate.Status;
 
 public class PlayStatusUpdate implements Command, PlaybackListener {
@@ -47,7 +47,7 @@ public class PlayStatusUpdate implements Command, PlaybackListener {
 		
 		int database = 1;
 		Track current = dj.playbackStatus().current();
-		interfaces.collection.Collection<? extends Track> playlist = dj.playbackStatus().playlist(); 
+		api.collections.Collection<? extends Track> playlist = dj.playbackStatus().playlist(); 
 		int position = dj.playbackStatus().position();
 		byte stateValue = dj.playbackStatus().state();
 		int revision = dj.playbackControl().revision();

@@ -1,15 +1,16 @@
 package music;
 
-import interfaces.Track;
-import interfaces.collection.Collection;
 import interfaces.collection.ConcreteCollection;
-import interfaces.collection.Source;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import api.collections.Collection;
+import api.collections.Source;
+import api.tracks.Track;
 
 import notification.AbstractEventGenerator;
 

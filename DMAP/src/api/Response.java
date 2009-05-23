@@ -1,6 +1,6 @@
 package api;
 
-import interfaces.Constants;
+import api.Constants;
 
 public class Response implements Node {
 	

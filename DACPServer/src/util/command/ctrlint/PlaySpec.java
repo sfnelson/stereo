@@ -1,8 +1,6 @@
 package util.command.ctrlint;
 
 import interfaces.DJInterface;
-import interfaces.Track;
-import interfaces.collection.Collection;
 
 import java.math.BigInteger;
 import java.util.Map;
@@ -11,6 +9,8 @@ import util.command.Command;
 import util.queryparser.QueryParser;
 import util.queryparser.Token;
 import api.Response;
+import api.collections.Collection;
+import api.tracks.Track;
 
 public class PlaySpec implements Command {
 

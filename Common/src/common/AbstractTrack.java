@@ -1,8 +1,12 @@
-package interfaces;
+package common;
 
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+
+import api.Constants;
+import api.tracks.Album;
+import api.tracks.Track;
 
 public abstract class AbstractTrack implements Track {
 	
@@ -34,7 +38,7 @@ public abstract class AbstractTrack implements Track {
 	}
 	
 	public int hashCode() {
-		return ((Long)persistentId).hashCode();
+		return (int)(persistentId^persistentId>>>32);
 	}
 	
 	public Album getAlbum() {
@@ -63,23 +67,28 @@ public abstract class AbstractTrack implements Track {
 	public void put(Constants tag, Object value) {
 		if (value == null) return;
 		
+		boolean correct = true;
+		
 		switch (tag.type) {
-		case Constants.BYTE: assert(value instanceof Byte); break;
-		case Constants.SIGNED_BYTE: assert(value instanceof Byte); break;
-		case Constants.SHORT: assert(value instanceof Short); break;
-		case Constants.SIGNED_SHORT: assert(value instanceof Short); break;
-		case Constants.INTEGER: assert(value instanceof Integer); break;
-		case Constants.SIGNED_INTEGER: assert(value instanceof Integer); break;
-		case Constants.LONG: assert(value instanceof Long); break;
-		case Constants.SIGNED_LONG: assert(value instanceof Long); break;
-		case Constants.STRING: assert(value instanceof String); break;
-		case Constants.DATE: assert(value instanceof Calendar); break;
-		case Constants.VERSION: assert(false); break; //versions should not be stored in tracks
-		case Constants.COMPOSITE: assert(false); break; //composites should not be stored in tracks
-		case Constants.LONG_LONG: assert(false); break; //long-longs should not be stored in tracks
-		default: assert(false);
+		case Constants.BYTE: if (value instanceof Byte) break;
+		case Constants.SIGNED_BYTE: if (value instanceof Byte) break;
+		case Constants.SHORT: if (value instanceof Short) break;
+		case Constants.SIGNED_SHORT: if (value instanceof Short) break;
+		case Constants.INTEGER: if (value instanceof Integer) break;
+		case Constants.SIGNED_INTEGER: if (value instanceof Integer) break;
+		case Constants.LONG: if (value instanceof Long) break;
+		case Constants.SIGNED_LONG: if (value instanceof Long) break;
+		case Constants.STRING: if (value instanceof String) break;
+		case Constants.DATE: if (value instanceof Calendar) break;
+		case Constants.VERSION: //versions should not be stored in tracks
+		case Constants.COMPOSITE: //composites should not be stored in tracks
+		case Constants.LONG_LONG: //long-longs should not be stored in tracks	
+		default:
+			assert false: "incorrect or unexpected type " + tag.type + " for " + tag.longName;
+			correct = false;
 		}
-		tags.put(tag, value);
+		
+		if (correct) tags.put(tag, value);
 	}
 
 	public Iterable<Constants> getAllTags() {

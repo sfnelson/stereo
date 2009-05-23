@@ -1,4 +1,6 @@
-package interfaces;
+package api.tracks;
+
+import api.Constants;
 
 public interface HasMetadata {
 	

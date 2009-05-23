@@ -7,5 +7,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/DNS-SD"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/DMAP"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/DACPServer"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Common"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

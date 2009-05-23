@@ -1,6 +1,6 @@
-package interfaces.collection;
+package api.collections;
 
-import interfaces.Track;
+import api.tracks.Track;
 
 public interface EditableCollection<T extends Track> extends Collection<T> {
 
