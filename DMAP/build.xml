@@ -5,7 +5,7 @@
        <!ENTITY paths SYSTEM "../paths.xml">
 ]>
 
-<project basedir="." default="build" name="Asunder" xmlns:ivy="antlib:org.apache.ivy.ant">
+<project basedir="." default="build" name="DMAP" xmlns:ivy="antlib:org.apache.ivy.ant">
 
   <property name="path.prefix" value="../"/>
 
@@ -16,10 +16,13 @@
     <fileset dir="${lib.dir}">
       <include name="**/*.jar"/>
     </fileset>
+    <path refid="Common.classpath"/>
   </path>
 
   &common;
 
-  <target name="build-subprojects"/>
+  <target name="build-subprojects">
+    <ant antfile="${Common.location}/build.xml" inheritAll="false" target="build"/>
+  </target>
 
 </project>

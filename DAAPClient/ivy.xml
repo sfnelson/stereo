@@ -1,7 +1,7 @@
 <ivy-module version="1.0">
         <info organisation="memphis" module="DAAPClient"/>
         <dependencies>
-	  <dependency org="org.apache.httpcomponents" name="httpcore" rev="4.0"/>
-	  <dependency org="org.apache.httpcomponents" name="httpclient" rev="4.0-beta2"/>
+	  <dependency org="org.apache.httpcomponents" name="httpcore" rev="4.0" conf="*->*,!sources,!javadoc"/>
+	  <dependency org="org.apache.httpcomponents" name="httpclient" rev="4.0-beta2" conf="*->*,!sources,!javadoc"/>
         </dependencies>
 </ivy-module>

@@ -1,0 +1,6 @@
+<ivy-module version="1.0">
+        <info organisation="memphis" module="DNS-SD"/>
+        <dependencies>
+		<dependency org="com.apple" name="dns-sd" rev="107.6"/>
+        </dependencies>
+</ivy-module>

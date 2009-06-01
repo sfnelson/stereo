@@ -5,7 +5,7 @@
        <!ENTITY paths SYSTEM "../paths.xml">
 ]>
 
-<project basedir="." default="build" name="Asunder" xmlns:ivy="antlib:org.apache.ivy.ant">
+<project basedir="." default="build" name="DNS-SD" xmlns:ivy="antlib:org.apache.ivy.ant">
 
   <property name="path.prefix" value="../"/>
 
@@ -19,7 +19,7 @@
   </path>
 
   &common;
-
+  
   <target name="build-subprojects"/>
 
 </project>

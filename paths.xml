@@ -1,0 +1,36 @@
+<!-- useful paths -->
+<property name="lib.dir" value="${path.prefix}lib"/>
+
+<property name="Amp.location" value="${path.prefix}Amp"/>
+<property name="Asunder.location" value="${path.prefix}Asunder"/>
+<property name="Common.location" value="${path.prefix}Common"/>
+<property name="DAAPClient.location" value="${path.prefix}DAAPClient"/>
+<property name="DACPServer.location" value="${path.prefix}DACPServer"/>
+<property name="DMAP.location" value="${path.prefix}DMAP"/>
+<property name="DNS-SD.location" value="${path.prefix}DNS-SD"/>
+<property name="MemphisDJ.location" value="${path.prefix}MemphisDJ"/>
+
+<path id="Amp.classpath">
+  <pathelement location="${Amp.location}/bin"/>
+</path>
+<path id="Asunder.classpath">
+  <pathelement location="${Asunder.location}/bin"/>
+</path>
+<path id="Common.classpath">
+  <pathelement location="${Common.location}/bin"/>
+</path>
+<path id="DAAPClient.classpath">
+  <pathelement location="${DAAPClient.location}/bin"/>
+</path>
+<path id="DACPServer.classpath">
+  <pathelement location="${DACPServer.location}/bin"/>
+</path>
+<path id="DMAP.classpath">
+  <pathelement location="${DMAP.location}/bin"/>
+</path>
+<path id="DNS-SD.classpath">
+  <pathelement location="${DNS-SD.location}/bin"/>
+</path>
+<path id="MemphisDJ.classpath">
+  <pathelement location="${MemphisDJ.location}/bin"/>
+</path>

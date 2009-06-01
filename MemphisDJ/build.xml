@@ -2,42 +2,26 @@
 
 <!DOCTYPE project [
        <!ENTITY common SYSTEM "../common.xml">
+       <!ENTITY paths SYSTEM "../paths.xml">
 ]>
 
-<project basedir="." default="build" name="MemphisDJ" xmlns:ivy="antlib:org.apache.ivy.ant">
+<project basedir="." default="build" name="Common" xmlns:ivy="antlib:org.apache.ivy.ant">
 
-  &common;
+  <property name="path.prefix" value="../" />
 
-  <path id="MemphisDJ.classpath">
+  &paths;
+
+  <path id="Project.classpath">
     <pathelement location="bin"/>
     <fileset dir="${lib.dir}">
       <include name="**/*.jar"/>
     </fileset>
+    <path refid="Common.classpath"/>
   </path>
 
-  <target name="init" depends="resolve">
-    <mkdir dir="bin"/>
-    <copy includeemptydirs="false" todir="bin">
-      <fileset dir="src" excludes="**/*.java"/>
-    </copy>
+  &common;
+
+  <target name="build-subprojects">
+    <ant antfile="${Common.location}/build.xml" inheritAll="false" target="build"/>
   </target>
-
-  <target name="clean">
-    <delete dir="bin"/>
-  </target>
-
-  <target name="build-subprojects"/>
-
-  <target depends="init" name="build-project">
-    <echo message="${ant.project.name}: ${ant.file}"/>
-    <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
-      <src path="src"/>
-      <classpath refid="MemphisDJ.classpath"/>
-    </javac>
-    <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
-      <src path="test"/>
-      <classpath refid="MemphisDJ.classpath"/>
-    </javac>
-  </target>
-
 </project>

@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!DOCTYPE project [
+       <!ENTITY paths SYSTEM "paths.xml">
+]>
+
 <project basedir="." default="build" name="Stereo" xmlns:ivy="antlib:org.apache.ivy.ant">
 
-  <property name="lib.dir" value="lib"/>
+  <property name="path.prefix" value=""/>
 
-  <property name="Amp.location" value="Amp"/>
-  <property name="Asunder.location" value="Asunder"/>
-  <property name="DAAPClient.location" value="DAAPClient"/>
-  <property name="DACPServer.location" value="DACPServer"/>
-  <property name="MemphisDJ.location" value="MemphisDJ"/>
+  &paths;
 
   <path id="Stereo.classpath">
-    <pathelement location="Amp/bin"/>
-    <pathelement location="Asunder/bin"/>
-    <pathelement location="DAAPClient/bin"/>
-    <pathelement location="DACPServer/bin"/>
-    <pathelement location="MemphisDJ/bin"/>
+    <pathelement location="${Amp.location}/bin"/>
+    <pathelement location="${Asunder.location}/bin"/>
+    <pathelement location="${Common.location}/bin"/>
+    <pathelement location="${DAAPClient.location}/bin"/>
+    <pathelement location="${DACPServer.location}/bin"/>
+    <pathelement location="${DMAP.location}/bin"/>
+    <pathelement location="${DNS-SD.location}/bin"/>
+    <pathelement location="${MemphisDJ.location}/bin"/>
     <fileset dir="${lib.dir}">
       <include name="**/*.jar"/>
     </fileset>
@@ -28,9 +31,12 @@
   <target depends="build-subprojects,build-project" name="build"/>
 
   <target name="build-subprojects">
+    <ant antfile="${Common.location}/build.xml" inheritAll="false" target="build-project"/>
+    <ant antfile="${Asunder.location}/build.xml" inheritAll="false" target="build-project"/>
+    <ant antfile="${DNS-SD.location}/build.xml" inheritAll="false" target="build-project"/>
+    <ant antfile="${DMAP.location}/build.xml" inheritAll="false" target="build-project"/>
     <ant antfile="${MemphisDJ.location}/build.xml" inheritAll="false" target="build-project"/>
     <ant antfile="${DAAPClient.location}/build.xml" inheritAll="false" target="build-project"/>
-    <ant antfile="${Asunder.location}/build.xml" inheritAll="false" target="build-project"/>
     <ant antfile="${DACPServer.location}/build.xml" inheritAll="false" target="build-project"/>
     <ant antfile="${Amp.location}/build.xml" inheritAll="false" target="build-project"/>
   </target>
@@ -39,8 +45,11 @@
     <delete dir="bin"/>    
     <ant antfile="${Amp.location}/build.xml" inheritAll="false" target="clean"/>
     <ant antfile="${Asunder.location}/build.xml" inheritAll="false" target="clean"/>
+    <ant antfile="${Common.location}/build.xml" inheritAll="false" target="clean"/>
     <ant antfile="${DAAPClient.location}/build.xml" inheritAll="false" target="clean"/>
     <ant antfile="${DACPServer.location}/build.xml" inheritAll="false" target="clean"/>
+    <ant antfile="${DMAP.location}/build.xml" inheritAll="false" target="clean"/>
+    <ant antfile="${DNS-SD.location}/build.xml" inheritAll="false" target="clean"/>
     <ant antfile="${MemphisDJ.location}/build.xml" inheritAll="false" target="clean"/>
   </target>
 

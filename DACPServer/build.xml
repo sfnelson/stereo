@@ -2,56 +2,35 @@
 
 <!DOCTYPE project [
        <!ENTITY common SYSTEM "../common.xml">
+       <!ENTITY paths SYSTEM "../paths.xml">
 ]>
 
 <project basedir="." default="build" name="DACPServer" xmlns:ivy="antlib:org.apache.ivy.ant">
 
-  <property name="Asunder.location" value="../Asunder"/>
-  <property name="MemphisDJ.location" value="../MemphisDJ"/>
+  <property name="path.prefix" value="../"/>
 
-  &common;
-
-  <path id="Asunder.classpath">
-    <pathelement location="${Asunder.location}/bin"/>
-  </path>
-  <path id="MemphisDJ.classpath">
-    <pathelement location="${MemphisDJ.location}/bin"/>
-  </path>
-  <path id="DACPServer.classpath">
+  &paths;
+  
+  <path id="Project.classpath">
     <pathelement location="bin"/>
     <fileset dir="${lib.dir}">
       <include name="**/*.jar"/>
     </fileset>
     <path refid="Asunder.classpath"/>
+    <path refid="Common.classpath"/>
+    <path refid="DMAP.classpath"/>
+    <path refid="DNS-SD.classpath"/>
     <path refid="MemphisDJ.classpath"/>
   </path>
 
-  <target name="init" depends="resolve">
-    <mkdir dir="bin"/>
-    <copy includeemptydirs="false" todir="bin">
-      <fileset dir="src" excludes="**/*.java"/>
-    </copy>
-  </target>
-
-  <target name="clean">
-    <delete dir="bin"/>
-  </target>
+  &common;
 
   <target name="build-subprojects">
     <ant antfile="${Asunder.location}/build.xml" inheritAll="false" target="build"/>
+    <ant antfile="${Common.location}/build.xml" inheritAll="false" target="build"/>
+    <ant antfile="${DMAP.location}/build.xml" inheritAll="false" target="build"/>
+    <ant antfile="${DNS-SD.location}/build.xml" inheritAll="false" target="build"/>
     <ant antfile="${MemphisDJ.location}/build.xml" inheritAll="false" target="build"/>
-  </target>
-
-  <target depends="init" name="build-project">
-    <echo message="${ant.project.name}: ${ant.file}"/>
-    <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
-      <src path="src"/>
-      <classpath refid="DACPServer.classpath"/>
-    </javac>
-    <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
-      <src path="test"/>
-      <classpath refid="DACPServer.classpath"/>
-    </javac>
   </target>
 
 </project>

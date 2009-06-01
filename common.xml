@@ -1,9 +1,8 @@
+<!-- generally useful stuff -->
 <property name="debuglevel" value="source,lines,vars"/>
 
 <property name="target" value="1.6"/>
 <property name="source" value="1.6"/>
-
-<property name="lib.dir" value="../lib"/>
 
 <property name="ivy.install.version" value="2.0.0"/>
 <available file="${lib.dir}/ivy.jar" property="ivy.available"/>
@@ -28,3 +27,29 @@
 </target>
 
 <target depends="build-subprojects,build-project" name="build"/>
+
+<target name="init" depends="resolve">
+  <mkdir dir="bin"/>
+  <copy includeemptydirs="false" todir="bin">
+    <fileset dir="src" excludes="**/*.java"/>
+  </copy>
+</target>
+
+<target name="clean">
+  <delete dir="bin"/>
+</target>
+
+<target depends="init" name="build-project">
+  <echo message="${ant.project.name}: ${ant.file}"/>
+  <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+    <src path="src"/>
+    <classpath refid="Project.classpath"/>
+  </javac>
+</target>
+
+<target depends="build-project" name="test">
+  <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+    <src path="test"/>
+    <classpath refid="Project.classpath"/>
+  </javac>
+</target>

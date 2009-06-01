@@ -43,6 +43,8 @@ CLI/src/clinterface/DACPDJInterface.java -text
 CLI/test/clinterface/CLITest.java -text
 Common/.classpath -text svneol=unset#text/plain
 Common/.project -text svneol=unset#text/plain
+Common/build.xml -text
+Common/ivy.xml -text
 Common/src/api/Constants.java -text
 Common/src/api/collections/Collection.java -text
 Common/src/api/collections/EditableCollection.java -text
@@ -136,6 +138,8 @@ DACPServer/test/client/ClientBroadcasterTest.java -text
 DACPServer/test/server/ServerParserTest.java -text
 DMAP/.classpath -text svneol=unset#text/plain
 DMAP/.project -text svneol=unset#text/plain
+DMAP/build.xml -text
+DMAP/ivy.xml -text
 DMAP/src/api/Node.java -text
 DMAP/src/api/Reader.java -text
 DMAP/src/api/Response.java -text
@@ -194,6 +198,8 @@ DMAP/test/dmap/response/databases/BrowseTest.java -text
 DMAP/test/dmap/response/databases/NewPlaylistTest.java -text
 DNS-SD/.classpath -text svneol=unset#text/plain
 DNS-SD/.project -text svneol=unset#text/plain
+DNS-SD/build.xml -text
+DNS-SD/ivy.xml -text
 DNS-SD/src/META-INF/services/spi.StereoServer -text
 DNS-SD/src/META-INF/services/stereo.dnssd.DNSSDProvider -text
 DNS-SD/src/stereo/dnssd/AppleDNSSDImpl.java -text svneol=unset#text/plain
@@ -269,3 +275,4 @@ StereoPair/main.m -text
 /common.xml -text
 /ivy.xml -text
 /ivysettings.xml -text
+/paths.xml -text
